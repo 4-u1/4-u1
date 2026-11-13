@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="Yazeed Hamad Alharthi · AI Engineer · Agentic AI" width="100%">
+  <img src="assets/banner-2026.png" alt="Yazeed Hamad Alharthi · AI Engineer · Agentic AI" width="100%">
 </p>
 
 <p align="center">
