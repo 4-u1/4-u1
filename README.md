@@ -56,14 +56,14 @@ asset liquidation, disaster risk, public-sector indicators and Islamic education
 <table>
 <tr>
 <td width="50%" valign="top">
-<a href="https://github.com/4-u1/AURA"><img src="assets/projects/aura.png" alt="AURA"></a>
+<a href="https://github.com/4-u1/AURA"><img src="assets/covers/aura.png" alt="AURA"></a>
 <h3><a href="https://github.com/4-u1/AURA">AURA · أورا</a></h3>
 AI digital twin of At-Turaif in Diriyah, a UNESCO World Heritage site. Generative and predictive AI for visitor flow and smart heritage tourism.<br><br>
 <b>1st Place</b> · Smart Tourism AI Champions 2026<br>
 <sub>React · TypeScript · Gemini 2.5 Pro &amp; Flash</sub>
 </td>
 <td width="50%" valign="top">
-<a href="https://github.com/4-u1/mijhar-agent"><img src="assets/projects/mijhar.png" alt="MIJHAR"></a>
+<a href="https://github.com/4-u1/mijhar-agent"><img src="assets/covers/mijhar.png" alt="MIJHAR"></a>
 <h3><a href="https://github.com/4-u1/mijhar-agent">MIJHAR · مِجهر</a></h3>
 Evidence-audit agent that drives a governed LangGraph pipeline over MCP tools. Nothing is written without a signed human decision; governance lives in code, not prompts.<br><br>
 <b>Evals 73% → 100%</b> · <a href="https://4-u1.github.io/mijhar-agent/slides/">65-slide deck</a><br>
@@ -77,19 +77,19 @@ Evidence-audit agent that drives a governed LangGraph pipeline over MCP tools. N
 <table>
 <tr>
 <td width="33%" valign="top">
-<a href="https://github.com/4-u1/Mujeaz"><img src="assets/projects/mujeaz.png" alt="Mujeaz"></a>
+<a href="https://github.com/4-u1/Mujeaz"><img src="assets/covers/mujeaz.png" alt="Mujeaz"></a>
 <b><a href="https://github.com/4-u1/Mujeaz">Mujeaz · مُجاز</a></b><br>
 Revenue assurance and prior authorization for NPHIES. Predicts denials, completes evidence, builds cited appeals.<br>
 <sub>React 19 · Gemini · HL7 FHIR R4</sub>
 </td>
 <td width="33%" valign="top">
-<a href="https://github.com/4-u1/Afiya-care-platform"><img src="assets/projects/aafiya.png" alt="AafiyaCare"></a>
+<a href="https://github.com/4-u1/Afiya-care-platform"><img src="assets/covers/aafiya.png" alt="AafiyaCare"></a>
 <b><a href="https://github.com/4-u1/Afiya-care-platform">AafiyaCare · عافية كير</a></b><br>
 Early warning for chronic patients after discharge: risk scores and SBAR-ready plans for clinical pharmacists.<br>
 <sub>Medication safety · Risk scoring</sub>
 </td>
 <td width="33%" valign="top">
-<a href="https://wanisai-senior-cognitive-intelligence-467968797278.europe-west2.run.app"><img src="assets/projects/wanis.png" alt="WANIS"></a>
+<a href="https://wanisai-senior-cognitive-intelligence-467968797278.europe-west2.run.app"><img src="assets/covers/wanis.png" alt="WANIS"></a>
 <b><a href="https://github.com/4-u1/WANIS-AI">WANIS · ونيس</a></b> · <a href="https://wanisai-senior-cognitive-intelligence-467968797278.europe-west2.run.app">live</a><br>
 Cognitive health and continuous care platform for older adults.<br>
 <sub>Gemini 2.5 · React 19 · Cloud Run</sub>
@@ -102,19 +102,19 @@ Cognitive health and continuous care platform for older adults.<br>
 <table>
 <tr>
 <td width="33%" valign="top">
-<a href="https://github.com/4-u1/MIRAAH-Al"><img src="assets/projects/miraah.png" alt="MIRAAH"></a>
+<a href="https://github.com/4-u1/MIRAAH-Al"><img src="assets/covers/miraah.png" alt="MIRAAH"></a>
 <b><a href="https://github.com/4-u1/MIRAAH-Al">MIRAAH · مرآة</a></b><br>
 Digital asset passport for judicial liquidation. AI defect suggestions confirmed by inspectors, SHA-256 sealed export.<br>
 <sub>React · Gemini Vision · SQLite</sub>
 </td>
 <td width="33%" valign="top">
-<a href="https://mirsad-rho.vercel.app"><img src="assets/projects/mirsad.png" alt="Mirsad"></a>
+<a href="https://mirsad-rho.vercel.app"><img src="assets/covers/mirsad.png" alt="Mirsad"></a>
 <b><a href="https://github.com/4-u1/Mirsad">Mirsad · مِرصاد</a></b> · <a href="https://mirsad-rho.vercel.app">live</a><br>
 Landslide-risk prediction for southwest Saudi Arabia with human-approved alerts. I built the GIS cell grid.<br>
 <sub>PostGIS · Supabase · ML</sub>
 </td>
 <td width="33%" valign="top">
-<a href="https://github.com/4-u1/marsad-platform"><img src="assets/projects/marsad.png" alt="Marsad"></a>
+<a href="https://github.com/4-u1/marsad-platform"><img src="assets/covers/marsad.png" alt="Marsad"></a>
 <b><a href="https://github.com/4-u1/marsad-platform">Marsad · مَرصد</a></b><br>
 National platform for tracking and analysing strategic and development indicators with AI.<br>
 <sub>Gemini · Veo 3 · React 19 · Recharts</sub>
@@ -127,19 +127,19 @@ National platform for tracking and analysing strategic and development indicator
 <table>
 <tr>
 <td width="33%" valign="top">
-<a href="https://vorqen-pi.vercel.app"><img src="assets/projects/vorqen.png" alt="VORQEN"></a>
+<a href="https://vorqen-pi.vercel.app"><img src="assets/covers/vorqen.png" alt="VORQEN"></a>
 <b>VORQEN</b> · <a href="https://vorqen-pi.vercel.app">live</a><br>
 Assistant that links what you share over time and answers with sources and confidence. Passed 18 rounds of independent verification.<br>
 <sub>Python · SQLite · Arabic voice</sub>
 </td>
 <td width="33%" valign="top">
-<a href="https://github.com/4-u1/GDDA-agent"><img src="assets/projects/gdda.png" alt="GDDA"></a>
+<a href="https://github.com/4-u1/GDDA-agent"><img src="assets/covers/gdda.png" alt="GDDA"></a>
 <b><a href="https://github.com/4-u1/GDDA-agent">GDDA · Ghost Data Still Exists</a></b><br>
 Deletion-audit and remediation agent that finds data surviving deletion. 32/32 exact on samples, 518 evaluation cases.<br>
 <sub>Python · React 19 · SQLite</sub>
 </td>
 <td width="33%" valign="top">
-<a href="https://dealguard-a7k8.onrender.com/"><img src="assets/projects/dealguard.png" alt="DealGuard"></a>
+<a href="https://dealguard-a7k8.onrender.com/"><img src="assets/covers/dealguard.png" alt="DealGuard"></a>
 <b><a href="https://github.com/4-u1/dealguard">DealGuard</a></b> · <a href="https://dealguard-a7k8.onrender.com/">live</a><br>
 Promotional-claim verifier: retrieval plus deterministic rules, every verdict cites its policy. Team project.<br>
 <sub>Python · TF-IDF · guarded Gemini</sub>
@@ -152,13 +152,13 @@ Promotional-claim verifier: retrieval plus deterministic rules, every verdict ci
 <table>
 <tr>
 <td width="50%" valign="top">
-<a href="https://weilmai.ai.studio/"><img src="assets/projects/ilm.png" alt="ILM"></a>
+<a href="https://weilmai.ai.studio/"><img src="assets/covers/ilm.png" alt="ILM"></a>
 <b><a href="https://github.com/4-u1/ILM-AI">ILM · عِلم</a></b> · <a href="https://weilmai.ai.studio/">live</a><br>
 Islamic learning and dawah platform with personalised journeys. RAG grounded in verified sources, with a hard guardrail against AI fatwas.<br>
 <sub>RAG · Gemini 2.5 Flash · TypeScript</sub>
 </td>
 <td width="50%" valign="top">
-<a href="https://yad-qtk.pages.dev"><img src="assets/projects/yad.png" alt="YAD English"></a>
+<a href="https://yad-qtk.pages.dev"><img src="assets/covers/yad.png" alt="YAD English"></a>
 <b>YAD English</b> · <a href="https://yad-qtk.pages.dev">live</a><br>
 English learning for Arabic speakers from Pre-A1 to A2: placement test, spaced repetition, text-to-speech and an interactive roadmap.<br>
 <sub>PWA · TTS · Cloudflare Pages</sub>
