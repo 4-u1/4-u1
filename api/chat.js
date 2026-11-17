@@ -42,23 +42,23 @@ const KB = `
 - الخلفية والبيانات: Python, FastAPI, Node.js/Express, PostgreSQL/pgvector, PostGIS/Supabase, SQLite, HL7 FHIR.
 - الواجهات والجودة: React, TypeScript, pytest, Playwright, mypy, Docker, GitHub Actions, Cloud Run.
 
-# البرامج والشهادات (مع أرقام الاعتماد)
-- هندسة أنظمة الذكاء الاصطناعي التوكيلي المتقدمة، أكاديمية سدايا، 25–29 أكتوبر 2026، رقم الاعتماد SA26-0021K، مشروع التخرج مِجهر.
+# البرامج والشهادات
+- هندسة أنظمة الذكاء الاصطناعي التوكيلي المتقدمة، أكاديمية سدايا، 25–29 أكتوبر 2026، مشروع التخرج مِجهر.
 - برنامج حلول الذكاء الاصطناعي مع Google، أكاديمية طويق × Google for Developers، نوفمبر 2026، وفيه حقق AURA المركز الأول.
-- تطوير حلول الذكاء الاصطناعي التوليدي، أكاديمية سدايا، 20–22 أكتوبر 2026، رقم الاعتماد SA26-001TP.
+- تطوير حلول الذكاء الاصطناعي التوليدي، أكاديمية سدايا، 20–22 أكتوبر 2026.
 - أساسيات الطائرات بدون طيار، منصة سطر، أكتوبر 2026.
 - AWS Certified AI Practitioner (مسار تعليمي وليس اختبار AWS الرسمي)، الأكاديمية الرقمية السعودية، سبتمبر 2026.
-- هندسة الأوامر والاستخدام المسؤول للذكاء الاصطناعي، أكاديمية سدايا، أغسطس 2026، رقم الاعتماد 24019.
-- Building with the Claude API، Anthropic، يوليو 2026، رقم الاعتماد 33xdnoier9mz.
+- هندسة الأوامر والاستخدام المسؤول للذكاء الاصطناعي، أكاديمية سدايا، أغسطس 2026.
+- Building with the Claude API، Anthropic، يوليو 2026.
 - مفاهيم الذكاء الاصطناعي وتطبيقاته المتقدمة، ومبادئ الذكاء الاصطناعي، أكاديمية سدايا ضمن مبادرة سماي، أبريل 2026.
-- Introduction to Penetration Testing، Security Blue Team، أبريل 2026، رقم الاعتماد 176258722.
+- Introduction to Penetration Testing، Security Blue Team، أبريل 2026.
 - Linux Forensics، نادي TUSecurity، 14 أبريل 2026.
-- SQL (Intermediate)، HackerRank، أبريل 2026، رقم الاعتماد C0E1E520A25C.
+- SQL (Intermediate)، HackerRank، أبريل 2026.
 - AWS AI Practitioner Challenge، Udacity، أبريل 2026.
 - ICAN 2026، المؤتمر الدولي لبناء القدرات في البيانات والذكاء الاصطناعي، سدايا، يناير 2026، حضور 16 ساعة.
 - سطر جلسات طويق، أكاديمية طويق، يناير 2026: 17 لقاء وورشة عمل في الذكاء التوكيلي والأمن السيبراني وحوكمة الهوية الرقمية.
 - Intensive General English، Bayswater College ليفربول، يوليو إلى سبتمبر 2024.
-- Kanz AI Training Hackathon (15 يوليو 2026، رقم الاعتماد KANZ-ATT-CEBB166ADF) وKanz AI Showcase (أغسطس 2026، بمشاريع YAD وFalcon Eye وMarsad، رقم الاعتماد KANZ-ATT-663F1A88B3)، Kanz × وزارة الموارد البشرية × LAU.
+- Kanz AI Training Hackathon (15 يوليو 2026) وKanz AI Showcase (أغسطس 2026، بمشاريع YAD وFalcon Eye وMarsad)، Kanz × وزارة الموارد البشرية × LAU.
 - رقم Guinness: أكبر درس فيديو عن الذكاء الاصطناعي، 15 يوليو 2026، 14,075 مشارك.
 
 # الخدمات
