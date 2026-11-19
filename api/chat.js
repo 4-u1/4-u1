@@ -102,13 +102,13 @@ function clean(messages) {
   return out;
 }
 
-async function geminiOnce(model, msgs) {
+async function geminiOnce(model, msgs, timeoutMs) {
   // thinking tokens count toward maxOutputTokens, so leave room for them
   const gen = { maxOutputTokens: 2048, temperature: 0.3 };
   if (/^gemini-2\.5/.test(model)) gen.thinkingConfig = { thinkingBudget: 0 };
   else if (/^gemini-3\.8/.test(model)) gen.thinkingConfig = { thinkingLevel: 'low' }; // 3.8 Flash: low|medium|high, no 'minimal'
   else if (/^gemini-3/.test(model)) gen.thinkingConfig = { thinkingLevel: 'minimal' };
-  const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 9000);
+  const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST',
@@ -129,16 +129,19 @@ async function geminiOnce(model, msgs) {
 
 // Primary model, one quick retry on overload, then lighter fallback models.
 async function callGemini(msgs) {
-  const chain = [process.env.GEMINI_MODEL || 'gemini-3.8-flash']
-    .concat((process.env.GEMINI_FALLBACKS || 'gemini-3.5-flash-lite,gemini-3.6-flash').split(',').map((x) => x.trim()).filter(Boolean));
-  let last;
+  // fast model first (short Q&A over a fixed profile); stronger models only as backup
+  const chain = [process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite']
+    .concat((process.env.GEMINI_FALLBACKS || 'gemini-3.6-flash,gemini-3.8-flash').split(',').map((x) => x.trim()).filter(Boolean));
+  let last; const deadline = Date.now() + 21000; // client gives up at 25 s
   for (let k = 0; k < chain.length; k++) {
     const tries = k === 0 ? 2 : 1;
     for (let t = 0; t < tries; t++) {
-      try { const out = await geminiOnce(chain[k], msgs); if (out) return out; }
+      const left = deadline - Date.now(); if (left < 2500) throw last || new Error('gemini deadline');
+      try { const out = await geminiOnce(chain[k], msgs, Math.min(9000, left)); if (out) return out; }
       catch (e) {
         last = e; console.error(String(e.message || e));
         if (e.status === 401 || e.status === 403 || e.status === 400) throw e; // bad key or request: fallbacks won't help
+        if (e.name === 'AbortError') break; // slow model: move on instead of retrying it
         if (t + 1 < tries) await new Promise((r) => setTimeout(r, 700));
       }
     }
