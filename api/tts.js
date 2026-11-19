@@ -3,6 +3,8 @@
 // Docs: POST https://api.elevenlabs.io/v1/text-to-speech/{voice_id}?output_format=mp3_44100_128
 //       header xi-api-key, body { text, model_id }
 
+const { reject } = require('./_guard');
+
 const MAX_CHARS = 420;          // caps credit use per reply
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 12;      // requests per IP per window
@@ -28,6 +30,7 @@ function clean(text) {
 
 async function handler(req, res) {
   if (req.method !== 'POST') { res.setHeader('allow', 'POST'); return res.status(405).json({ error: 'method_not_allowed' }); }
+  if (reject(req, res)) return;
   const key = process.env.ELEVENLABS_API_KEY, voice = process.env.ELEVENLABS_VOICE_ID;
   if (!key || !voice) return res.status(503).json({ error: 'not_configured' });
 

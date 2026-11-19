@@ -6,10 +6,12 @@
 //                    Until then Resend only allows "onboarding@resend.dev" -> the Resend account owner's own address.
 // The visitor's address goes in reply_to, so replying from Gmail answers the visitor directly.
 
+const { reject } = require('./_guard');
+
 const MAX_FILES = 3;
 const MAX_TOTAL_BYTES = 3.5 * 1024 * 1024; // keeps the JSON body under Vercel's 4.5 MB request limit
-const ALLOWED = /^(image\/(png|jpe?g|webp|gif|heic|heif)|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.(wordprocessingml\.document|presentationml\.presentation|spreadsheetml\.sheet)|application\/vnd\.ms-(powerpoint|excel)|application\/zip|application\/x-zip-compressed|text\/plain)$/;
-const EXT_OK = /\.(png|jpe?g|webp|gif|heic|heif|pdf|docx?|pptx?|xlsx?|zip|txt)$/i;
+const ALLOWED = /^(image\/(png|jpe?g|webp|gif|heic|heif)|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.(wordprocessingml\.document|presentationml\.presentation|spreadsheetml\.sheet)|application\/vnd\.ms-(powerpoint|excel)|text\/plain)$/;
+const EXT_OK = /\.(png|jpe?g|webp|gif|heic|heif|pdf|docx?|pptx?|xlsx?|txt)$/i;
 const EMAIL = /^[^@\s<>"]+@[^@\s<>"]+\.[^@\s<>"]{2,}$/;
 
 const hits = new Map();
@@ -26,6 +28,7 @@ const safeName = (s) => clean(s, 120).replace(/[\\/:*?"<>|\r\n]+/g, '_') || 'att
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') { res.statusCode = 405; return res.json({ error: 'method_not_allowed' }); }
+  if (reject(req, res)) return;
   const key = process.env.RESEND_API_KEY;
   if (!key) { res.statusCode = 503; return res.json({ error: 'not_configured' }); }
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'anon';
@@ -36,7 +39,7 @@ module.exports = async function handler(req, res) {
   if (!b || typeof b !== 'object') { res.statusCode = 400; return res.json({ error: 'bad_request' }); }
   if (b.company) { return res.json({ ok: true }); } // honeypot: silently drop bots
 
-  const name = clean(b.name, 100), email = clean(b.email, 200), message = clean(b.message, 5000);
+  const name = clean(b.name, 100).replace(/[\r\n\t]+/g, ' '), email = clean(b.email, 200), message = clean(b.message, 5000);
   if (!name || !message) { res.statusCode = 400; return res.json({ error: 'missing_fields' }); }
   if (!EMAIL.test(email)) { res.statusCode = 400; return res.json({ error: 'bad_email' }); }
 

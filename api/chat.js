@@ -132,9 +132,12 @@ async function callClaude(msgs) {
   return (j.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('').trim();
 }
 
+const { reject } = require('./_guard');
+
 module.exports = async (req, res) => {
   res.setHeader('cache-control', 'no-store');
   if (req.method !== 'POST') { res.statusCode = 405; return res.json({ error: 'method_not_allowed' }); }
+  if (reject(req, res)) return;
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'anon';
   if (limited(ip)) { res.statusCode = 429; return res.json({ error: 'rate_limited' }); }
   let body = req.body;
