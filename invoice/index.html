@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>الفواتير | يزيد حمد الحارثي</title>
+<title>YH · الفواتير</title>
 <link rel="icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -241,7 +241,7 @@ function paint(inv){
  $('oTerms').innerHTML=TERMS.map(x=>`<li>${esc(x)}</li>`).join('');
  set('oNotes',inv.notes);$('notesWrap').style.display=inv.notes?'':'none';
  const f=[s.phone,s.email];if(s.fl)f.push('Freelance No. '+s.fl);$('oFoot').textContent=f.filter(Boolean).join('   ·   ');
- document.title=inv.id?('فاتورة '+inv.id+' | يزيد حمد الحارثي'):'الفواتير | يزيد حمد الحارثي';
+ document.title=inv.id?('YH · فاتورة '+inv.id):'YH · الفواتير';
 }
 function draft(){
  const its=items.map(it=>({d:String(it.d||'').trim(),q:Number(it.q)||0,p:Number(it.p)||0})).filter(it=>it.d&&it.q>0);
