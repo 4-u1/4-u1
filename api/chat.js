@@ -144,7 +144,7 @@ async function callGemini(msgs) {
     const tries = k === 0 ? 2 : 1;
     for (let t = 0; t < tries; t++) {
       const left = deadline - Date.now(); if (left < 2500) throw last || new Error('gemini deadline');
-      try { const out = await geminiOnce(chain[k], msgs, Math.min(9000, left)); if (out) return out; }
+      try { const t0 = Date.now(); const out = await geminiOnce(chain[k], msgs, Math.min(9000, left)); if (out) { console.log('chat ok', chain[k], (Date.now() - t0) + 'ms'); return out; } }
       catch (e) {
         last = e; console.error(String(e.message || e));
         if (e.status === 401 || e.status === 403 || e.status === 400) throw e; // bad key or request: fallbacks won't help

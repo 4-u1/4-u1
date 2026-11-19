@@ -56,6 +56,7 @@ async function handler(req, res) {
     });
     if (!r.ok) { console.error('elevenlabs', r.status, (await r.text()).slice(0, 300)); return res.status(502).json({ error: 'tts_failed', status: r.status }); }
     const buf = Buffer.from(await r.arrayBuffer());
+    console.log('tts ok', arabic ? 'ar' : 'en', model, buf.length + ' bytes');
     res.setHeader('content-type', 'audio/mpeg');
     res.setHeader('cache-control', 'no-store');
     return res.status(200).send(buf);
