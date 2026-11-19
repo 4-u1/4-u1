@@ -102,6 +102,13 @@ function clean(messages) {
   return out;
 }
 
+function langNote(msgs) {
+  const last = msgs[msgs.length - 1] || { text: '' };
+  return /[\u0600-\u06FF]/.test(last.text)
+    ? '\n\nمهم: الزائر كتب بالعربي، فجاوب بالعربي فقط.'
+    : '\n\nIMPORTANT: The visitor wrote in English. Reply in clear English only, even though the knowledge base is in Arabic.';
+}
+
 async function geminiOnce(model, msgs, timeoutMs) {
   // thinking tokens count toward maxOutputTokens, so leave room for them
   const gen = { maxOutputTokens: 2048, temperature: 0.3 };
@@ -115,7 +122,7 @@ async function geminiOnce(model, msgs, timeoutMs) {
       signal: ctrl.signal,
       headers: { 'content-type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM }] },
+        systemInstruction: { parts: [{ text: SYSTEM + langNote(msgs) }] },
         contents: msgs.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.text }] })),
         generationConfig: gen
       })
@@ -154,7 +161,7 @@ async function callClaude(msgs) {
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model, max_tokens: 600, temperature: 0.3, system: SYSTEM, messages: msgs.map((m) => ({ role: m.role, content: m.text })) })
+    body: JSON.stringify({ model, max_tokens: 600, temperature: 0.3, system: SYSTEM + langNote(msgs), messages: msgs.map((m) => ({ role: m.role, content: m.text })) })
   });
   if (!r.ok) throw new Error('anthropic ' + r.status + ' ' + (await r.text()).slice(0, 300));
   const j = await r.json();
