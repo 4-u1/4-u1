@@ -630,13 +630,15 @@ class Component extends DCLogic {
       const O = this.buildOrb(), dpr = Math.min(1.5, window.devicePixelRatio || 1);
       const cw = Math.round(cv.offsetWidth * dpr), ch = Math.round(cv.offsetHeight * dpr);
       if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
-      const x = cv.getContext('2d'), cx = cw / 2, cy = ch / 2, R = cw / 2 / 1.36;
+      const x = cv.getContext('2d'), cx = cw / 2, cy = ch / 2; let R = cw / 2 / 1.36;
       const st = this.state, mode = st.listening ? 'listen' : st.thinking ? 'think' : st.speaking ? 'speak' : 'idle';
       const target = reduce ? 0 : mode === 'speak' ? this.voiceLevel(t) : mode === 'listen' ? 0.18 + 0.12 * Math.sin(t * 0.004) : 0;
       this._lvl += (target - this._lvl) * (target > this._lvl ? 0.55 : 0.18);
       const L = Math.max(0, Math.min(1.2, this._lvl));
       this._rot += reduce ? 0 : mode === 'think' ? 0.006 : 0.0009 + L * 0.002;
       const gold = mode === 'listen';
+      // a soft pulse of the whole sphere: with the voice when it speaks, a slow breath while it listens
+      if (!reduce) { const pz = mode === 'speak' ? 0.01 + L * 0.018 : mode === 'listen' ? 0.018 * (0.5 + 0.5 * Math.sin(t * 0.0042)) : 0; this._pz = (this._pz || 0) + (pz - (this._pz || 0)) * 0.2; R *= 1 + this._pz; }
       x.clearRect(0, 0, cw, ch);
       // outer glow
       const og = x.createRadialGradient(cx, cy, R * 0.85, cx, cy, R * 1.36);
