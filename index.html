@@ -308,7 +308,10 @@
  "Bayswater College · ليفربول": "Bayswater College · Liverpool",
  "تكريم إتمام برنامج Intensive General English في Bayswater College، ليفربول، سبتمبر 2024": "Recognized for completing Intensive General English at Bayswater College, Liverpool, September 2024",
  "عرض الكل": "Show all",
- "عرض أقل": "Show less"
+ "عرض أقل": "Show less",
+ "بكالوريوس هندسة الحاسب": "B.Sc. Computer Engineering",
+ "جامعة الطائف": "Taif University",
+ "يناير 2023 – حاليًا": "Jan 2023 – Present"
 };
 (function () {
   var pending = false, C = null, TPL = null, root = null, cache = {};
@@ -838,6 +841,7 @@ class Component extends DCLogic {
       {title: "AWS AI Practitioner Challenge", org: "Udacity", date: "أبريل 2026", cid: "", gold: false},
       {title: "ICAN 2026 · المؤتمر الدولي لبناء القدرات في البيانات والذكاء الاصطناعي", org: "سدايا · حضور 16 ساعة", date: "يناير 2026", cid: "", gold: false},
       {title: "سطر جلسات طويق", org: "أكاديمية طويق · 17 لقاء وورشة عمل: الذكاء التوكيلي، الأمن السيبراني، حوكمة الهوية الرقمية", date: "يناير 2026", cid: "", gold: false},
+      {title: "بكالوريوس هندسة الحاسب", org: "جامعة الطائف", date: "يناير 2023 – حاليًا", cid: "", gold: false},
       {title: "Intensive General English", org: "Bayswater College · ليفربول، المملكة المتحدة", date: "يوليو – سبتمبر 2024", cid: "", gold: false}
     ];
     const ACH = [
@@ -855,7 +859,9 @@ class Component extends DCLogic {
     const TOP = { prog: ["هندسة أنظمة الذكاء الاصطناعي التوكيلي المتقدمة", "برنامج حلول الذكاء الاصطناعي مع Google", "تطوير حلول الذكاء الاصطناعي التوليدي", "Building with the Claude API", "AWS Certified AI Practitioner (مسار تعليمي)"], ach: 5 };
     const src = st.qtab === 'prog' ? PROG : ACH;
     const topList = st.qtab === 'prog' ? TOP.prog.map((t) => src.find((q) => q.title === t)).filter(Boolean) : src.slice(0, TOP.ach);
-    const ordered = topList.concat(src.filter((q) => topList.indexOf(q) === -1));
+    const restList = src.filter((q) => topList.indexOf(q) === -1);
+    const edu = restList.filter((q) => q.title === 'بكالوريوس هندسة الحاسب');
+    const ordered = topList.concat(edu, restList.filter((q) => edu.indexOf(q) === -1));
     const qShown = st.qall ? ordered : topList;
     const quals = qShown.map((q, i) => Object.assign({}, q, { right: i % 2 === 0, left: i % 2 === 1, dot: 'tdot' + (q.gold ? ' gold' : '') }));
     const qRest = ordered.length - topList.length;
