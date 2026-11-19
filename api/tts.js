@@ -31,8 +31,8 @@ function clean(text) {
 async function handler(req, res) {
   if (req.method !== 'POST') { res.setHeader('allow', 'POST'); return res.status(405).json({ error: 'method_not_allowed' }); }
   if (reject(req, res)) return;
-  const key = process.env.ELEVENLABS_API_KEY, voice = process.env.ELEVENLABS_VOICE_ID;
-  if (!key || !voice) return res.status(503).json({ error: 'not_configured' });
+  const key = process.env.ELEVENLABS_API_KEY;
+  if (!key) return res.status(503).json({ error: 'not_configured' });
 
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
   if (limited(ip)) return res.status(429).json({ error: 'rate_limited' });
@@ -42,6 +42,11 @@ async function handler(req, res) {
   const text = clean(body && body.text);
   if (!text) return res.status(400).json({ error: 'empty_text' });
 
+  // Arabic replies use the Arabic voice, everything else the English voice (voice ids are not secrets)
+  const arabic = /[\u0600-\u06FF]/.test(text);
+  const voice = arabic
+    ? (process.env.ELEVENLABS_VOICE_ID_AR || '2aVe3IK7dgUBaUTdfarw')
+    : (process.env.ELEVENLABS_VOICE_ID_EN || 'Gv42yFG3G6CHLsU5y8g6');
   const model = process.env.ELEVENLABS_MODEL || 'eleven_multilingual_v2';
   try {
     const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voice)}?output_format=mp3_44100_128`, {
