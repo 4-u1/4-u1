@@ -34,8 +34,11 @@ const LABELS = {
   collab: '🌱 تعاون',
   question: '💬 استفسار',
   thanks: '✨ تحية',
-  spam: '⚠️ مشبوهة'
+  spam: '⚠️ مشبوهة',
+  quote: '🧾 طلب عرض سعر'
 };
+// services offered on the site; a quote request must name one of these exactly
+const SERVICES = ['استشارة تبنّي الذكاء الاصطناعي', 'مساعد ذكي على بيانات منشأتك', 'أتمتة الأعمال وربط الأنظمة', 'بوت واتساب وتيليجرام للعملاء', 'استخراج البيانات من المستندات', 'لوحة تقارير ومؤشرات ذكية', 'موقع تعريفي بمساعد ذكي', 'وكيل ذكي ينفّذ المهام', 'فحص أمان تطبيقات الذكاء الاصطناعي', 'الصيانة والتشغيل الشهري', 'ورشة عمل لفريقك'];
 const urlCount = (t) => (String(t).match(/https?:\/\/|www\./gi) || []).length;
 async function triage(name, message) {
   const k = process.env.GEMINI_API_KEY; if (!k) return null;
@@ -98,9 +101,11 @@ module.exports = async function handler(req, res) {
   const from = process.env.CONTACT_FROM || 'موقع يزيد الحارثي <onboarding@resend.dev>';
   let label = await triage(name, message);
   if (!label && (urlCount(message) > 3 || !Number.isFinite(elapsed))) label = 'spam';
-  const subject = label ? `${LABELS[label]} من ${name} · عبر موقعك` : `رسالة من ${name} عبر موقعك`;
+  const service = SERVICES.includes(String(b.service || '')) ? String(b.service) : '';
+  if (service && label !== 'spam') label = 'quote';
+  const subject = label === 'quote' ? `🧾 طلب عرض سعر: ${service} · من ${name}` : label ? `${LABELS[label]} من ${name} · عبر موقعك` : `رسالة من ${name} عبر موقعك`;
   console.log('contact label', label || 'none');
-  const html = renderEmail({ name, email, message, files: attachments.map((a) => a.filename), label: label ? LABELS[label] : '' });
+  const html = renderEmail({ name, email, message, files: attachments.map((a) => a.filename), label: label ? LABELS[label] : '', service: label === 'quote' ? service : '' });
   const text = `الاسم: ${name}\nالبريد: ${email}\n\n${message}`;
 
   try {
@@ -139,8 +144,9 @@ const FONT = "font-family:Inter,'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif";
 const box = (inner, { line = '#1E2733', fill = '#0E1217', r = 14, pad = '16px 18px', extra = '' } = {}) =>
   `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${BG(line)};border-radius:${r}px"><tr><td style="padding:1px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${BG(fill)};border-radius:${r - 1}px"><tr><td style="padding:${pad};${FONT};${extra}">${inner}</td></tr></table></td></tr></table>`;
 
-function renderEmail({ name, email, message, files, label = '' }) {
+function renderEmail({ name, email, message, files, label = '', service = '' }) {
   const now = new Intl.DateTimeFormat('ar-u-nu-latn-ca-gregory', { timeZone: 'Asia/Riyadh', dateStyle: 'long', timeStyle: 'short' }).format(new Date());
+  const quoteHref = `https://yazeedalharthi.sa/quote/?name=${encodeURIComponent(name)}&svc=${encodeURIComponent(service)}&to=${encodeURIComponent(email)}`;
   const replyHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('رد من يزيد حمد الحارثي')}`;
   const chips = files.map((f) => `<td style="padding:0 0 6px 6px">${box(G(`<span style="color:#D6D6D6;font-size:13px;white-space:nowrap">📎 ${esc(f)}</span>`), { r: 10, pad: '7px 12px', fill: '#10151C' })}</td>`).join('');
   const fileRows = files.length ? `<tr><td style="padding:16px 28px 0;${FONT};text-align:right">${G('<div style="font-size:12px;color:#8C8C8C;margin-bottom:8px">المرفقات (' + files.length + ')</div>')}<table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>${chips}</tr></table></td></tr>` : '';
@@ -162,7 +168,7 @@ function renderEmail({ name, email, message, files, label = '' }) {
 </td></tr>
 <tr><td style="padding:18px 28px 0">${msg}</td></tr>
 ${fileRows}
-<tr><td align="center" style="padding:24px 28px 6px"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td align="center" style="${BG('#17719F')};border-radius:12px"><a href="${replyHref}" style="display:block;padding:13px 34px;${FONT};font-size:15px;font-weight:bold;color:#FFFFFF;text-decoration:none">${G(`رد على ${esc(name)}`)}</a></td></tr></table></td></tr>
+<tr><td align="center" style="padding:24px 28px 6px"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td align="center" style="${BG('#17719F')};border-radius:12px"><a href="${replyHref}" style="display:block;padding:13px 34px;${FONT};font-size:15px;font-weight:bold;color:#FFFFFF;text-decoration:none">${G(`رد على ${esc(name)}`)}</a></td></tr></table></td></tr>${service ? `<tr><td align="center" style="padding:10px 28px 6px"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td align="center" style="${BG('#0F1722')};border-radius:12px"><a href="${quoteHref}" style="display:block;padding:13px 34px;${FONT};font-size:15px;font-weight:bold;color:#FFFFFF;text-decoration:none">${G('🧾 جهّز عرض السعر')}</a></td></tr></table></td></tr>` : ''}
 <tr><td align="center" style="padding:26px 16px 0"><img src="${ASSET}/ach.png" width="360" alt="المركز الأول طويق · Google — رقم Guinness 14,075 مشارك — 100% حماية مِجهر — 32 من 32 HackerRank" style="display:block;width:100%;max-width:360px;height:auto;border:0;margin:0 auto"></td></tr>
 <tr><td align="center" style="padding:8px 16px 0"><a href="https://yazeedalharthi.sa" style="text-decoration:none"><img src="${ASSET}/brand.png" width="360" alt="همّة حتى القمّة — يزيد حمد الحارثي · مهندس حلول ذكاء اصطناعي — yazeedalharthi.sa" style="display:block;width:100%;max-width:360px;height:auto;border:0;margin:0 auto"></a></td></tr>
 <tr><td style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td height="1" style="height:1px;font-size:0;line-height:0;${BG('#141A22')}">&nbsp;</td></tr></table></td></tr>
