@@ -91,9 +91,10 @@ function renderEmail({ name, email, message, files }) {
   const replyHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('رد من يزيد حمد الحارثي')}`;
   const ach = [
     ['🥇', 'المركز الأول', 'طويق · Google'],
+    ['🏆', 'رقم Guinness', '14,075 مشارك'],
     ['🛡️', '100%', 'حماية مِجهر'],
     ['⚡', '32 من 32', 'HackerRank']
-  ].map(([i, t, d]) => `<td width="33%" valign="top" style="padding:0 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#10141A;border:1px solid #1F252E;border-radius:14px"><tr><td height="96" valign="middle" style="height:96px;padding:12px 8px;text-align:center;font-family:Tahoma,Arial,sans-serif">
+  ].map(([i, t, d], n) => `${n === 2 ? '</tr><tr><td colspan="2" height="8" style="height:8px;font-size:0;line-height:0">&nbsp;</td></tr><tr>' : ''}<td width="50%" valign="top" style="padding:0 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#10141A;border:1px solid #1F252E;border-radius:14px"><tr><td height="96" valign="middle" style="height:96px;padding:12px 8px;text-align:center;font-family:Tahoma,Arial,sans-serif">
 <div style="font-size:20px;line-height:1">${i}</div><div style="margin-top:8px;font-size:14px;font-weight:bold;color:#F2F4F7;white-space:nowrap">${t}</div><div style="margin-top:3px;font-size:12px;color:#7E8895;line-height:1.5">${d}</div></td></tr></table></td>`).join('');
   const fileRows = files.length ? `<tr><td style="padding:18px 28px 0;font-family:Tahoma,Arial,sans-serif">
 <div style="font-size:12px;color:#7E8895;margin-bottom:8px">المرفقات (${files.length})</div>
