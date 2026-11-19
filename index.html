@@ -638,12 +638,12 @@ class Component extends DCLogic {
       this._rot += reduce ? 0 : mode === 'think' ? 0.006 : 0.0009 + L * 0.002;
       const gold = mode === 'listen';
       // a soft pulse of the whole sphere: with the voice when it speaks, a slow breath while it listens
-      if (!reduce) { const pz = mode === 'speak' ? 0.01 + L * 0.018 : mode === 'listen' ? 0.018 * (0.5 + 0.5 * Math.sin(t * 0.0042)) : 0; this._pz = (this._pz || 0) + (pz - (this._pz || 0)) * 0.2; R *= 1 + this._pz; }
+      if (!reduce) { this._bump = (this._bump || 0) * 0.9; const pz = mode === 'speak' ? 0.015 + L * 0.11 : mode === 'listen' ? 0.035 * (0.5 + 0.5 * Math.sin(t * 0.005)) + this._bump : 0; const k = pz > (this._pz || 0) ? 0.35 : 0.12; this._pz = (this._pz || 0) + (pz - (this._pz || 0)) * k; R *= 1 + this._pz; }
       x.clearRect(0, 0, cw, ch);
       // outer glow
-      const og = x.createRadialGradient(cx, cy, R * 0.85, cx, cy, R * 1.36);
+      const og = x.createRadialGradient(cx, cy, R * 0.85, cx, cy, R * 1.2);
       og.addColorStop(0, gold ? 'rgba(233,185,73,' + (0.22 + L * 0.3) + ')' : 'rgba(79,184,232,' + (0.16 + L * 0.34) + ')'); og.addColorStop(1, 'rgba(79,184,232,0)');
-      x.fillStyle = og; x.beginPath(); x.arc(cx, cy, R * 1.36, 0, 6.283); x.fill();
+      x.fillStyle = og; x.beginPath(); x.arc(cx, cy, R * 1.2, 0, 6.283); x.fill();
       x.save(); x.beginPath(); x.arc(cx, cy, R, 0, 6.283); x.clip();
       // glass body
       const bg = x.createRadialGradient(cx - R * 0.3, cy - R * 0.35, R * 0.1, cx, cy, R);
@@ -750,9 +750,10 @@ class Component extends DCLogic {
       let fin = '', mid = '';
       for (let i = 0; i < e.results.length; i++) { const r = e.results[i]; const tx = (r[0] && r[0].transcript) || ''; if (r.isFinal) fin += tx + ' '; else mid += tx + ' '; }
       this._final = fin.trim(); this._heard = (fin + mid).replace(/\s+/g, ' ').trim();
-      if (this._heard) this.setState({ lastText: this._heard });
+      if (this._heard) { if (this._heard.length !== (this._hl || 0)) this._bump = Math.min(0.12, (this._bump || 0) + 0.06); this._hl = this._heard.length; this.setState({ lastText: this._heard }); }
       quiet();
     };
+    rec.onspeechstart = () => { this._bump = 0.08; };
     rec.onerror = (e) => { if (e.error === 'no-speech' || e.error === 'aborted') return; clearTimeout(this._sil); this.setState({ listening: false, phase: 'idle', vstatus: e.error === 'not-allowed' ? 'اسمح للمتصفح يستخدم المايك وجرب مرة ثانية' : 'ما وصلني صوت واضح، جرّب مرة ثانية' }); };
     rec.onend = () => { if (this.rec === rec && this.state.listening) this.finishListen(false); };
     this.setState({ listening: true, phase: 'listen', lastText: '', vstatus: 'يسمعك' }); this.startWave();
