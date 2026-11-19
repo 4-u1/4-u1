@@ -86,44 +86,46 @@ module.exports.config = { api: { bodyParser: { sizeLimit: '4.5mb' } } };
 
 // Branded notification email (table layout + inline styles for Gmail/Outlook/Apple Mail)
 const ASSET = 'https://yazeedalharthi.sa/assets/email';
-// Gmail iOS dark mode inverts text colours; these wrappers undo it (styles apply only inside Gmail).
+// Gmail iOS dark mode inverts colours. Defences used here:
+//  - every background is also a background-image gradient (Gmail never inverts those)
+//  - borders are drawn as 1px padding over a gradient, not CSS borders (Gmail inverts borders)
+//  - static brand art (eyebrow, achievements, signature) is an image (never inverted)
+//  - dynamic text is neutral (no hue) and wrapped in G(), a blend-mode fix that only applies in Gmail
 const G = (h) => `<div class="gs"><div class="gd">${h}</div></div>`;
+const BG = (c) => `background-color:${c};background-image:linear-gradient(${c},${c})`;
+const FONT = "font-family:Inter,'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif";
+// a box with a 1px "border" that survives Gmail dark mode
+const box = (inner, { line = '#1E2733', fill = '#0E1217', r = 14, pad = '16px 18px', extra = '' } = {}) =>
+  `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${BG(line)};border-radius:${r}px"><tr><td style="padding:1px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${BG(fill)};border-radius:${r - 1}px"><tr><td style="padding:${pad};${FONT};${extra}">${inner}</td></tr></table></td></tr></table>`;
+
 function renderEmail({ name, email, message, files }) {
   const now = new Intl.DateTimeFormat('ar-u-nu-latn-ca-gregory', { timeZone: 'Asia/Riyadh', dateStyle: 'long', timeStyle: 'short' }).format(new Date());
   const replyHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('رد من يزيد حمد الحارثي')}`;
-  const ach = [
-    ['🥇', 'المركز الأول', 'طويق · Google'],
-    ['🏆', 'رقم Guinness', '14,075 مشارك'],
-    ['🛡️', '100%', 'حماية مِجهر'],
-    ['⚡', '32 من 32', 'HackerRank']
-  ].map(([i, t, d], n) => `${n === 2 ? '</tr><tr><td colspan="2" height="8" style="height:8px;font-size:0;line-height:0">&nbsp;</td></tr><tr>' : ''}<td width="50%" valign="top" style="padding:0 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#10141A;background-image:linear-gradient(#10141A,#10141A);border:1px solid #1F252E;border-radius:14px"><tr><td height="96" valign="middle" style="height:96px;padding:12px 8px;text-align:center;font-family:Tahoma,Arial,sans-serif">
-<div style="font-size:20px;line-height:1">${i}</div>${G(`<div style="margin-top:8px;font-size:14px;font-weight:bold;color:#F2F4F7;white-space:nowrap">${t}</div><div style="margin-top:3px;font-size:12px;color:#7E8895;line-height:1.5">${d}</div>`)}</td></tr></table></td>`).join('');
-  const fileRows = files.length ? `<tr><td style="padding:18px 28px 0;font-family:Tahoma,Arial,sans-serif">
-${G(`<div style="font-size:12px;color:#7E8895;margin-bottom:8px">المرفقات (${files.length})</div>`)}
-${files.map((f) => `<div style="display:inline-block;margin:0 0 6px 6px;padding:7px 12px;border-radius:10px;background-color:#10141A;background-image:linear-gradient(#10141A,#10141A);border:1px solid #1F252E;color:#CFE9F7;font-size:13px">${G(`📎 ${esc(f)}`)}</div>`).join('')}</td></tr>` : '';
-  return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><style>u + .body .gs{background:#000;mix-blend-mode:screen}u + .body .gd{background:#000;mix-blend-mode:difference}</style></head>
-<body class="body" style="margin:0;padding:0;background-color:#05070A;background-image:linear-gradient(#05070A,#05070A)">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#05070A" style="background-color:#05070A;background-image:linear-gradient(#05070A,#05070A)"><tr><td align="center" style="padding:24px 12px">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" dir="rtl" style="width:100%;max-width:600px;background-color:#07090C;background-image:linear-gradient(#07090C,#07090C);border:1px solid #1A1F27;border-radius:22px;overflow:hidden">
-<tr><td style="padding:0"><img src="${ASSET}/yh-header-v2.jpg" width="600" alt="YH" style="display:block;width:100%;height:auto;border:0"></td></tr>
-<tr><td style="padding:6px 28px 0;font-family:Tahoma,Arial,sans-serif;text-align:right">
-${G(`<div style="font-size:12.5px;color:#E9B949;letter-spacing:.3px">رسالة جديدة من موقعك</div>
-<div style="margin-top:6px;font-size:24px;font-weight:bold;color:#FFFFFF;line-height:1.5">${esc(name)}</div>
-<div style="margin-top:2px;font-size:14px"><a href="mailto:${esc(email)}" style="color:#4FB8E8;text-decoration:none">${esc(email)}</a></div>
-<div style="margin-top:2px;font-size:12px;color:#5A6472">${now}</div>`)}
+  const chips = files.map((f) => `<td style="padding:0 0 6px 6px">${box(G(`<span style="color:#D6D6D6;font-size:13px;white-space:nowrap">📎 ${esc(f)}</span>`), { r: 10, pad: '7px 12px', fill: '#10151C' })}</td>`).join('');
+  const fileRows = files.length ? `<tr><td style="padding:16px 28px 0;${FONT};text-align:right">${G('<div style="font-size:12px;color:#8C8C8C;margin-bottom:8px">المرفقات (' + files.length + ')</div>')}<table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>${chips}</tr></table></td></tr>` : '';
+  const msg = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${BG('#1E2733')};border-radius:14px"><tr><td style="padding:1px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="${BG('#0E1217')};border-radius:13px"><tr>
+<td width="3" style="width:3px;${BG('#4FB8E8')};border-radius:0 13px 13px 0;font-size:0;line-height:0">&nbsp;</td>
+<td style="padding:18px 20px;${FONT};font-size:15.5px;line-height:1.95;color:#E6E6E6;white-space:pre-wrap;text-align:right">${G(esc(message))}</td></tr></table></td></tr></table>`;
+  return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
+<style>u + .body .gs{background:#000;mix-blend-mode:screen}u + .body .gd{background:#000;mix-blend-mode:difference}</style></head>
+<body class="body" style="margin:0;padding:0;${BG('#05070A')}">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#05070A" style="${BG('#05070A')}"><tr><td align="center" style="padding:24px 10px">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;${BG('#1A2330')};border-radius:22px"><tr><td style="padding:1px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="rtl" style="${BG('#07090C')};border-radius:21px;overflow:hidden">
+<tr><td style="padding:0;border-radius:21px 21px 0 0;overflow:hidden"><img src="${ASSET}/yh-header-v2.jpg" width="600" alt="YH" style="display:block;width:100%;height:auto;border:0;border-radius:21px 21px 0 0"></td></tr>
+<tr><td style="padding:10px 28px 0;text-align:right">
+<img src="${ASSET}/eyebrow.png" width="141" height="29" alt="رسالة جديدة من موقعك" style="display:inline-block;width:141px;height:29px;border:0">
+<div style="${FONT};text-align:right">${G(`<div style="margin-top:4px;font-size:24px;font-weight:bold;color:#FFFFFF;line-height:1.5">${esc(name)}</div>
+<div style="margin-top:2px;font-size:14px"><a href="mailto:${esc(email)}" style="color:#D9D9D9;text-decoration:none">${esc(email)}</a></div>
+<div style="margin-top:2px;font-size:12px;color:#8A8A8A">${now}</div>`)}</div>
 </td></tr>
-<tr><td style="padding:18px 28px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0E1217;background-image:linear-gradient(#0E1217,#0E1217);border:1px solid #1F252E;border-right:3px solid #4FB8E8;border-radius:14px"><tr><td style="padding:18px 20px;font-family:Tahoma,Arial,sans-serif;font-size:15.5px;line-height:1.95;color:#DCE2E9;white-space:pre-wrap;text-align:right">${G(esc(message))}</td></tr></table></td></tr>
+<tr><td style="padding:18px 28px 0">${msg}</td></tr>
 ${fileRows}
-<tr><td align="center" style="padding:24px 28px 6px"><a href="${replyHref}" style="display:inline-block;padding:13px 34px;border-radius:12px;background-color:#1F86C2;background-image:linear-gradient(#1F86C2,#1F86C2);color:#FFFFFF;font-family:Tahoma,Arial,sans-serif;font-size:15px;font-weight:bold;text-decoration:none">${G(`رد على ${esc(name)}`)}</a></td></tr>
-<tr><td style="padding:26px 16px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed"><tr>${ach}</tr></table></td></tr>
-<tr><td align="center" style="padding:30px 28px 8px">
-<img src="${ASSET}/emblem.png" width="44" height="44" alt="" style="display:block;border:0;margin:0 auto">
-${G('<div style="margin-top:8px;font-family:Tahoma,Arial,sans-serif;font-size:17px;font-weight:bold;color:#E9B949">همّة حتى القمّة</div>')}
-</td></tr>
-<tr><td align="center" style="padding:14px 28px 26px;border-top:1px solid #151A21;font-family:Tahoma,Arial,sans-serif">
-${G(`<div style="font-size:13px;color:#AEB7C2"><b style="color:#F2F4F7">يزيد حمد الحارثي</b> · مهندس حلول ذكاء اصطناعي</div>
-<div style="margin-top:6px;font-size:12.5px"><a href="https://yazeedalharthi.sa" style="color:#4FB8E8;text-decoration:none">yazeedalharthi.sa</a></div>
-<div style="margin-top:10px;font-size:11px;color:#4A5361">وصلتك هذي الرسالة من نموذج التواصل في موقعك. زر «رد» يرد على المرسل مباشرة. © 2026</div>`)}
-</td></tr>
-</table></td></tr></table></body></html>`;
+<tr><td align="center" style="padding:24px 28px 6px"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td align="center" style="${BG('#17719F')};border-radius:12px"><a href="${replyHref}" style="display:block;padding:13px 34px;${FONT};font-size:15px;font-weight:bold;color:#FFFFFF;text-decoration:none">${G(`رد على ${esc(name)}`)}</a></td></tr></table></td></tr>
+<tr><td align="center" style="padding:26px 16px 0"><img src="${ASSET}/ach.png" width="360" alt="المركز الأول طويق · Google — رقم Guinness 14,075 مشارك — 100% حماية مِجهر — 32 من 32 HackerRank" style="display:block;width:100%;max-width:360px;height:auto;border:0;margin:0 auto"></td></tr>
+<tr><td align="center" style="padding:8px 16px 0"><a href="https://yazeedalharthi.sa" style="text-decoration:none"><img src="${ASSET}/brand.png" width="360" alt="همّة حتى القمّة — يزيد حمد الحارثي · مهندس حلول ذكاء اصطناعي — yazeedalharthi.sa" style="display:block;width:100%;max-width:360px;height:auto;border:0;margin:0 auto"></a></td></tr>
+<tr><td style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td height="1" style="height:1px;font-size:0;line-height:0;${BG('#141A22')}">&nbsp;</td></tr></table></td></tr>
+<tr><td align="center" style="padding:14px 28px 22px;${FONT}">${G('<div style="font-size:11px;line-height:1.7;color:#6F6F6F">وصلتك هذي الرسالة من نموذج التواصل في موقعك. زر «رد» يرد على المرسل مباشرة. © 2026</div>')}</td></tr>
+</table></td></tr></table>
+</td></tr></table></body></html>`;
 }
