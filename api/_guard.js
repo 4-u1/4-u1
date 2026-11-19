@@ -6,7 +6,8 @@
 const ALLOWED_HOSTS = new Set([
   'yazeed-alharthi.vercel.app',
   'yazeedalharthi.sa',
-  'www.yazeedalharthi.sa'
+  'www.yazeedalharthi.sa',
+  'invoice.yazeedalharthi.sa'
 ]);
 // preview / branch deployments of this project only
 const PREVIEW = /^yazeed-alharthi-[a-z0-9-]+-4-u1-6459\.vercel\.app$/;

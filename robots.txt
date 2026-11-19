@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /quote/
+Disallow: /invoice/
 
 Sitemap: https://yazeedalharthi.sa/sitemap.xml

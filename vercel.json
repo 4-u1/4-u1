@@ -51,5 +51,31 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "invoice.yazeedalharthi.sa"
+        }
+      ],
+      "destination": "/invoice/index.html"
+    },
+    {
+      "source": "/v/:id",
+      "has": [
+        {
+          "type": "host",
+          "value": "invoice.yazeedalharthi.sa"
+        }
+      ],
+      "destination": "/invoice/index.html"
+    },
+    {
+      "source": "/invoice/v/:id",
+      "destination": "/invoice/index.html"
+    }
   ]
 }
