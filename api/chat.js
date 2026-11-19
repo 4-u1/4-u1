@@ -1,6 +1,6 @@
 // Serverless function: answers questions about Yazeed using a real model.
 // Keys come only from environment variables set in the Vercel dashboard:
-//   GEMINI_API_KEY  (optional GEMINI_MODEL, default gemini-2.5-flash)
+//   GEMINI_API_KEY  (optional GEMINI_MODEL, default gemini-3.8-flash)
 //   ANTHROPIC_API_KEY (optional ANTHROPIC_MODEL, default claude-haiku-5-5)
 // If both are set, Gemini is used. Keys are never sent to the browser.
 
@@ -103,9 +103,11 @@ function clean(messages) {
 }
 
 async function callGemini(msgs) {
-  const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-  const gen = { maxOutputTokens: 600, temperature: 0.3 };
+  const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+  // thinking tokens count toward maxOutputTokens, so leave room for them
+  const gen = { maxOutputTokens: 2048, temperature: 0.3 };
   if (/^gemini-2\.5/.test(model)) gen.thinkingConfig = { thinkingBudget: 0 };
+  else if (/^gemini-3/.test(model)) gen.thinkingConfig = { thinkingLevel: 'low' }; // 3.8 Flash: low|medium|high, no 'minimal'
   const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY },
@@ -118,7 +120,7 @@ async function callGemini(msgs) {
   if (!r.ok) throw new Error('gemini ' + r.status + ' ' + (await r.text()).slice(0, 300));
   const j = await r.json();
   const parts = (((j.candidates || [])[0] || {}).content || {}).parts || [];
-  return parts.map((p) => p.text || '').join('').trim();
+  return parts.filter((p) => !p.thought).map((p) => p.text || '').join('').trim();
 }
 
 async function callClaude(msgs) {
