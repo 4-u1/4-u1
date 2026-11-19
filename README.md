@@ -7,6 +7,7 @@
 </p>
 
 <p align="center">
+  <a href="https://yazeedalharthi.sa"><img alt="Website: yazeedalharthi.sa" src="https://img.shields.io/badge/Website-yazeedalharthi.sa-E9B949?style=for-the-badge&logo=googlechrome&logoColor=white&labelColor=0B0F1A"></a>
   <a href="https://www.linkedin.com/in/y4z"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-in%2Fy4z-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"></a>
   <a href="mailto:yazed.501k@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-yazed.501k%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white"></a>
   <a href="#projects"><img alt="13 projects" src="https://img.shields.io/badge/Projects-13-4FB8E8?style=for-the-badge&logo=github&logoColor=white&labelColor=0B0F1A"></a>
@@ -17,7 +18,8 @@
 
 ## About me
 
-I am a Computer Engineering student and AI engineer from Saudi Arabia. I build **AI systems that
+I am **Yazeed Hamad Alharthi** (يزيد حمد الحارثي), a Computer Engineering student and AI engineer from Saudi Arabia.
+Portfolio: **[yazeedalharthi.sa](https://yazeedalharthi.sa)**. I build **AI systems that
 can be trusted**: agents that show where every claim came from, admit when the evidence is not
 there, and wait for a human before anything is written, sent or decided.
 
