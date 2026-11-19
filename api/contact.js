@@ -9,7 +9,7 @@
 const { reject } = require('./_guard');
 
 const MAX_FILES = 3;
-const MAX_TOTAL_BYTES = 3.5 * 1024 * 1024; // keeps the JSON body under Vercel's 4.5 MB request limit
+const MAX_TOTAL_BYTES = 3 * 1024 * 1024; // 3 MB decoded ≈ 4 MB base64, safely under Vercel's 4.5 MB request limit
 const ALLOWED = /^(image\/(png|jpe?g|webp|gif|heic|heif)|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.(wordprocessingml\.document|presentationml\.presentation|spreadsheetml\.sheet)|application\/vnd\.ms-(powerpoint|excel)|text\/plain)$/;
 const EXT_OK = /\.(png|jpe?g|webp|gif|heic|heif|pdf|docx?|pptx?|xlsx?|txt)$/i;
 const EMAIL = /^[^@\s<>"]+@[^@\s<>"]+\.[^@\s<>"]{2,}$/;
