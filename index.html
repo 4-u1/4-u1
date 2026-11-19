@@ -856,7 +856,7 @@ class Component extends DCLogic {
       {title: "مشارك في رقم قياسي من Guinness", org: "أكبر درس فيديو عن الذكاء الاصطناعي · 14,075 مشارك", date: "15 يوليو 2026", cid: "", gold: false},
       {title: "نادي البرمجة والذكاء الاصطناعي (PAIC)", org: "مسار الذكاء الاصطناعي وعلوم البيانات · مشروعا مِرصاد ومحور", date: "أغسطس 2026 حتى الآن", cid: "", gold: false}
     ];
-    const TOP = { prog: ["هندسة أنظمة الذكاء الاصطناعي التوكيلي المتقدمة", "برنامج حلول الذكاء الاصطناعي مع Google", "تطوير حلول الذكاء الاصطناعي التوليدي", "Building with the Claude API", "AWS Certified AI Practitioner (مسار تعليمي)"], ach: 5 };
+    const TOP = { prog: ["بكالوريوس هندسة الحاسب", "هندسة أنظمة الذكاء الاصطناعي التوكيلي المتقدمة", "برنامج حلول الذكاء الاصطناعي مع Google", "تطوير حلول الذكاء الاصطناعي التوليدي", "Building with the Claude API", "AWS Certified AI Practitioner (مسار تعليمي)"], ach: 5 };
     const src = st.qtab === 'prog' ? PROG : ACH;
     const topList = st.qtab === 'prog' ? TOP.prog.map((t) => src.find((q) => q.title === t)).filter(Boolean) : src.slice(0, TOP.ach);
     const restList = src.filter((q) => topList.indexOf(q) === -1);
