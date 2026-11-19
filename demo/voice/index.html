@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0E3A47">
+<title>بيت الرَّوشن | مطبخ حجازي في جدة، اتصل واحجز</title>
+<meta name="description" content="بيت الرَّوشن، مطبخ حجازي في البلد وأبحر الشمالية. المنيو والفروع والمواعيد، واتصل لحجز طاولتك.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230E3A47'/%3E%3Cpath d='M18 56V28a14 14 0 0 1 28 0v28z' fill='none' stroke='%23EDE2CF' stroke-width='3.5'/%3E%3Cpath d='M32 30l7 7-7 7-7-7z' fill='%23F2B632'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Reem+Kufi:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Reem+Kufi:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+<style>
+:root{
+  --sea:#0E3A47;      /* بحر جدة ليلاً */
+  --deep:#0A2C36;
+  --wood:#2A7D70;     /* دهان الروشن */
+  --wood-dim:#1B5A55;
+  --stone:#EDE2CF;    /* حجر منقبي */
+  --mist:#A9C6C3;
+  --saffron:#F2B632;  /* اللون المميز، للاتصال فقط */
+  --henna:#D2483F;
+  --kufi:"Reem Kufi",system-ui,sans-serif;
+  --naskh:"Noto Naskh Arabic","Geeza Pro",serif;
+  --pad:clamp(18px,5vw,56px);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--sea);color:var(--stone);font-family:var(--naskh);font-size:17px;line-height:1.75;-webkit-text-size-adjust:100%;overflow-x:hidden}
+body.locked{overflow:hidden}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--saffron);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.num{font-family:var(--kufi);font-variant-numeric:tabular-nums}
+.ico{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ===== app bar ===== */
+.bar{position:sticky;top:0;z-index:20;background:rgba(14,58,71,.94);backdrop-filter:saturate(1.2) blur(6px);-webkit-backdrop-filter:saturate(1.2) blur(6px);border-bottom:1px solid var(--wood-dim);padding-top:env(safe-area-inset-top)}
+.bar-in{max-width:1180px;margin:0 auto;padding:10px var(--pad);display:flex;align-items:center;gap:22px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--stone)}
+.logo svg{width:30px;height:38px;flex:none}
+.logo b{font-family:var(--kufi);font-weight:700;font-size:21px;line-height:1}
+.logo span{display:block;font-family:var(--kufi);font-weight:400;font-size:11.5px;color:var(--mist);margin-top:3px}
+.nav{display:none;gap:26px;margin-inline-start:auto;font-family:var(--kufi);font-size:15px}
+.nav a{text-decoration:none;color:var(--mist);padding-block:6px;border-bottom:1px solid transparent}
+.nav a:hover{color:var(--stone);border-bottom-color:var(--wood)}
+.bar-call{margin-inline-start:auto;display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--stone);padding:7px 14px;font-family:var(--kufi);font-size:14.5px;border-radius:2px}
+.bar-call:hover{background:var(--stone);color:var(--deep)}
+.bar-call .ico{width:18px;height:18px}
+@media (min-width:860px){.nav{display:flex}.bar-call{margin-inline-start:0}}
+
+/* ===== hero ===== */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--wood-dim)}
+.hero-in{max-width:1180px;margin:0 auto;padding:34px var(--pad) 40px;display:grid;gap:8px;position:relative}
+.facade{position:absolute;inset-block:0;inset-inline-end:-96px;width:210px;opacity:.32;pointer-events:none}
+.facade svg{width:100%;height:100%}
+.hero-copy{position:relative;max-width:30rem}
+.hero h1{font-family:var(--kufi);font-weight:700;font-size:clamp(44px,12vw,92px);line-height:1.05;margin:0;letter-spacing:0}
+.hero .tag{font-size:clamp(18px,4.6vw,23px);line-height:1.6;margin:14px 0 0;max-width:24ch}
+.openline{display:flex;align-items:center;gap:8px;font-family:var(--kufi);font-size:14px;color:var(--mist);margin:16px 0 0}
+.openline i{width:8px;height:8px;border-radius:50%;background:var(--wood);flex:none}
+.openline.is-open i{background:#5FC28F}
+.dial{display:flex;align-items:center;gap:16px;margin-top:30px}
+.dial-btn{width:76px;height:76px;border-radius:50%;border:0;background:var(--saffron);color:var(--deep);display:grid;place-items:center;flex:none;box-shadow:0 0 0 7px rgba(242,182,50,.13)}
+.dial-btn:hover{box-shadow:0 0 0 10px rgba(242,182,50,.18)}
+.dial-btn:active{transform:scale(.96)}
+.dial-btn svg{width:32px;height:32px}
+.dial b{display:block;font-family:var(--kufi);font-weight:700;font-size:20px;line-height:1.3}
+.dial small{display:block;color:var(--mist);font-size:14.5px;line-height:1.5}
+.starters{margin-top:30px;max-width:30rem;position:relative}
+.starters h2{font-family:var(--kufi);font-weight:500;font-size:14px;color:var(--mist);margin:0 0 4px}
+.starters ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--wood-dim)}
+.starters li{border-bottom:1px solid var(--wood-dim)}
+.starter{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;background:none;border:0;padding:12px 2px;text-align:start;font-size:17px;line-height:1.5}
+.starter .ico{width:18px;height:18px;color:var(--mist)}
+.starter:hover{color:#fff}.starter:hover .ico{color:var(--saffron)}
+@media (min-width:860px){
+  .hero-in{grid-template-columns:1.1fr .9fr;padding-block:72px 84px;column-gap:56px}
+  .facade{position:relative;inset:auto;width:auto;grid-column:2;grid-row:1 / span 2;height:560px;opacity:1}
+  .starters{grid-column:1}
+}
+
+/* ===== sections ===== */
+.sec{max-width:1180px;margin:0 auto;padding:56px var(--pad)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:2px solid var(--stone);padding-bottom:10px;margin-bottom:6px}
+.sec-head h2{font-family:var(--kufi);font-weight:700;font-size:clamp(28px,6vw,40px);line-height:1.2;margin:0}
+.sec-head p{margin:0;color:var(--mist);font-size:14.5px;font-family:var(--kufi)}
+.menu-grid{display:grid;gap:8px 64px}
+@media (min-width:860px){.menu-grid{grid-template-columns:1fr 1fr}}
+.menu-group h3{font-family:var(--kufi);font-weight:500;font-size:18px;color:var(--mist);margin:28px 0 4px}
+.menu{list-style:none;margin:0;padding:0}
+.menu li{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid rgba(42,125,112,.45)}
+.menu .dish{flex:1;min-width:0}
+.menu .dish b{font-weight:600;font-size:17.5px}
+.menu .dish small{display:block;color:var(--mist);font-size:14px;line-height:1.5}
+.menu .price{font-family:var(--kufi);font-variant-numeric:tabular-nums;font-size:17px;white-space:nowrap}
+.menu .price span{font-size:12px;color:var(--mist);margin-inline-start:3px}
+.veg{display:inline-block;font-family:var(--kufi);font-size:11.5px;color:#9fd8b8;border:1px solid #3f7f62;padding:0 6px;margin-inline-start:6px;vertical-align:2px;border-radius:2px}
+
+.band{background:var(--deep);border-block:1px solid var(--wood-dim)}
+.branches{display:grid;gap:36px;margin-top:22px}
+@media (min-width:860px){.branches{grid-template-columns:1.15fr 1fr;gap:64px}}
+.branch h3{font-family:var(--kufi);font-weight:700;font-size:24px;margin:0;line-height:1.3}
+.branch .addr{margin:4px 0 12px;color:var(--mist)}
+.branch p{margin:0 0 10px;max-width:42ch}
+.hours{width:100%;border-collapse:collapse;margin-top:8px;font-size:16px}
+.hours th{font-family:var(--kufi);font-weight:500;text-align:start;padding:8px 0;color:var(--mist);width:42%}
+.hours td{padding:8px 0;text-align:end}
+.hours tr{border-bottom:1px solid var(--wood-dim)}
+
+.book{display:grid;gap:26px;align-items:start}
+@media (min-width:860px){.book{grid-template-columns:1fr 1fr;gap:64px}}
+.rules{list-style:none;margin:0;padding:0;counter-reset:r}
+.rules li{display:grid;grid-template-columns:28px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--wood-dim)}
+.rules .ico{color:var(--mist);margin-top:4px}
+.book-cta{border-inline-start:3px solid var(--saffron);padding-inline-start:20px}
+.book-cta p{margin:0 0 18px;font-size:19px;max-width:28ch}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--saffron);color:var(--deep);border:0;padding:12px 22px;font-family:var(--kufi);font-weight:700;font-size:16px;border-radius:2px}
+.cta:hover{background:#f7c650}
+.cta .ico{width:20px;height:20px}
+
+.foot{border-top:1px solid var(--wood-dim);padding:28px var(--pad) max(28px,env(safe-area-inset-bottom));max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between;font-family:var(--kufi);font-size:13px;color:var(--mist)}
+.foot .copy{margin:0}
+.credit{display:flex;flex-wrap:wrap;gap:6px 20px;align-items:center}
+.credit a{color:var(--mist);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.credit a:hover{color:var(--stone);text-decoration:underline}
+.credit img{height:16px;width:auto;display:block}
+
+/* ===== call layer ===== */
+.layer{position:fixed;inset:0;z-index:50;display:none;background:rgba(5,25,31,.7)}
+.layer.open{display:block}
+.phone>*{flex:none}
+.phone>.log{flex:1 1 auto}
+.phone{position:absolute;inset:0;background:var(--deep);display:flex;flex-direction:column;padding:max(12px,env(safe-area-inset-top)) 18px max(14px,env(safe-area-inset-bottom));min-width:0;animation:rise .32s cubic-bezier(.2,.8,.3,1)}
+@keyframes rise{from{transform:translateY(24px);opacity:0}}
+@media (min-width:700px){.phone{inset:auto;top:50%;left:50%;transform:translate(-50%,-50%);width:430px;height:min(800px,94vh);border:1px solid var(--wood);border-radius:28px;animation:none}}
+.ph-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ph-top .who{display:flex;align-items:center;gap:8px;font-family:var(--kufi);font-size:14px;color:var(--mist)}
+.ph-top .who svg{width:20px;height:26px}
+.spk{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--wood-dim);padding:5px 10px;font-family:var(--kufi);font-size:12.5px;color:var(--mist);border-radius:2px}
+.spk .ico{width:16px;height:16px}
+.spk[aria-pressed="false"]{color:#7f9e9c}
+.window{display:grid;place-items:center;padding-top:6px}
+.window svg{width:112px;height:auto;display:block}
+.status{text-align:center;font-family:var(--kufi);font-weight:500;font-size:18px;margin:6px 0 0;min-height:1.5em}
+.timer{text-align:center;font-family:var(--kufi);font-size:14px;color:var(--mist);margin:0;font-variant-numeric:tabular-nums;min-height:1.4em}
+
+.log{flex:1 1 auto;min-height:120px;overflow-y:auto;margin-top:10px;padding:4px 2px 8px;overscroll-behavior:contain}
+.line{margin:0 0 12px;max-width:92%}
+.line .by{display:block;font-family:var(--kufi);font-size:12px;color:var(--mist);line-height:1.4}
+.line p{margin:0;font-size:17px;line-height:1.8;overflow-wrap:anywhere}
+.line.agent{border-inline-start:2px solid var(--saffron);padding-inline-start:12px}
+.line.user{margin-inline-start:auto;text-align:end}
+.line.user p{display:inline-block;text-align:start;background:var(--stone);color:var(--deep);padding:5px 13px;border-radius:16px 16px 3px 16px}
+.line.interim p{background:transparent;color:var(--mist);border:1px solid var(--wood)}
+.line.sys{max-width:100%;font-size:15px;color:#f2cfc4;border-inline-start:2px solid var(--henna);padding:4px 12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.line.sys button{background:none;border:1px solid var(--stone);color:var(--stone);padding:3px 12px;font-family:var(--kufi);font-size:13.5px;border-radius:2px}
+.skel{display:grid;gap:7px;padding:6px 0 4px;width:70%}
+.skel i{display:block;height:10px;border-radius:2px;background:linear-gradient(90deg,#14424c 0%,#1d5560 40%,#14424c 80%);background-size:200% 100%;animation:sh 1.2s linear infinite}
+.skel i:last-child{width:60%}
+@keyframes sh{to{background-position:-200% 0}}
+
+.ticket{margin:4px 0 14px;background:var(--stone);color:var(--deep);padding:14px 16px 16px;border-radius:3px;position:relative;animation:drop .4s cubic-bezier(.2,.9,.3,1.2)}
+.ticket::before,.ticket::after{content:"";position:absolute;top:56px;width:16px;height:16px;border-radius:50%;background:var(--deep)}
+.ticket::before{inset-inline-start:-8px}.ticket::after{inset-inline-end:-8px}
+@keyframes drop{from{transform:translateY(-8px);opacity:0}}
+.ticket h3{margin:0;font-family:var(--kufi);font-weight:700;font-size:18px;display:flex;align-items:center;gap:8px;line-height:1.3}
+.ticket h3 .ico{width:20px;height:20px;stroke-width:2}
+.ticket .sub{margin:2px 0 0;font-size:13.5px;color:#46605f;line-height:1.5}
+.ticket dl{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:20px 0 0;padding-top:12px;border-top:2px dotted #b9ab92}
+.ticket dt{font-family:var(--kufi);font-size:12px;color:#5b6f6d;line-height:1.3}
+.ticket dd{margin:0;font-weight:600;font-size:17px;line-height:1.4;overflow-wrap:anywhere}
+
+.quick{display:flex;gap:6px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none;min-width:0;max-width:100%}
+.quick::-webkit-scrollbar{display:none}
+.q{flex:none;background:none;border:0;border-bottom:1px solid var(--wood);padding:4px 6px;font-size:15px;line-height:1.4;color:var(--stone);white-space:nowrap}
+.q:hover{border-bottom-color:var(--saffron)}
+.q:disabled{opacity:.4;cursor:default}
+.note{font-size:14px;color:var(--mist);margin:0 0 6px;line-height:1.6}
+.typer{display:flex;gap:8px;margin-bottom:10px}
+.typer[hidden]{display:none}
+.typer input{flex:1;min-width:0;background:var(--sea);border:1px solid var(--wood);border-radius:3px;padding:10px 12px;font-size:16px;color:var(--stone)}
+.typer input::placeholder{color:#7fa3a0}
+.typer button{background:var(--stone);color:var(--deep);border:0;border-radius:3px;padding:0 16px;font-family:var(--kufi);font-weight:700}
+.typer button:disabled{opacity:.5}
+
+.controls{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;gap:10px;padding-top:4px}
+.ctl{display:grid;justify-items:center;gap:4px}
+.round{width:54px;height:54px;border-radius:50%;border:1px solid var(--wood);background:transparent;display:grid;place-items:center}
+.round[aria-pressed="true"]{background:var(--stone);color:var(--deep);border-color:var(--stone)}
+.round:disabled{opacity:.35;cursor:default}
+.ctl-label{font-family:var(--kufi);font-size:12px;color:var(--mist);text-align:center}
+.hang{width:74px;height:74px;border-radius:50%;border:0;background:var(--henna);color:#fff;display:grid;place-items:center}
+.hang svg{width:32px;height:32px;transform:rotate(135deg)}
+.hang:active{transform:scale(.96)}
+
+.summary{display:none;padding-top:6px}
+.layer.ended .summary{display:block}
+.layer.ended .controls,.layer.ended .quick,.layer.ended .typer,.layer.ended .note{display:none!important}
+.summary h2{font-family:var(--kufi);font-size:20px;margin:0;line-height:1.3}
+.summary .outcome{margin:2px 0 12px;color:var(--mist);font-size:15.5px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:0 0 14px;border-block:1px solid var(--wood-dim)}
+.stats div{padding:8px 4px;text-align:center}
+.stats div+div{border-inline-start:1px solid var(--wood-dim)}
+.stats dt{font-family:var(--kufi);font-size:12px;color:var(--mist);line-height:1.3}
+.stats dd{margin:2px 0 0;font-family:var(--kufi);font-weight:700;font-size:20px;font-variant-numeric:tabular-nums;line-height:1.3}
+.sum-actions{display:flex;gap:10px}
+.sum-actions button{flex:1;padding:11px 12px;font-family:var(--kufi);font-weight:700;font-size:15px;border:1px solid var(--stone);background:transparent;border-radius:2px}
+.sum-actions .again{background:var(--saffron);color:var(--deep);border-color:var(--saffron)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark" viewBox="0 0 30 38"><path d="M3 37V15a12 12 0 0 1 24 0v22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M1 37h28" stroke="currentColor" stroke-width="2"/><path d="M15 11l5.5 5.5L15 22l-5.5-5.5z" fill="#F2B632"/><path d="M15 22l5.5 5.5L15 33l-5.5-5.5z" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="logo" href="#top" aria-label="بيت الرَّوشن">
+      <svg aria-hidden="true"><use href="#mark"/></svg>
+      <div><b>بيت الرَّوشن</b><span>مطبخ حجازي</span></div>
+    </a>
+    <nav class="nav" aria-label="أقسام الموقع">
+      <a href="#menu">المنيو</a><a href="#branches">الفروع والمواعيد</a><a href="#booking">الحجز</a>
+    </nav>
+    <button class="bar-call" type="button" data-call>
+      <svg class="ico" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+      اتصل بنا
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-in">
+      <div class="facade" aria-hidden="true">
+        <svg viewBox="0 0 260 560" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <pattern id="lat" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <path d="M0 0h12M0 0v12" stroke="#2A7D70" stroke-width="1.6"/>
+            </pattern>
+            <pattern id="lat2" width="8" height="8" patternUnits="userSpaceOnUse">
+              <path d="M0 4h8M4 0v8" stroke="#2A7D70" stroke-width="1"/>
+            </pattern>
+            <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2B632" stop-opacity=".18"/><stop offset="1" stop-color="#F2B632" stop-opacity="0"/></linearGradient>
+          </defs>
+          <!-- coral-stone wall courses -->
+          <g stroke="#1B5A55" stroke-width="1">
+            <path d="M0 40h260M0 210h260M0 380h260M0 548h260"/>
+            <path d="M0 44h260M0 214h260M0 384h260"/>
+          </g>
+          <!-- upper rawshan -->
+          <g fill="none" stroke="#2A7D70" stroke-width="2">
+            <path d="M40 60h180v6H40zM34 54h192"/>
+            <path d="M46 66h168v118H46z"/>
+            <rect x="54" y="74" width="72" height="80" fill="url(#lat)"/>
+            <rect x="134" y="74" width="72" height="80" fill="url(#lat)"/>
+            <path d="M54 162h152v14H54z" fill="url(#lat2)"/>
+            <path d="M46 184l14 18h140l14-18"/>
+            <path d="M70 202v8M130 202v8M190 202v8"/>
+          </g>
+          <rect x="54" y="74" width="152" height="80" fill="url(#dusk)"/>
+          <path d="M130 46l6 6-6 6-6-6z" fill="#F2B632"/>
+          <!-- lower rawshan, larger -->
+          <g fill="none" stroke="#2A7D70" stroke-width="2">
+            <path d="M26 232h208v8H26zM20 226h220"/>
+            <path d="M34 240h192v150H34z"/>
+            <path d="M34 240h192"/>
+            <rect x="42" y="250" width="54" height="104" fill="url(#lat)"/>
+            <rect x="103" y="250" width="54" height="104" fill="url(#lat)"/>
+            <rect x="164" y="250" width="54" height="104" fill="url(#lat)"/>
+            <path d="M42 362h176v20H42z" fill="url(#lat2)"/>
+            <path d="M34 390l16 22h160l16-22"/>
+            <path d="M60 412v10M100 412v10M160 412v10M200 412v10"/>
+          </g>
+          <rect x="103" y="250" width="54" height="104" fill="url(#dusk)"/>
+          <!-- door -->
+          <g fill="none" stroke="#2A7D70" stroke-width="2">
+            <path d="M92 548V474a38 38 0 0 1 76 0v74"/>
+            <path d="M100 548V478a30 30 0 0 1 60 0v70M130 448v100"/>
+            <path d="M112 500h8M140 500h8"/>
+          </g>
+        </svg>
+      </div>
+      <div class="hero-copy">
+        <h1>بيت الرَّوشن</h1>
+        <p class="tag">سليق وصيادية ومعصوب على أصولها، من البلد إلى أبحر.</p>
+        <p class="openline" id="openNow"><i></i><span>يوميًا من 1 الظهر إلى 1 بعد منتصف الليل</span></p>
+        <div class="dial">
+          <button class="dial-btn" type="button" data-call aria-label="اتصل بالمطعم">
+            <svg aria-hidden="true"><use href="#i-phone"/></svg>
+          </button>
+          <div><b>اتصل بالمطعم</b><small>للحجز والاستفسار، الخط يرد على مدار الساعة</small></div>
+        </div>
+      </div>
+      <div class="starters">
+        <h2>أو ابدأ المكالمة بـ</h2>
+        <ul>
+          <li><button class="starter" type="button" data-line="أبي أحجز طاولة لخمسة يوم الخميس">أبي أحجز طاولة لخمسة يوم الخميس<svg class="ico" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button></li>
+          <li><button class="starter" type="button" data-line="كم سعر السليق؟">كم سعر السليق؟<svg class="ico" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button></li>
+          <li><button class="starter" type="button" data-line="متى تفتحون يوم الجمعة؟">متى تفتحون يوم الجمعة؟<svg class="ico" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button></li>
+          <li><button class="starter" type="button" data-line="وش عندكم فطور حجازي؟">وش عندكم فطور حجازي؟<svg class="ico" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="menu" aria-labelledby="menuT">
+    <div class="sec-head"><h2 id="menuT">المنيو</h2><p>الأسعار بالريال وشاملة الضريبة</p></div>
+    <div class="menu-grid">
+      <div>
+        <div class="menu-group">
+          <h3>الأطباق الرئيسية</h3>
+          <ul class="menu">
+            <li><div class="dish"><b>سليق دجاج</b><small>رز مطبوخ بالحليب والمرق، مع دجاج محمّر</small></div><span class="price"><bdi>58</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>صيادية سمك</b><small>رز بني بالبصل المكرمل وسمك اليوم</small></div><span class="price"><bdi>74</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>سمك حريد مشوي مع رز</b></div><span class="price"><bdi>79</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>رز بخاري لحم</b></div><span class="price"><bdi>72</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>رز بخاري دجاج</b></div><span class="price"><bdi>52</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>مقلقل لحم</b></div><span class="price"><bdi>68</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>منتو لحم</b><small>12 حبة على البخار</small></div><span class="price"><bdi>42</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>مبشور لحم</b></div><span class="price"><bdi>39</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>معدوس</b><span class="veg">نباتي</span></div><span class="price"><bdi>34</bdi><span>ر.س</span></span></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="menu-group">
+          <h3>الفطور الحجازي، فرع البلد</h3>
+          <ul class="menu">
+            <li><div class="dish"><b>فول بالسمن البلدي</b><span class="veg">نباتي</span></div><span class="price"><bdi>18</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>تميس</b><small>الحبة</small></div><span class="price"><bdi>3</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>مطبق لحم</b></div><span class="price"><bdi>22</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>معصوب بالموز والقشطة</b></div><span class="price"><bdi>26</bdi><span>ر.س</span></span></li>
+          </ul>
+        </div>
+        <div class="menu-group">
+          <h3>الحلى والمشروبات</h3>
+          <ul class="menu">
+            <li><div class="dish"><b>بسبوسة بالقشطة</b></div><span class="price"><bdi>22</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>لقيمات بالدبس</b></div><span class="price"><bdi>19</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>سوبيا</b></div><span class="price"><bdi>12</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>شاي بالنعناع المديني</b></div><span class="price"><bdi>9</bdi><span>ر.س</span></span></li>
+            <li><div class="dish"><b>دلة قهوة عربية</b></div><span class="price"><bdi>25</bdi><span>ر.س</span></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="band">
+    <section class="sec" id="branches" aria-labelledby="brT">
+      <div class="sec-head"><h2 id="brT">الفروع والمواعيد</h2><p>قسم عوائل في الفرعين</p></div>
+      <div class="branches">
+        <div class="branch">
+          <h3>فرع البلد</h3>
+          <p class="addr">جدة التاريخية، قرب باب مكة</p>
+          <p>جلسة سطح مطلة على الرواشين، تتسع للمجموعات حتى 20 شخص. الفطور الحجازي في هذا الفرع فقط.</p>
+          <table class="hours">
+            <tr><th scope="row">السبت إلى الخميس</th><td><bdi>1:00</bdi> م إلى <bdi>1:00</bdi> ص</td></tr>
+            <tr><th scope="row">الجمعة</th><td><bdi>4:00</bdi> م إلى <bdi>1:00</bdi> ص</td></tr>
+            <tr><th scope="row">الفطور (السبت إلى الخميس)</th><td><bdi>7:00</bdi> ص إلى <bdi>11:00</bdi> ص</td></tr>
+          </table>
+        </div>
+        <div class="branch">
+          <h3>فرع أبحر الشمالية</h3>
+          <p class="addr">على الكورنيش</p>
+          <p>جلسات أفراد وعوائل مع إطلالة على البحر.</p>
+          <table class="hours">
+            <tr><th scope="row">السبت إلى الخميس</th><td><bdi>1:00</bdi> م إلى <bdi>1:00</bdi> ص</td></tr>
+            <tr><th scope="row">الجمعة</th><td><bdi>4:00</bdi> م إلى <bdi>1:00</bdi> ص</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="sec" id="booking" aria-labelledby="bkT">
+    <div class="sec-head"><h2 id="bkT">الحجز</h2><p>بالاتصال فقط</p></div>
+    <div class="book">
+      <ul class="rules">
+        <li><svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 5.5a3 3 0 0 1 0 5.6M18 19a4.5 4.5 0 0 0-2.5-4"/></svg><span>من شخص إلى 20 شخص. المجموعات فوق 10 في قسم العوائل أو جلسة السطح.</span></li>
+        <li><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>نحفظ الطاولة 15 دقيقة بعد موعدك.</span></li>
+        <li><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16v10H4z"/><path d="M4 10h16M7 14h3"/><path d="M3 3l18 18"/></svg><span>بدون عربون. نحتاج الاسم والعدد واليوم والوقت فقط.</span></li>
+      </ul>
+      <div class="book-cta">
+        <p>اتصل وقل لنا كم شخص ومتى، ونأكد لك الحجز في نفس المكالمة.</p>
+        <button class="cta" type="button" data-call><svg class="ico" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>اتصل واحجز</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="copy">بيت الرَّوشن. جميع الحقوق محفوظة.</p>
+  <div class="credit">
+    <a href="https://yazeedalharthi.sa/#services">تصميم وتطوير <img src="/assets/yh-mark-on-dark.svg" alt="" width="24" height="16"> يزيد الحارثي</a>
+    <a href="https://yazeedalharthi.sa/#services">تبي نسخة لمنشأتك؟ اطلب عرض سعر</a>
+  </div>
+</footer>
+
+<!-- call experience -->
+<div class="layer" id="layer" role="dialog" aria-modal="true" aria-labelledby="callTitle" hidden>
+  <div class="phone">
+    <div class="ph-top">
+      <div class="who"><svg aria-hidden="true"><use href="#mark"/></svg><span id="callTitle">بيت الرَّوشن، خط الحجز</span></div>
+      <button class="spk" id="spk" type="button" aria-pressed="true">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+        <span id="spkLabel">السماعة</span>
+      </button>
+    </div>
+    <div class="window" aria-hidden="true"><svg id="rawshan" viewBox="0 0 120 170"></svg></div>
+    <p class="status" id="status" aria-live="polite">جاري الاتصال</p>
+    <p class="timer" id="timer"><bdi>0:00</bdi></p>
+
+    <div class="log" id="log" role="log" aria-live="polite" aria-label="نص المكالمة"></div>
+
+    <section class="summary" id="summary" aria-labelledby="sumTitle">
+      <h2 id="sumTitle">انتهت المكالمة</h2>
+      <p class="outcome" id="sumOutcome"></p>
+      <dl class="stats">
+        <div><dt>المدة</dt><dd id="sumDur">0:00</dd></div>
+        <div><dt>طلباتك</dt><dd id="sumTurns">0</dd></div>
+        <div><dt>ردودنا</dt><dd id="sumReplies">0</dd></div>
+      </dl>
+      <div class="sum-actions">
+        <button type="button" class="again" id="againBtn">اتصال جديد</button>
+        <button type="button" id="closeBtn">إغلاق</button>
+      </div>
+    </section>
+
+    <div class="quick" id="quick" role="group" aria-label="جمل سريعة">
+      <button class="q" type="button">أبي أحجز طاولة لخمسة يوم الخميس</button>
+      <button class="q" type="button">كم سعر الصيادية؟</button>
+      <button class="q" type="button">عندكم أكل نباتي؟</button>
+      <button class="q" type="button">وين فروعكم؟</button>
+      <button class="q" type="button">فيه توصيل؟</button>
+    </div>
+    <p class="note" id="note" hidden></p>
+    <form class="typer" id="typer" hidden autocomplete="off">
+      <label for="say" class="sr">اكتب كلامك</label>
+      <input id="say" name="say" type="text" maxlength="380" placeholder="اكتب اللي تبي تقوله" enterkeyhint="send">
+      <button type="submit" id="sendBtn">أرسل</button>
+    </form>
+
+    <div class="controls">
+      <div class="ctl">
+        <button class="round" id="micBtn" type="button" aria-pressed="false" aria-describedby="micLbl">
+          <svg class="ico" id="micIcon" viewBox="0 0 24 24"></svg>
+        </button>
+        <span class="ctl-label" id="micLbl">المايك</span>
+      </div>
+      <div class="ctl">
+        <button class="hang" id="hangBtn" type="button" aria-label="إنهاء المكالمة"><svg aria-hidden="true"><use href="#i-phone"/></svg></button>
+        <span class="ctl-label">إنهاء</span>
+      </div>
+      <div class="ctl">
+        <button class="round" id="kbBtn" type="button" aria-pressed="false" aria-describedby="kbLbl">
+          <svg class="ico" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.01M9.5 10h.01M13 10h.01M16.5 10h.01M8 14h8"/></svg>
+        </button>
+        <span class="ctl-label" id="kbLbl">كتابة</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $ = function(id){ return document.getElementById(id); };
+var layer=$('layer'), logEl=$('log'), statusEl=$('status'), timerEl=$('timer'),
+    hangBtn=$('hangBtn'), micBtn=$('micBtn'), micLbl=$('micLbl'), kbBtn=$('kbBtn'),
+    typer=$('typer'), sayInput=$('say'), sendBtn=$('sendBtn'), noteEl=$('note'), spkBtn=$('spk'), spkLabel=$('spkLabel');
+var qBtns=[].slice.call(document.querySelectorAll('.q'));
+var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+var TTS = ('speechSynthesis' in window) && typeof SpeechSynthesisUtterance !== 'undefined';
+var GREETING = 'هلا والله، معك بيت الرَّوشن. تبي تحجز طاولة ولا عندك سؤال عن المنيو؟';
+var lastFocus=null;
+
+var S = { live:false, start:0, tick:null, mode:'voice', muted:false, speaker:true, phase:'idle',
+  history:[], userTurns:0, replies:0, reservation:null, rec:null, recFinal:'', interimEl:null,
+  silentRounds:0, ctrl:null, callId:0, greetWait:null, _fin:null };
+
+/* ---------- open-now line (Asia/Riyadh) ---------- */
+(function(){
+  try{
+    var parts=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Riyadh',weekday:'short',hour:'numeric',hour12:false}).formatToParts(new Date());
+    var wd='',h=0; parts.forEach(function(p){ if(p.type==='weekday') wd=p.value; if(p.type==='hour') h=parseInt(p.value,10)%24; });
+    var openAt = wd==='Fri'?16:13, el=$('openNow'), txt;
+    var isOpen = h<1 || h>=openAt;
+    if(isOpen) txt='مفتوحين الحين، نقفل 1 بعد منتصف الليل';
+    else if(wd!=='Fri' && h>=7 && h<11) txt='فطور البلد شغّال الحين، والغداء من 1 الظهر';
+    else txt='نفتح اليوم '+(openAt===16?'4 العصر':'1 الظهر')+'، والحجز متاح الحين بالاتصال';
+    el.querySelector('span').textContent=txt; el.classList.toggle('is-open',isOpen);
+  }catch(e){}
+})();
+
+/* ---------- rawshan lattice visualizer ---------- */
+var cells=[], level=0, target=0, raf=0, tStart=performance.now();
+(function(){
+  var svg=$('rawshan'), NS='http://www.w3.org/2000/svg';
+  function el(n,a){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e;}
+  var defs=el('defs',{}), cp=el('clipPath',{id:'arch'}), archD='M14 166V62a46 46 0 0 1 92 0v104z';
+  cp.appendChild(el('path',{d:archD})); defs.appendChild(cp); svg.appendChild(defs);
+  svg.appendChild(el('path',{d:archD,fill:'#082630'}));
+  var g=el('g',{'clip-path':'url(#arch)'}); svg.appendChild(g);
+  var step=11;
+  for(var y=10;y<=172;y+=step) for(var x=8;x<=114;x+=step){
+    var r=el('rect',{x:x-3.6,y:y-3.6,width:7.2,height:7.2,rx:1,transform:'rotate(45 '+x+' '+y+')',fill:'#F2B632','fill-opacity':'0.07'});
+    g.appendChild(r); cells.push({el:r,x:x,y:y,d:Math.hypot(x-60,(y-110)*0.8)});
+  }
+  for(var lx=8+step/2; lx<114; lx+=step) g.appendChild(el('line',{x1:lx,y1:0,x2:lx,y2:170,stroke:'#2A7D70','stroke-width':'1.1'}));
+  for(var ly=10+step/2; ly<170; ly+=step) g.appendChild(el('line',{x1:0,y1:ly,x2:120,y2:ly,stroke:'#2A7D70','stroke-width':'1.1'}));
+  svg.appendChild(el('path',{d:archD,fill:'none',stroke:'#2A7D70','stroke-width':'3.5'}));
+  svg.appendChild(el('path',{d:'M8 164h104v6H8z',fill:'#2A7D70'}));
+  svg.appendChild(el('path',{d:'M54 13l6-7 6 7-6 7z',fill:'#F2B632'}));
+})();
+function paint(now){
+  var t=(now-tStart)/1000, ph=S.phase;
+  level += (target-level)*0.12;
+  for(var i=0;i<cells.length;i++){
+    var c=cells[i], v=0.07;
+    if(ph==='speaking') v=0.1+Math.max(0, level*(1.15-c.d/70)+0.25*Math.sin(t*7-c.d/9)*level);
+    else if(ph==='listening') v=0.08+(0.22+level*0.7)*Math.max(0,Math.sin(t*2.2-c.d/14))*(1-c.d/120);
+    else if(ph==='thinking') v=0.08+0.33*Math.max(0,Math.sin(t*3+c.y/16-c.x/40));
+    else if(S.live) v=0.12;
+    c.el.setAttribute('fill-opacity', Math.min(0.95,v).toFixed(3));
+  }
+  if(ph==='speaking' && Math.random()<0.18) target=0.35+Math.random()*0.65;
+  if(ph!=='speaking') target*=0.96;
+  raf=requestAnimationFrame(paint);
+}
+function paintStatic(){
+  var v = S.phase==='speaking'?0.6 : S.phase==='listening'?0.35 : S.phase==='thinking'?0.25 : S.live?0.12:0.07;
+  cells.forEach(function(c){ c.el.setAttribute('fill-opacity', String(c.d<40? v : v*0.5)); });
+}
+function startPaint(){ if(reduceMotion){ paintStatic(); return; } if(!raf) raf=requestAnimationFrame(paint); }
+function stopPaint(){ if(raf){ cancelAnimationFrame(raf); raf=0; } S.phase='idle'; paintStatic(); }
+
+/* ---------- helpers ---------- */
+function setPhase(p,text){ S.phase=p; if(text!=null) statusEl.textContent=text; if(reduceMotion) paintStatic(); }
+function fmt(ms){ var s=Math.max(0,Math.round(ms/1000)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function setTimer(txt){ timerEl.textContent=''; var b=document.createElement('bdi'); b.textContent=txt; timerEl.appendChild(b); }
+function scrollLog(){ logEl.scrollTop=logEl.scrollHeight; }
+function addLine(role,text){
+  var d=document.createElement('div'); d.className='line '+role;
+  var w=document.createElement('span'); w.className='by'; w.textContent= role==='agent'?'بيت الرَّوشن':'أنت';
+  var p=document.createElement('p'); p.textContent=text;
+  d.appendChild(w); d.appendChild(p); logEl.appendChild(d); scrollLog(); return d;
+}
+function addSys(text,retryFn){
+  var d=document.createElement('div'); d.className='line sys';
+  var s=document.createElement('span'); s.textContent=text; d.appendChild(s);
+  if(retryFn){ var b=document.createElement('button'); b.type='button'; b.textContent='أعد المحاولة';
+    b.addEventListener('click',function(){ d.remove(); retryFn(); }); d.appendChild(b); }
+  logEl.appendChild(d); scrollLog(); return d;
+}
+function showNote(t){ noteEl.textContent=t; noteEl.hidden=!t; }
+function setQuickDisabled(v){ qBtns.forEach(function(b){ b.disabled=v; }); }
+
+/* ---------- reservation tag ---------- */
+var TAG_RE=/\[\[\s*RES\s*\|([^|\]]*)\|([^|\]]*)\|([^|\]]*)\|([^|\]]*)\]\]/;
+function clip(s,n){ s=String(s||'').replace(/[\[\]|<>]/g,'').trim(); return s.length>n? s.slice(0,n)+'…' : s; }
+function parseReply(raw){
+  var m=String(raw||'').match(TAG_RE), res=null;
+  if(m){
+    var num=(m[2]||'').replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d);}).match(/\d+/);
+    res={ name:clip(m[1],40), people: num? String(Math.min(99,parseInt(num[0],10))) : clip(m[2],12), day:clip(m[3],30), time:clip(m[4],30) };
+    if(!res.name||!res.people||!res.day||!res.time) res=null;
+  }
+  var clean=String(raw||'').replace(/\[\[[\s\S]*?\]\]/g,'').replace(/\[\[[\s\S]*$/,'').replace(/[*#_`>]+/g,'').replace(/\s+/g,' ').trim();
+  return {text:clean,res:res};
+}
+var NS='http://www.w3.org/2000/svg';
+function checkIcon(){
+  var s=document.createElementNS(NS,'svg'); s.setAttribute('viewBox','0 0 24 24'); s.setAttribute('class','ico'); s.setAttribute('aria-hidden','true');
+  var c=document.createElementNS(NS,'circle'); c.setAttribute('cx','12'); c.setAttribute('cy','12'); c.setAttribute('r','9');
+  var p=document.createElementNS(NS,'path'); p.setAttribute('d','M8 12.5l2.8 2.8L16.5 9.5');
+  s.appendChild(c); s.appendChild(p); return s;
+}
+function ticketNode(r){
+  var t=document.createElement('div'); t.className='ticket'; t.setAttribute('role','status');
+  var h=document.createElement('h3'); h.appendChild(checkIcon()); h.appendChild(document.createTextNode('تم تأكيد الحجز'));
+  var sub=document.createElement('p'); sub.className='sub'; sub.textContent='نحفظ الطاولة 15 دقيقة بعد الموعد';
+  var dl=document.createElement('dl');
+  [['الاسم',r.name],['عدد الأشخاص',r.people],['اليوم',r.day],['الوقت',r.time]].forEach(function(p){
+    var w=document.createElement('div'), dt=document.createElement('dt'), dd=document.createElement('dd'), bd=document.createElement('bdi');
+    dt.textContent=p[0]; bd.textContent=p[1]; dd.appendChild(bd); w.appendChild(dt); w.appendChild(dd); dl.appendChild(w);
+  });
+  t.appendChild(h); t.appendChild(sub); t.appendChild(dl); return t;
+}
+
+/* ---------- speech synthesis ---------- */
+var arVoice=null, voicesKnown=false;
+function pickVoice(){
+  if(!TTS) return;
+  var vs=speechSynthesis.getVoices()||[]; if(vs.length) voicesKnown=true;
+  var ar=vs.filter(function(v){ return /^ar/i.test(v.lang||''); });
+  arVoice = ar.find(function(v){return /sa/i.test(v.lang);}) || ar.find(function(v){return v.localService;}) || ar[0] || null;
+}
+if(TTS){ pickVoice(); if(speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged',pickVoice); }
+function canSpeak(){ return TTS && S.speaker && (arVoice || !voicesKnown); }
+function speak(text){
+  return new Promise(function(resolve){
+    if(!canSpeak()||!text){ resolve(); return; }
+    try{
+      speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(text);
+      u.lang = arVoice ? arVoice.lang : 'ar-SA'; if(arVoice){ try{ u.voice=arVoice; }catch(e){} }
+      u.rate=1.02;
+      var done=false, guard;
+      var fin=function(){ if(done) return; done=true; clearTimeout(guard); target=0; if(S._fin===fin) S._fin=null; resolve(); };
+      guard=setTimeout(fin, 4000+text.length*110);
+      u.onstart=function(){ target=0.8; };
+      u.onboundary=function(){ target=0.55+Math.random()*0.45; };
+      u.onend=fin; u.onerror=fin; S._fin=fin;
+      speechSynthesis.speak(u);
+    }catch(e){ resolve(); }
+  });
+}
+function stopSpeaking(){ if(TTS){ try{ speechSynthesis.cancel(); }catch(e){} } if(S._fin) S._fin(); }
+function updateSpeakerUI(){ spkBtn.setAttribute('aria-pressed',S.speaker?'true':'false'); spkLabel.textContent=S.speaker?'السماعة':'الصوت مكتوم'; }
+spkBtn.addEventListener('click',function(){ S.speaker=!S.speaker; updateSpeakerUI(); if(!S.speaker) stopSpeaking(); });
+if(!TTS){ S.speaker=false; spkBtn.disabled=true; updateSpeakerUI(); spkLabel.textContent='بدون صوت'; }
+
+/* ---------- speech recognition ---------- */
+var MSG_DENIED='ما وصلنا إذن المايك. كمّل المكالمة كتابة، أو اسمح للمايك من إعدادات المتصفح.';
+var MSG_NOMIC='ما لقينا مايك في جهازك. كمّل المكالمة كتابة ونرد عليك بالصوت.';
+var MSG_NOSR='متصفحك ما يدعم التحدث المباشر. كمّل المكالمة كتابة ونرد عليك بالصوت.';
+function voiceUnavailable(msg){
+  S.mode='text'; stopRec();
+  if(S.live && S.phase==='listening') setPhase('idle-live','الخط مفتوح، اكتب طلبك');
+  showNote(msg); openTyper(true); updateMicUI();
+}
+function stopRec(){
+  var r=S.rec; S.rec=null;
+  if(r){ r.onresult=r.onend=r.onerror=null; try{ r.abort(); }catch(e){} }
+  if(S.interimEl){ S.interimEl.remove(); S.interimEl=null; }
+}
+function listen(){
+  if(!S.live || S.mode!=='voice' || S.muted || !SR){
+    if(S.live && S.phase!=='thinking') setPhase('idle-live', S.mode==='text'?'الخط مفتوح، اكتب طلبك':'المايك موقف');
+    return;
+  }
+  stopRec();
+  var r; try{ r=new SR(); }catch(e){ voiceUnavailable(MSG_NOSR); return; }
+  r.lang='ar-SA'; r.interimResults=true; r.continuous=false; r.maxAlternatives=1;
+  S.rec=r; S.recFinal='';
+  var myCall=S.callId;
+  setPhase('listening','نسمعك، تفضّل');
+  r.onresult=function(e){
+    var interim='', fin='';
+    for(var i=0;i<e.results.length;i++){ var tx=e.results[i][0].transcript; if(e.results[i].isFinal) fin+=tx; else interim+=tx; }
+    S.recFinal=fin||S.recFinal; target=0.7;
+    var show=(fin||interim).trim();
+    if(show){
+      if(!S.interimEl){ S.interimEl=addLine('user',show); S.interimEl.classList.add('interim'); }
+      else S.interimEl.querySelector('p').textContent=show;
+      scrollLog();
+    }
+  };
+  r.onerror=function(e){
+    var er=e&&e.error;
+    if(er==='not-allowed'||er==='service-not-allowed') voiceUnavailable(MSG_DENIED);
+    else if(er==='audio-capture') voiceUnavailable(MSG_NOMIC);
+    else if(er==='network') voiceUnavailable('التحدث المباشر يحتاج إنترنت ثابت. كمّل كتابة لين يرجع.');
+    else if(er==='language-not-supported') voiceUnavailable(MSG_NOSR);
+  };
+  r.onend=function(){
+    if(S.rec!==r || myCall!==S.callId) return;
+    S.rec=null;
+    var said=(S.recFinal||(S.interimEl&&S.interimEl.querySelector('p').textContent)||'').trim();
+    if(S.interimEl){ S.interimEl.remove(); S.interimEl=null; }
+    if(said){ S.silentRounds=0; userSays(said); return; }
+    if(!S.live||S.mode!=='voice'||S.muted||S.phase!=='listening') return;
+    S.silentRounds++;
+    if(S.silentRounds===3) showNote('ما وصلنا صوتك بوضوح. قرّب الجوال وتكلّم، أو اكتب طلبك.');
+    setTimeout(function(){ if(S.live && S.phase==='listening' && !S.rec && myCall===S.callId) listen(); },250);
+  };
+  try{ r.start(); }catch(e){ setTimeout(function(){ if(S.live && S.phase==='listening') listen(); },400); }
+}
+function askMic(){
+  if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return Promise.resolve(true);
+  return navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){ st.getTracks().forEach(function(t){t.stop();}); return true; })
+    .catch(function(e){ voiceUnavailable(e && e.name==='NotFoundError' ? MSG_NOMIC : MSG_DENIED); return false; });
+}
+
+/* ---------- conversation ---------- */
+function userSays(text, keepSpeech){
+  text=String(text||'').trim().slice(0,380);
+  if(!text||!S.live) return;
+  stopRec(); if(!keepSpeech){ stopSpeaking(); S.greetWait=null; }
+  S.userTurns++; addLine('user',text); S.history.push({role:'user',text:text});
+  ask();
+}
+function ask(){
+  var myCall=S.callId;
+  setPhase('thinking','لحظة');
+  sendBtn.disabled=true; setQuickDisabled(true);
+  var sk=document.createElement('div'); sk.className='line agent pending'; sk.setAttribute('aria-label','نجهّز الرد');
+  var sb=document.createElement('div'); sb.className='skel'; sb.appendChild(document.createElement('i')); sb.appendChild(document.createElement('i'));
+  sk.appendChild(sb); logEl.appendChild(sk); scrollLog();
+  var ctrl=new AbortController(); S.ctrl=ctrl;
+  var to=setTimeout(function(){ ctrl.abort(); },30000);
+  fetch('/api/demo',{method:'POST',headers:{'content-type':'application/json'},signal:ctrl.signal,
+    body:JSON.stringify({demo:'voice',messages:S.history.slice(-12)})})
+  .then(function(r){ return r.json().catch(function(){return {};}).then(function(j){ return {ok:r.ok,status:r.status,j:j}; }); })
+  .then(function(res){
+    clearTimeout(to); sk.remove(); if(myCall!==S.callId) return;
+    S.ctrl=null; sendBtn.disabled=false; setQuickDisabled(false);
+    if(!res.ok||!res.j||typeof res.j.text!=='string'||!res.j.text.trim()) return fail(res.status);
+    var out=parseReply(res.j.text);
+    if(!out.text && !out.res) return fail(502);
+    var spoken=out.text||'تم تأكيد حجزك.';
+    S.replies++; S.history.push({role:'assistant',text:spoken});
+    addLine('agent',spoken);
+    if(out.res){ S.reservation=out.res; logEl.appendChild(ticketNode(out.res)); scrollLog(); }
+    setPhase('speaking','يرد عليك');
+    (S.greetWait||Promise.resolve()).then(function(){ S.greetWait=null; return myCall===S.callId ? speak(spoken) : null; })
+      .then(function(){ if(myCall===S.callId && S.live) listen(); });
+  })
+  .catch(function(){
+    clearTimeout(to); sk.remove(); if(myCall!==S.callId) return;
+    S.ctrl=null; sendBtn.disabled=false; setQuickDisabled(false);
+    fail(ctrl.signal.aborted?'timeout':'network');
+  });
+}
+function fail(code){
+  var msg;
+  if(code===429) msg='الخط مزحوم الحين. انتظر دقيقة وأعد المحاولة.';
+  else if(code===503) msg='خط الحجز متوقف مؤقتًا. جرّب بعد شوي.';
+  else if(code==='timeout') msg='الرد تأخر أكثر من 30 ثانية. أعد المحاولة.';
+  else if(code==='network') msg='انقطع الاتصال بالإنترنت. تأكد من الشبكة وأعد المحاولة.';
+  else msg='انقطع الخط قبل ما يوصلك الرد. أعد المحاولة.';
+  addSys(msg,function(){ if(S.live) ask(); });
+  setPhase('idle-live','الخط مفتوح');
+}
+
+/* ---------- call lifecycle ---------- */
+function openTyper(show){ typer.hidden=!show; kbBtn.setAttribute('aria-pressed',show?'true':'false'); }
+var MIC_ON='<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>';
+var MIC_OFF=MIC_ON.replace('V21"','V21M4 4l16 16"');
+function updateMicUI(){
+  var on=S.live && S.mode==='voice' && !S.muted;
+  micBtn.disabled=!S.live;
+  micBtn.setAttribute('aria-pressed',on?'false':'true');
+  if(S.mode==='text'){ micLbl.textContent= SR?'شغّل المايك':'المايك غير متاح'; if(!SR) micBtn.disabled=true; }
+  else micLbl.textContent= S.muted?'المايك موقف':'كتم المايك';
+  $('micIcon').innerHTML= on?MIC_ON:MIC_OFF;
+}
+function showLayer(){
+  if(layer.hidden){ lastFocus=document.activeElement; }
+  layer.hidden=false; layer.classList.add('open'); document.body.classList.add('locked');
+}
+function hideLayer(){
+  layer.classList.remove('open','ended'); layer.hidden=true; document.body.classList.remove('locked');
+  if(lastFocus && lastFocus.focus) lastFocus.focus();
+}
+function startCall(firstLine){
+  if(S.live) return;
+  showLayer(); layer.classList.remove('ended');
+  S.callId++; S.live=true; S.start=Date.now(); S.history=[]; S.userTurns=0; S.replies=0; S.reservation=null; S.silentRounds=0; S.muted=false;
+  logEl.textContent=''; showNote(''); setTimer('0:00');
+  S.tick=setInterval(function(){ setTimer(fmt(Date.now()-S.start)); },1000);
+  startPaint();
+  var wantVoice=!firstLine && !!SR;
+  S.mode= wantVoice?'voice':'text';
+  if(!SR){ showNote(MSG_NOSR); openTyper(true); }
+  else openTyper(!wantVoice);
+  updateMicUI();
+  setTimeout(function(){ (S.mode==='text'? sayInput : hangBtn).focus({preventScroll:true}); },30);
+
+  /* fixed opening line of the call; spoken inside the tap so iOS unlocks audio */
+  S.history.push({role:'assistant',text:GREETING});
+  addLine('agent',GREETING);
+  setPhase('speaking','متصل');
+  var myCall=S.callId, greeted=speak(GREETING);
+  S.greetWait=greeted;
+  if(firstLine){ userSays(firstLine,true); return; }
+  var micReady= wantVoice? askMic() : Promise.resolve(true);
+  Promise.all([greeted,micReady]).then(function(){
+    if(myCall!==S.callId||!S.live||S.phase==='thinking') return;
+    listen();
+  });
+}
+function endCall(){
+  if(!S.live) return;
+  S.live=false; S.callId++;
+  stopRec(); stopSpeaking();
+  if(S.ctrl){ try{ S.ctrl.abort(); }catch(e){} S.ctrl=null; }
+  [].slice.call(logEl.querySelectorAll('.pending')).forEach(function(d){ d.remove(); });
+  clearInterval(S.tick);
+  var dur=Date.now()-S.start;
+  stopPaint();
+  statusEl.textContent='انتهت المكالمة'; setTimer(fmt(dur));
+  sendBtn.disabled=false; setQuickDisabled(false); showNote('');
+  $('sumDur').textContent=fmt(dur);
+  $('sumTurns').textContent=String(S.userTurns);
+  $('sumReplies').textContent=String(S.replies);
+  $('sumOutcome').textContent = S.reservation ? 'حجزك مؤكد. نشوفك '+S.reservation.day+' الساعة '+S.reservation.time+'.'
+    : S.userTurns>0 ? 'تم الرد على استفسارك بدون حجز.' : 'انتهت المكالمة قبل أي طلب.';
+  layer.classList.add('ended'); updateMicUI();
+  setTimeout(function(){ $('againBtn').focus({preventScroll:true}); scrollLog(); },30);
+}
+
+[].slice.call(document.querySelectorAll('[data-call]')).forEach(function(b){ b.addEventListener('click',function(){ startCall(); }); });
+[].slice.call(document.querySelectorAll('[data-line]')).forEach(function(b){ b.addEventListener('click',function(){ startCall(b.getAttribute('data-line')); }); });
+hangBtn.addEventListener('click',endCall);
+qBtns.forEach(function(b){ b.addEventListener('click',function(){ if(S.live && S.phase!=='thinking') userSays(b.textContent.trim()); }); });
+typer.addEventListener('submit',function(e){
+  e.preventDefault();
+  var v=sayInput.value.trim(); if(!v||!S.live||S.phase==='thinking') return;
+  sayInput.value=''; userSays(v);
+});
+kbBtn.addEventListener('click',function(){ var show=typer.hidden; openTyper(show); if(show) sayInput.focus(); });
+micBtn.addEventListener('click',function(){
+  if(!S.live) return;
+  if(S.mode==='text'){
+    if(!SR) return;
+    S.mode='voice'; S.muted=false; showNote(''); updateMicUI(); stopSpeaking();
+    var myCall=S.callId;
+    askMic().then(function(ok){ if(ok && myCall===S.callId && S.phase!=='thinking') listen(); });
+    return;
+  }
+  S.muted=!S.muted; updateMicUI();
+  if(S.muted){ stopRec(); if(S.phase==='listening') setPhase('idle-live','المايك موقف'); }
+  else { stopSpeaking(); if(S.phase!=='thinking') listen(); }
+});
+$('againBtn').addEventListener('click',function(){ startCall(); });
+$('closeBtn').addEventListener('click',hideLayer);
+layer.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){ e.preventDefault(); if(S.live) endCall(); else hideLayer(); }
+  if(e.key==='Tab'){
+    var f=[].slice.call(layer.querySelectorAll('button,input')).filter(function(x){ return !x.disabled && x.offsetParent!==null; });
+    if(!f.length) return;
+    if(e.shiftKey && document.activeElement===f[0]){ e.preventDefault(); f[f.length-1].focus(); }
+    else if(!e.shiftKey && document.activeElement===f[f.length-1]){ e.preventDefault(); f[0].focus(); }
+  }
+});
+window.addEventListener('pagehide',function(){ if(S.live){ stopRec(); stopSpeaking(); } });
+paintStatic(); updateSpeakerUI(); updateMicUI();
+})();
+</script>
+</body>
+</html>
