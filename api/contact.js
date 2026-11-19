@@ -90,7 +90,7 @@ function renderEmail({ name, email, message, files }) {
   const now = new Intl.DateTimeFormat('ar-u-nu-latn-ca-gregory', { timeZone: 'Asia/Riyadh', dateStyle: 'long', timeStyle: 'short' }).format(new Date());
   const replyHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('رد من يزيد حمد الحارثي')}`;
   const ach = [
-    ['🥇', 'المركز الأول', 'السياحة الذكية'],
+    ['🥇', 'المركز الأول', 'طويق · Google'],
     ['🛡️', '100%', 'حماية مِجهر'],
     ['⚡', '32 من 32', 'HackerRank']
   ].map(([i, t, d]) => `<td width="33%" valign="top" style="padding:0 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#10141A;border:1px solid #1F252E;border-radius:14px"><tr><td height="96" valign="middle" style="height:96px;padding:12px 8px;text-align:center;font-family:Tahoma,Arial,sans-serif">
