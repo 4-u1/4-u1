@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#231A2B">
+<title>سِمة | مساحة عمل الهويات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Readex+Pro:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --paper:#ECEEE9; --sheet:#F8F9F5; --ink:#231A2B; --ink-2:#564C5D; --ink-3:#7A7180; --plum:#5E3B5A;
+  --brass:#C9A866; --brass-d:#86662B; --line:#D3D6CE; --line-2:#E2E4DE;
+  --dk:#231A2B; --dk-2:#2E2537; --dk-line:#463B51; --dk-txt:#EFEAF0; --dk-mute:#A99FAF;
+  --ff:"Readex Pro",system-ui,sans-serif; --fd:"Aref Ruqaa","Readex Pro",serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--ff);font-size:16px;line-height:1.65}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--plum);outline-offset:3px}
+.num{font-variant-numeric:tabular-nums}
+
+/* app bar */
+.bar{background:var(--dk);color:var(--dk-txt);padding:calc(10px + env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) 10px max(18px,env(safe-area-inset-left));
+  display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:5}
+.logo{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}
+.logo svg{width:30px;height:30px;flex:none}
+.logo b{font-family:var(--fd);font-weight:700;font-size:27px;line-height:1}
+.crumb{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--dk-mute);min-width:0}
+.crumb::before{content:"";width:1px;height:20px;background:var(--dk-line)}
+.crumb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb strong{color:var(--dk-txt);font-weight:500}
+.status{margin-inline-start:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dk-mute);white-space:nowrap}
+.status i{width:7px;height:7px;border-radius:50%;background:#7C7385}
+.status[data-s=busy] i{background:var(--brass);animation:pulse 1s ease-in-out infinite alternate}
+.status[data-s=ok] i{background:#8FC6A0}
+.status[data-s=err] i{background:#E29A8B}
+@keyframes pulse{to{opacity:.3}}
+@media (max-width:560px){.crumb .p{display:none}}
+
+/* workspace */
+.ws{display:grid;grid-template-columns:1fr;align-items:start}
+@media (min-width:1000px){
+  .ws{grid-template-columns:372px 1fr;min-height:calc(100vh - 52px)}
+  .brief{position:sticky;top:52px;min-height:calc(100vh - 52px)}
+}
+
+/* brief panel */
+.brief{background:var(--dk-2);color:var(--dk-txt);padding:22px max(18px,env(safe-area-inset-right)) 24px max(18px,env(safe-area-inset-left))}
+.brief h2{font-size:15px;font-weight:500;margin:0 0 18px;color:var(--dk-mute)}
+.f{margin:0 0 20px;padding:0;border:0;min-width:0}
+.f>label,.f>legend{display:block;font-size:13.5px;color:var(--dk-mute);margin:0 0 7px;padding:0}
+.f input[type=text]{width:100%;background:transparent;border:0;border-bottom:1.5px solid var(--dk-line);border-radius:0;padding:6px 0 8px;color:#fff;font-size:21px;font-weight:500;min-height:46px}
+.f input[type=text]:focus-visible{outline:none;border-bottom-color:var(--brass)}
+.f input.en{direction:ltr;text-align:right;font-size:18px;font-weight:400;letter-spacing:.02em}
+.f input::placeholder{color:#7C7385}
+.sectors{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--dk-line);border:1px solid var(--dk-line);border-radius:4px;overflow:hidden}
+.tile{position:relative;background:var(--dk-2)}
+.tile input,.tog input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;width:100%;height:100%}
+.tile span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:70px;font-size:13.5px;color:#D9D2DB;cursor:pointer;transition:background .12s}
+.tile svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.tile:hover span{background:#352B3F}
+.tile input:checked+span{background:var(--brass);color:var(--dk)}
+.tile input:focus-visible+span,.tog input:focus-visible+span{outline:2px solid var(--brass);outline-offset:-4px}
+.tones{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tog{position:relative}
+.tog span{display:flex;align-items:center;gap:9px;min-height:44px;padding:0 12px;border-bottom:1.5px solid var(--dk-line);font-size:15px;color:#D9D2DB;cursor:pointer}
+.tog span::before{content:"";width:14px;height:14px;border:1.5px solid #7C7385;border-radius:2px;flex:none}
+.tog input:checked+span{color:#fff;border-bottom-color:var(--brass)}
+.tog input:checked+span::before{background:var(--brass);border-color:var(--brass);box-shadow:inset 0 0 0 2.5px var(--dk-2)}
+.hint{font-size:13px;color:var(--dk-mute);margin:8px 0 0;min-height:1.3em}
+.hint.warn{color:#F0C98A}
+.go{width:100%;min-height:54px;border:0;border-radius:4px;background:var(--brass);color:var(--dk);font-weight:600;font-size:17px;cursor:pointer;margin-top:6px}
+.go:hover{background:#D6B677}
+.go:active{transform:translateY(1px)}
+.go[disabled]{opacity:.6;cursor:progress}
+.go:focus-visible{outline-color:#fff}
+
+/* board */
+.board{min-width:0;padding:0 0 10px;scroll-margin-top:56px}
+.phead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:24px 22px 0}
+.phead h1{font-size:24px;font-weight:500;margin:0;line-height:1.3}
+.phead small{font-size:13px;color:var(--ink-3)}
+.empty{padding:22px}
+.empty p{margin:14px 0 0;color:var(--ink-2);font-size:14.5px}
+.skel{display:grid;gap:14px;grid-template-columns:1.4fr 1fr}
+.skel div{background:#E1E4DD;border-radius:3px;position:relative;overflow:hidden}
+.skel .a{grid-row:span 3;min-height:300px}
+.skel .b{height:84px}.skel .c{height:110px}.skel .d{height:96px}
+.skel .e{grid-column:1/-1;height:120px}
+.busy .skel div::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(100%);animation:sh 1.3s linear infinite}
+@keyframes sh{to{transform:translateX(-100%)}}
+.state{padding:40px 22px;max-width:34em}
+.state p{margin:0 0 14px}
+.btn2{min-height:44px;padding:8px 18px;border-radius:4px;border:1.5px solid var(--ink);background:transparent;cursor:pointer;font-weight:500}
+.btn2:hover{background:var(--ink);color:var(--sheet)}
+
+/* result */
+.hero{display:grid;gap:0;padding:18px 22px 6px}
+@media (min-width:1180px){.hero{grid-template-columns:1.25fr 1fr;gap:30px;align-items:start}}
+.stage{display:grid;place-items:center;padding:30px 16px;min-height:280px;border-radius:3px}
+.stage svg{width:min(100%,400px);height:auto;display:block}
+.vrow{display:flex;gap:8px;margin-top:10px}
+.vbtn{flex:1;max-width:84px;aspect-ratio:1;padding:8px;border:1px solid var(--line);background:var(--sheet);cursor:pointer;border-radius:3px}
+.vbtn svg{width:100%;height:100%;display:block}
+.vbtn:hover{border-color:var(--ink-3)}
+.vbtn[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.vrow .lbl{align-self:center;font-size:13px;color:var(--ink-3);margin-inline-start:6px}
+.idea{padding-top:18px}
+.idea .concept{font-size:clamp(18px,4.4vw,21px);line-height:1.7;margin:0 0 16px}
+.sl{margin:0 0 4px;font-size:22px;line-height:1.5}
+.sl.en{direction:ltr;text-align:right;font-size:17px;color:var(--ink-2)}
+.voice{margin:16px 0 0;font-size:14px;color:var(--ink-2)}
+.voice b{font-weight:500;color:var(--ink)}
+.dl{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.dl button{min-height:44px;padding:8px 16px;border-radius:4px;border:1.5px solid var(--ink);background:var(--ink);color:var(--sheet);cursor:pointer;font-weight:500;font-size:15px;display:inline-flex;align-items:center;gap:8px}
+.dl button svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.dl button.ghost{background:transparent;color:var(--ink)}
+.dl button:hover{opacity:.88}
+.note{font-size:12.5px;color:var(--ink-3);margin:10px 0 0}
+
+.sec{padding:30px 22px 6px}
+.sec>header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:16px}
+.sec h3{font-family:var(--fd);font-weight:700;font-size:23px;line-height:1.2;margin:0}
+.sec header small{font-size:13px;color:var(--ink-3)}
+
+.palette{display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr .8fr}
+.sw{border:0;margin:0;padding:12px 12px 10px;min-height:190px;display:flex;flex-direction:column;justify-content:flex-end;gap:1px;text-align:start;cursor:pointer;font-size:12.5px;line-height:1.4}
+.sw .nm{font-weight:500;font-size:15px}
+.sw .hx{direction:ltr;text-align:right;font-size:13px;font-variant-numeric:tabular-nums;letter-spacing:.03em;margin-top:6px}
+.sw .cp{font-size:12px;opacity:0;transition:opacity .15s}
+.sw:hover .cp,.sw:focus-visible .cp,.sw.done .cp{opacity:.9}
+.sw:focus-visible{outline-offset:-4px}
+@media (max-width:640px){
+  .palette{grid-template-columns:1fr 1fr}
+  .sw{min-height:104px}
+  .sw:first-child{grid-column:span 2;min-height:150px}
+  .sw:last-child{grid-column:span 2;min-height:72px}
+  .sw .cp{opacity:.8}
+}
+.fixes{margin:12px 0 0;padding:0;list-style:none;font-size:13px;color:var(--ink-2)}
+.fixes li{margin-top:4px}
+
+.type{display:grid;gap:0}
+@media (min-width:780px){.type{grid-template-columns:1.3fr 1fr}}
+.spec{padding:20px 18px;overflow:hidden;min-width:0}
+.spec .big{font-size:clamp(42px,11vw,68px);line-height:1.3;margin:0;overflow-wrap:anywhere}
+.spec .line{font-size:17px;margin:8px 0 0;line-height:1.8;overflow-wrap:anywhere}
+.spec .meta{font-size:12.5px;margin:14px 0 0;opacity:.8;font-family:var(--ff)}
+.spec.lat{direction:ltr;text-align:left}
+
+.mocks{display:grid;gap:26px 22px}
+@media (min-width:800px){.mocks{grid-template-columns:1fr 1fr}}
+.mocks figure{margin:0;min-width:0}
+.mocks svg{display:block;width:100%;height:auto}
+.mocks figcaption{font-size:13px;color:var(--ink-3);margin-top:8px}
+.cards{display:grid;gap:12px}
+.cards svg{border-radius:6px;box-shadow:0 1px 0 rgba(35,26,43,.08),0 14px 26px -18px rgba(35,26,43,.55)}
+.post{background:#fff;border:1px solid var(--line-2)}
+.post header{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.post .av{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none}
+.post .av svg{width:100%;height:100%}
+.post header b{font-weight:500;font-size:14px;display:block;line-height:1.3}
+.post header small{font-size:12px;color:var(--ink-3)}
+.post .cap{padding:10px 12px 14px;font-size:14px;margin:0}
+.wide{grid-column:1/-1}
+.again{padding:26px 22px 8px}
+
+.toast{position:fixed;inset-inline:0;bottom:calc(18px + env(safe-area-inset-bottom));margin-inline:auto;width:max-content;max-width:90vw;background:var(--dk);color:var(--dk-txt);padding:10px 18px;border-radius:4px;font-size:14px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:none}
+
+footer{padding:18px max(22px,env(safe-area-inset-right)) calc(22px + env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left));display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;font-size:12.5px;color:var(--ink-3);border-top:1px solid var(--line)}
+footer .cr{margin-inline-end:auto}
+footer a{color:var(--ink-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+footer a:hover{color:var(--ink);text-decoration:underline}
+footer img{height:16px;width:auto}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="./" aria-label="سِمة">
+    <svg viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="2" fill="#C9A866"/><path d="M8 26V14a7 7 0 0 1 14 0v12" fill="none" stroke="#231A2B" stroke-width="2.2"/><path d="M12 26v-9.5a3 3 0 0 1 6 0V26" fill="#231A2B"/><circle cx="15" cy="5.6" r="1.6" fill="#231A2B"/></svg>
+    <b>سِمة</b>
+  </a>
+  <div class="crumb"><span class="p">المشاريع</span><strong><span id="crumbName">مشروع جديد</span></strong></div>
+  <div class="status" id="status" data-s="idle" aria-live="polite"><i></i><span id="statusTxt">مسودة</span></div>
+</header>
+
+<div class="ws">
+  <form class="brief" id="brief" novalidate>
+    <h2>الملف التعريفي</h2>
+    <div class="f">
+      <label for="nameAr">اسم النشاط</label>
+      <input type="text" id="nameAr" name="nameAr" maxlength="40" value="بُنّ الوادي" autocomplete="organization" required>
+    </div>
+    <div class="f">
+      <label for="nameEn">الاسم بالإنجليزي، اختياري</label>
+      <input type="text" id="nameEn" name="nameEn" class="en" maxlength="40" value="Wadi Bunn" dir="ltr" autocomplete="off">
+    </div>
+    <fieldset class="f">
+      <legend>القطاع</legend>
+      <div class="sectors" id="sector"></div>
+    </fieldset>
+    <fieldset class="f" aria-describedby="personaHint">
+      <legend>الشخصية، من كلمتين إلى ثلاث</legend>
+      <div class="tones" id="persona"></div>
+      <p class="hint" id="personaHint" aria-live="polite"></p>
+    </fieldset>
+    <button class="go" id="go" type="submit">صمم الهوية</button>
+  </form>
+
+  <main class="board" id="board" aria-live="polite" aria-busy="false">
+    <div class="phead"><h1 id="pTitle">بُنّ الوادي</h1><small>لم تُصمم بعد</small></div>
+    <div class="empty" id="empty">
+      <div class="skel" aria-hidden="true"><div class="a"></div><div class="b"></div><div class="c"></div><div class="d"></div><div class="e"></div></div>
+      <p>اللوحة فاضية. راجع الملف التعريفي واضغط «صمم الهوية».</p>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <span class="cr">جميع الحقوق محفوظة لاستوديو سِمة</span>
+  <a href="https://yazeedalharthi.sa/#services">تصميم وتطوير <img src="/assets/yh-mark-on-light.svg" alt="" width="24" height="16"> يزيد الحارثي</a>
+  <a href="https://yazeedalharthi.sa/#services">تبي نسخة لمنشأتك؟ اطلب عرض سعر</a>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+const SECTORS = ['مقهى','عطور','عيادة','تقنية','مقاولات','أزياء','مطعم','تعليم'];
+const PERSONAS = ['فخم','عصري','دافئ','جريء','هادئ','تراثي'];
+const AR_FONTS = ['Amiri','Noto Naskh Arabic','Aref Ruqaa','El Messiri','Reem Kufi','Noto Kufi Arabic','Readex Pro','IBM Plex Sans Arabic','Tajawal','Cairo','Changa','Lalezar','Marhey','Almarai'];
+const LAT_FONTS = ['Cormorant Garamond','Playfair Display','DM Serif Display','Fraunces','Josefin Sans','Montserrat','Space Grotesk','Syne','Outfit','Archivo'];
+const ONLY400 = new Set(['Lalezar','DM Serif Display']);
+const ROLES = ['أساسي','ثانوي','خلفية','نص','لمسة'];
+const SVGNS = 'http://www.w3.org/2000/svg';
+const $ = (s) => document.querySelector(s);
+
+/* ---------- form ---------- */
+const ICONS = {
+  'مقهى':'<path d="M5 10h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M9 3c-.8 1 .8 2 0 3.5M12.5 3c-.8 1 .8 2 0 3.5"/>',
+  'عطور':'<rect x="6" y="9" width="12" height="12" rx="2"/><path d="M10 9V6h4v3M9 4h6"/><path d="M9.5 15h5"/>',
+  'عيادة':'<path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/><path d="M12 10v5M9.5 12.5h5"/>',
+  'تقنية':'<rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>',
+  'مقاولات':'<path d="M4 21h16M6 21V9l6-5 6 5v12"/><path d="M10 21v-6h4v6"/>',
+  'أزياء':'<path d="M12 7a2 2 0 1 0-2-2"/><path d="M12 7v2L3 16h18l-9-7"/>',
+  'مطعم':'<path d="M4 13h16a8 8 0 0 1-16 0z"/><path d="M8 4l2 7M14 3l-1 8"/>',
+  'تعليم':'<path d="M3 6.5C6 5 9 5 12 7c3-2 6-2 9-.5V19c-3-1.5-6-1.5-9 .5-3-2-6-2-9-.5z"/><path d="M12 7v12.5"/>'
+};
+function chip(group, type, value, checked){
+  const l = document.createElement('label'); l.className = type === 'radio' ? 'tile' : 'tog';
+  const i = document.createElement('input'); i.type = type; i.name = group; i.value = value; i.checked = checked;
+  const s = document.createElement('span');
+  if (type === 'radio'){ const ic = document.createElementNS(SVGNS, 'svg'); ic.setAttribute('viewBox','0 0 24 24'); ic.setAttribute('aria-hidden','true'); ic.innerHTML = ICONS[value]; s.append(ic); }
+  s.append(document.createTextNode(value));
+  l.append(i, s); return l;
+}
+SECTORS.forEach((s) => $('#sector').append(chip('sector','radio',s,s==='مقهى')));
+PERSONAS.forEach((p) => $('#persona').append(chip('persona','checkbox',p,p==='دافئ'||p==='تراثي')));
+$('#nameAr').addEventListener('input', () => { if (!SPEC) $('#pTitle').textContent = $('#nameAr').value.trim() || 'مشروع جديد'; });
+let pOrder = ['دافئ','تراثي'];
+$('#persona').addEventListener('change', (e) => {
+  const v = e.target.value;
+  if (e.target.checked){
+    pOrder.push(v);
+    if (pOrder.length > 3){
+      const drop = pOrder.shift();
+      const el = document.querySelector('#persona input[value="'+drop+'"]'); if (el) el.checked = false;
+      hint('ثلاث كلمات بالكثير، شلنا «'+drop+'».');
+    } else hint('');
+  } else { pOrder = pOrder.filter((x) => x !== v); hint(''); }
+});
+function hint(t, warn){ const h = $('#personaHint'); h.textContent = t; h.classList.toggle('warn', !!warn); }
+
+/* ---------- color ---------- */
+function normHex(h){
+  if (typeof h !== 'string') return null;
+  let s = h.trim().replace(/^#/, '');
+  if (/^[0-9a-f]{3}$/i.test(s)) s = s.split('').map((c) => c + c).join('');
+  return /^[0-9a-f]{6}$/i.test(s) ? '#' + s.toUpperCase() : null;
+}
+function rgb(h){ const n = parseInt(h.slice(1),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function hex([r,g,b]){ return '#' + [r,g,b].map((v) => Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('').toUpperCase(); }
+function lum(h){ return rgb(h).map((v) => { v/=255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4); }).reduce((a,v,i) => a + v*[.2126,.7152,.0722][i], 0); }
+function contrast(a,b){ const x = lum(a), y = lum(b); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); }
+function mix(a,b,t){ const A = rgb(a), B = rgb(b); return hex(A.map((v,i) => v + (B[i]-v)*t)); }
+function sat(h){ const [r,g,b] = rgb(h).map((v) => v/255); const mx = Math.max(r,g,b), mn = Math.min(r,g,b); return mx === 0 ? 0 : (mx-mn)/mx; }
+
+let FIXES = [];
+// pick a text color on bg with contrast >= min; log any fix
+function ensure(want, bg, min, label, pal){
+  if (contrast(want,bg) >= min) return want;
+  const pool = [...(pal || []), '#FFFFFF', '#1A1A1A'];
+  // try nudging the wanted color first (keeps the hue), then palette, then white/black
+  const dark = lum(bg) > .3;
+  for (let t = .15; t <= 1.001; t += .15){
+    const c = mix(want, dark ? '#141414' : '#FFFFFF', t);
+    if (contrast(c,bg) >= min){ logFix(label, want, c, contrast(want,bg)); return c; }
+  }
+  const best = pool.filter((c) => contrast(c,bg) >= min).sort((a,b) => contrast(b,bg) - contrast(a,bg))[0] || (dark ? '#141414' : '#FFFFFF');
+  logFix(label, want, best, contrast(want,bg));
+  return best;
+}
+function logFix(label, from, to, ratio){
+  if (!label) return;
+  FIXES.push('عدّلنا لون ' + label + ' من ' + from + ' إلى ' + to + ' لأن التباين كان ' + ratio.toFixed(1) + ' (المطلوب 4.5 أو أكثر).');
+}
+
+const FALLBACK = {
+  'مقهى':['#5B3A29','#B08562','#F4EEE6','#2A1C14','#C9A227'], 'عطور':['#3D2B4F','#B79C6B','#F6F2EC','#1E1626','#8C5A7A'],
+  'عيادة':['#1F5F6B','#8FB9B5','#F3F7F6','#13292D','#E08E6D'], 'تقنية':['#2433A8','#5AC2D9','#F2F4FA','#0F1430','#F2B33D'],
+  'مقاولات':['#2F3B45','#C27A2C','#F1EFEC','#161C21','#E4B23A'], 'أزياء':['#1E1E1E','#C8A796','#F7F3F0','#141414','#A63D40'],
+  'مطعم':['#8C2F1F','#E0A458','#FBF4EA','#2B1510','#3E6B48'], 'تعليم':['#1F4E8C','#F0B429','#F5F7FB','#122033','#3FA37C']
+};
+
+/* ---------- normalize model output ---------- */
+function clip(s, n){ return typeof s === 'string' ? s.replace(/\s+/g,' ').trim().slice(0,n) : ''; }
+function firstLetter(name){
+  const w = (name || '').replace(/[^\p{L}\s]/gu,'').trim().split(/\s+/)[0] || '';
+  const s = w.replace(/^ال(?=\p{L}{2})/u,'');
+  return (s.match(/\p{L}/u) || ['س'])[0];
+}
+function normalize(d, input){
+  const out = {};
+  out.concept = clip(d.concept, 320);
+  out.sloganAr = clip(d.slogan_ar, 70);
+  out.sloganEn = clip(d.slogan_en, 70);
+  out.voice = (Array.isArray(d.voice) ? d.voice : []).map((v) => clip(v, 20)).filter(Boolean).slice(0,3);
+  // palette
+  const raw = (Array.isArray(d.palette) ? d.palette : []).map((c) => ({ name: clip(c && c.name, 24), hex: normHex(c && c.hex), role: c && c.role }))
+    .filter((c) => c.hex).slice(0,8);
+  const fb = FALLBACK[input.sector] || FALLBACK['مقهى'];
+  const byRole = {};
+  raw.forEach((c) => { if (ROLES.includes(c.role) && !byRole[c.role]) byRole[c.role] = c; });
+  const unused = raw.filter((c) => !Object.values(byRole).includes(c));
+  ROLES.forEach((r, i) => {
+    if (byRole[r]) return;
+    let c = null;
+    if (unused.length){
+      if (r === 'خلفية') c = unused.sort((a,b) => lum(b.hex) - lum(a.hex))[0];
+      else if (r === 'نص') c = unused.sort((a,b) => lum(a.hex) - lum(b.hex))[0];
+      else c = unused.sort((a,b) => sat(b.hex) - sat(a.hex))[0];
+      unused.splice(unused.indexOf(c),1);
+    }
+    byRole[r] = c ? { ...c, role:r } : { name:'', hex: fb[i], role:r, filled:true };
+  });
+  if (raw.length < 3) ROLES.forEach((r,i) => { byRole[r] = { name: byRole[r].name, hex: fb[i], role:r, filled:true }; });
+  const defaultNames = { 'أساسي':'اللون الأساسي','ثانوي':'اللون الثاني','خلفية':'الخلفية','نص':'النص','لمسة':'اللمسة' };
+  out.palette = ROLES.map((r) => ({ ...byRole[r], name: byRole[r].name || defaultNames[r] }));
+  out.filledColors = out.palette.some((c) => c.filled);
+  // fonts
+  const fa = d.fonts && AR_FONTS.find((f) => f.toLowerCase() === String(d.fonts.arabic || '').trim().toLowerCase());
+  const fl = d.fonts && LAT_FONTS.find((f) => f.toLowerCase() === String(d.fonts.latin || '').trim().toLowerCase());
+  const lux = input.persona.some((p) => p === 'فخم' || p === 'تراثي');
+  out.fontAr = fa || (lux ? 'Amiri' : 'Readex Pro');
+  out.fontLat = fl || (lux ? 'Cormorant Garamond' : 'Space Grotesk');
+  // mark
+  const m = d.mark || {};
+  out.type = ['monogram','symbol','wordmark'].includes(m.type) ? m.type : 'monogram';
+  let letters = (String(m.letters || '').match(/\p{L}/gu) || []).slice(0,2).join('');
+  if (!letters) letters = firstLetter(input.nameAr);
+  out.letters = /[a-z]/.test(letters) && !/[A-Z]/.test(letters) ? letters.toUpperCase() : letters;
+  out.shape = ['circle','square','arch','diamond','none'].includes(m.shape) ? m.shape : 'circle';
+  out.nameAr = input.nameAr; out.nameEn = input.nameEn;
+  return out;
+}
+
+/* ---------- fonts ---------- */
+const loadedFonts = new Set();
+function fontHref(f){ return 'https://fonts.googleapis.com/css2?family=' + f.replace(/ /g,'+') + ':wght@' + (ONLY400.has(f) ? '400' : '400;700') + '&display=swap'; }
+function wt(f){ return ONLY400.has(f) ? 400 : 700; }
+async function loadFont(f, sample){
+  if (!loadedFonts.has(f)){
+    loadedFonts.add(f);
+    const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = fontHref(f);
+    await new Promise((res) => { l.onload = res; l.onerror = res; document.head.append(l); setTimeout(res, 4000); });
+  }
+  try {
+    await Promise.race([
+      Promise.all([document.fonts.load(wt(f) + ' 60px "' + f + '"', sample), document.fonts.load('400 60px "' + f + '"', sample)]),
+      new Promise((r) => setTimeout(r, 4000))
+    ]);
+  } catch (e) {}
+}
+
+/* ---------- text metrics (canvas ink bounds) ---------- */
+const mctx = document.createElement('canvas').getContext('2d');
+function isAr(s){ return /[؀-ۿ]/.test(s); }
+function measure(str, fam, w, size, ls){
+  mctx.font = w + ' ' + size + 'px "' + fam + '", sans-serif';
+  mctx.textAlign = 'center'; mctx.textBaseline = 'alphabetic';
+  if ('letterSpacing' in mctx) mctx.letterSpacing = (ls || 0) + 'px';
+  const m = mctx.measureText(str);
+  const L = m.actualBoundingBoxLeft || m.width/2, R = m.actualBoundingBoxRight || m.width/2;
+  const A = m.actualBoundingBoxAscent || size*.7, D = m.actualBoundingBoxDescent || 0;
+  return { w: L + R, h: A + D, L, R, A, D, adv: m.width };
+}
+// build a <text> whose ink box is centered on (cx,cy); size fixed, or fitted to maxW/maxH
+function T(str, o){
+  const fam = o.fam, w = o.w || 400, ls = o.ls || 0;
+  let size = o.size || 100;
+  if (o.maxW || o.maxH){
+    const m = measure(str, fam, w, 100, ls * 100 / size);
+    const k = Math.min(o.maxW ? o.maxW / m.w : 99, o.maxH ? o.maxH / m.h : 99);
+    size = Math.min(100 * k, o.maxSize || 999);
+  }
+  const lsz = ls ? ls : 0;
+  const m = measure(str, fam, w, size, lsz);
+  let cx = o.cx;
+  if (o.align === 'right') cx = o.x - m.w/2;
+  if (o.align === 'left') cx = o.x + m.w/2;
+  const x = cx - (m.R - m.L)/2, y = o.cy + (m.A - m.D)/2;
+  const t = el('text', { x: r2(x), y: r2(y), 'font-family': '"' + fam + '"', 'font-weight': w, 'font-size': r2(size), 'text-anchor':'middle', fill: o.fill });
+  if (lsz) t.setAttribute('letter-spacing', r2(lsz));
+  if (o.opacity) t.setAttribute('opacity', o.opacity);
+  if (o.halo){ t.setAttribute('stroke', o.halo); t.setAttribute('stroke-width', r2(o.haloW || size*.09)); t.setAttribute('stroke-linejoin','round'); t.setAttribute('paint-order','stroke'); }
+  t.textContent = str;
+  t._m = m; t._size = size;
+  return t;
+}
+const r2 = (n) => Math.round(n * 100) / 100;
+function el(tag, attrs, kids){
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs || {}) if (attrs[k] != null) e.setAttribute(k, attrs[k]);
+  (kids || []).forEach((k) => k && e.append(k));
+  return e;
+}
+function svgRoot(w, h, label){
+  const s = el('svg', { xmlns: SVGNS, viewBox: '0 0 ' + w + ' ' + h, width: w, height: h, role: 'img', style: 'direction:ltr' });
+  if (label){ const t = el('title'); t.textContent = label; s.append(t); }
+  return s;
+}
+
+/* ---------- logo constructions (400×400 box) ---------- */
+function letterFont(spec, s){ return isAr(s) ? spec.fontAr : spec.fontLat; }
+function letters(spec, cx, cy, w, h, color, halo){
+  const f = letterFont(spec, spec.letters);
+  return T(spec.letters, { fam: f, w: wt(f), cx, cy, maxW: w, maxH: h, fill: color, ls: isAr(spec.letters) ? 0 : 4, halo });
+}
+function hash(s){ let h = 2166136261; for (const c of s) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function starPts(cx, cy, R, r, n, rot){
+  const p = [];
+  for (let i = 0; i < n*2; i++){ const a = rot + i * Math.PI / n; const rr = i % 2 ? r : R; p.push(r2(cx + rr*Math.sin(a)) + ',' + r2(cy - rr*Math.cos(a))); }
+  return p.join(' ');
+}
+const ARCH = (x0, x1, top, base) => { const r = (x1 - x0)/2, sp = top + r; return 'M' + x0 + ' ' + base + ' L' + x0 + ' ' + sp + ' A' + r + ' ' + r + ' 0 0 1 ' + x1 + ' ' + sp + ' L' + x1 + ' ' + base + ' Z'; };
+function quarter(x, y, s, corner){
+  return {
+    tl: 'M'+x+' '+y+' L'+(x+s)+' '+y+' A'+s+' '+s+' 0 0 1 '+x+' '+(y+s)+' Z',
+    tr: 'M'+(x+s)+' '+y+' L'+(x+s)+' '+(y+s)+' A'+s+' '+s+' 0 0 1 '+x+' '+y+' Z',
+    br: 'M'+(x+s)+' '+(y+s)+' L'+x+' '+(y+s)+' A'+s+' '+s+' 0 0 1 '+(x+s)+' '+y+' Z',
+    bl: 'M'+x+' '+(y+s)+' L'+x+' '+y+' A'+s+' '+s+' 0 0 1 '+(x+s)+' '+(y+s)+' Z'
+  }[corner];
+}
+function quad(q, cx, cy, r){ // circle quadrant
+  const P = { t:[cx,cy-r], r:[cx+r,cy], b:[cx,cy+r], l:[cx-r,cy] };
+  const [a,b] = { tr:['t','r'], br:['r','b'], bl:['b','l'], tl:['l','t'] }[q];
+  return 'M'+cx+' '+cy+' L'+P[a].join(' ')+' A'+r+' '+r+' 0 0 1 '+P[b].join(' ')+' Z';
+}
+// latin name set around a circle, one <text> per glyph (rotated), so canvas export can redraw it
+function ringText(str, cx, cy, R, fam, size, color, g){
+  const chars = [...str], ls = size*.32;
+  const adv = chars.map((ch) => measure(ch, fam, 500, size, 0).adv + ls);
+  const total = adv.reduce((a,b) => a+b, 0), sweep = total / R; // radians
+  let a = -sweep/2;
+  chars.forEach((ch, i) => {
+    const mid = a + adv[i]/2/R; a += adv[i]/R;
+    if (ch === ' ') return;
+    const t = el('text', { x: cx, y: r2(cy - R), 'font-family': '"' + fam + '"', 'font-weight': 500, 'font-size': size, 'text-anchor':'middle', fill: color,
+      transform: 'rotate(' + r2(mid*180/Math.PI) + ' ' + cx + ' ' + cy + ')' });
+    t.textContent = ch; g.append(t);
+  });
+  return sweep;
+}
+const SHAPE_NAMES = { circle:['الختم','الحلقة','الكسوف'], square:['الورقة','التداخل','الطابع'], arch:['المحراب','البوابة','العتبة'], diamond:['الجوهرة','الإطار','النجمة'], none:['الحرف','النقطة','الظل'] };
+const SYMBOL_NAMES = { circle:['الأرباع','الشروق','الحلقة'], square:['البلاط','المثلثات','الورقة'], arch:['الأقواس','الشمس','المحراب'], diamond:['الجوهرة','المعينات','الإطار'], none:['الخاتم','الأشعة','الحرف'] };
+function iconShape(spec){ return spec.type === 'wordmark' ? 'none' : spec.shape; }
+function variantNames(spec){ return (spec.type === 'symbol' ? SYMBOL_NAMES : SHAPE_NAMES)[iconShape(spec)]; }
+const shade = (c, t) => mix(c, t > 0 ? '#FFFFFF' : '#000000', Math.abs(t));
+
+// pure geometric symbols (type "symbol"), k = 0|1
+function geo(spec, c, k){
+  const g = el('g'), sh = iconShape(spec), fg = c.fg, ac = c.ac, ko = c.ko;
+  const flip = hash(spec.nameAr) % 2;
+  if (sh === 'circle'){
+    if (k === 0){
+      const qs = flip ? ['tr','bl'] : ['tl','br'];
+      g.append(el('path', { d: quad(qs[0],200,200,172), fill: fg }), el('path', { d: quad(qs[1],200,200,172), fill: fg }));
+      g.append(el('path', { d: quad(flip ? 'tl' : 'tr',200,200,172), fill: ac }));
+      const q4 = flip ? 'br' : 'bl', off = { br:[1,1], bl:[-1,1] }[q4];
+      g.append(el('circle', { cx: 200 + off[0]*62, cy: 200 + off[1]*62, r: 44, fill: fg }));
+    } else {
+      g.append(el('path', { d: 'M28 214 A172 172 0 0 1 372 214 Z', fill: fg }));
+      g.append(el('circle', { cx:200, cy:214, r:70, fill: ac }));
+      g.append(el('rect', { x:28, y:214, width:344, height:30, fill: ko }));
+      [252, 286, 320].forEach((y, i) => g.append(el('rect', { x: 60 + i*34, y, width: 280 - i*68, height: 14, rx:7, fill: fg })));
+    }
+  } else if (sh === 'square'){
+    if (k === 0){
+      const s = 172, x0 = 28, y0 = 28;
+      const pat = flip ? [['br','tl'],['tr','bl']] : [['bl','tr'],['tl','br']];
+      for (let r = 0; r < 2; r++) for (let q = 0; q < 2; q++){
+        const col = (r + q) % 2 ? ac : fg;
+        g.append(el('path', { d: quarter(x0 + q*s, y0 + r*s, s, pat[r][q]), fill: col }));
+      }
+    } else {
+      g.append(el('polygon', { points: '28,28 372,28 28,372', fill: fg }));
+      g.append(el('polygon', { points: '372,28 372,372 28,372', fill: ac }));
+      g.append(el('circle', { cx:200, cy:200, r:74, fill: ko }));
+      g.append(el('circle', { cx:200, cy:200, r:30, fill: fg }));
+    }
+  } else if (sh === 'arch'){
+    if (k === 0){
+      [[40,360,24,fg],[80,320,64,ac],[120,280,104,fg],[160,240,144,ko]].forEach(([a,b,t,col]) => g.append(el('path', { d: ARCH(a,b,t,380), fill: col })));
+    } else {
+      g.append(el('path', { d: ARCH(60,340,24,380), fill: fg }));
+      g.append(el('circle', { cx:200, cy:170, r:62, fill: ac }));
+      [262, 300, 338].forEach((y) => g.append(el('rect', { x:60, y, width:280, height:16, fill: ko })));
+    }
+  } else if (sh === 'diamond'){
+    if (k === 0) g.append(gem(c));
+    else {
+      [[200,92,fg],[308,200,flip ? ac : fg],[200,308,fg],[92,200,flip ? fg : ac]].forEach(([x,y,col]) =>
+        g.append(el('polygon', { points: x+','+(y-100)+' '+(x+100)+','+y+' '+x+','+(y+100)+' '+(x-100)+','+y, fill: col, stroke: ko, 'stroke-width': 10, 'stroke-linejoin':'miter' })));
+    }
+  } else {
+    if (k === 0){
+      g.append(el('polygon', { points: starPts(200,200,182,150,8,Math.PI/8), fill: fg }));
+      g.append(el('polygon', { points: starPts(200,200,118,97,8,0), fill: 'none', stroke: ko, 'stroke-width': 9, 'stroke-linejoin':'miter' }));
+      g.append(el('circle', { cx:200, cy:200, r:34, fill: ac }));
+    } else {
+      g.append(el('circle', { cx:200, cy:200, r:80, fill: fg }));
+      for (let i = 0; i < 16; i++){ const a = i*Math.PI/8, L = i % 2 ? 150 : 180;
+        g.append(el('line', { x1: r2(200+Math.sin(a)*104), y1: r2(200-Math.cos(a)*104), x2: r2(200+Math.sin(a)*L), y2: r2(200-Math.cos(a)*L), stroke: i % 2 ? ac : fg, 'stroke-width': 13, 'stroke-linecap':'round' })); }
+    }
+  }
+  return g;
+}
+function gem(c, open){
+  const g = el('g'), fg = c.fg, lt = shade(c.fg, .22), dk = shade(c.fg, -.22), ln = c.ko;
+  const T1 = [130,70], T2 = [270,70], R = [364,160], L = [36,160], B = [200,376], M1 = [118,160], M2 = [200,160], M3 = [282,160];
+  const P = (...p) => p.map((q) => q.join(',')).join(' ');
+  const faces = open ? [[P(T1,T2,M3,M2,M1), lt],[P(L,T1,M1), fg],[P(T2,R,M3), dk],[P(L,M1,B), lt],[P(M1,M3,B), fg],[P(M3,R,B), dk]]
+    : [[P(T1,T2,M3,M2,M1), lt],[P(L,T1,M1), fg],[P(T2,R,M3), dk],[P(L,M1,B), dk],[P(M1,M2,B), fg],[P(M2,M3,B), lt],[P(M3,R,B), fg]];
+  faces.forEach(([pts, col]) => g.append(el('polygon', { points: pts, fill: col, stroke: ln, 'stroke-width': 4, 'stroke-linejoin':'round' })));
+  return g;
+}
+
+// c = {fg: mark color, ko: surface behind the mark, ac: accent, latin?: string}
+function mark(spec, c, v){
+  if (spec.type === 'symbol' && v < 2) return geo(spec, c, v);
+  const g = el('g'), shape = iconShape(spec);
+  const ring = (spec.nameEn || '').toUpperCase().replace(/[^A-Z0-9 &]/g,'').trim();
+  if (shape === 'circle'){
+    if (v === 0){ // seal: disc + name set on a ring
+      g.append(el('circle', { cx:200, cy:200, r:186, fill: c.fg }));
+      g.append(el('circle', { cx:200, cy:200, r:122, fill:'none', stroke: c.ko, 'stroke-width':2.5 }));
+      if (ring && ring.length <= 22){
+        const txt = ring + '  ' + '•' + '  ';
+        const sweep = ringText(ring, 200, 200, 146, spec.fontLat, 27, c.ko, g);
+        // close the ring with small accent dots on the bottom arc
+        g.append(el('circle', { cx:200, cy: 200 + 154, r:6, fill: c.ac }));
+        if (sweep < Math.PI*1.2){ g.append(el('circle', { cx: r2(200 + Math.sin(2.4)*154), cy: r2(200 - Math.cos(2.4)*154), r:4, fill: c.ac }), el('circle', { cx: r2(200 - Math.sin(2.4)*154), cy: r2(200 - Math.cos(2.4)*154), r:4, fill: c.ac })); }
+      } else {
+        for (let i = 0; i < 48; i++){ const a = i*Math.PI/24; g.append(el('line', { x1: r2(200+Math.sin(a)*140), y1: r2(200-Math.cos(a)*140), x2: r2(200+Math.sin(a)*(i%4?150:162)), y2: r2(200-Math.cos(a)*(i%4?150:162)), stroke: c.ko, 'stroke-width':2.5 })); }
+      }
+      g.append(letters(spec, 200, 200, 150, 120, c.ko));
+    } else if (v === 1){ // open ring with accent in the gap
+      g.append(el('path', { d: 'M' + r2(200 + Math.sin(.62)*160) + ' ' + r2(200 - Math.cos(.62)*160) + ' A160 160 0 1 1 ' + r2(200 + Math.sin(-.08)*160) + ' ' + r2(200 - Math.cos(-.08)*160), fill:'none', stroke: c.fg, 'stroke-width':30, 'stroke-linecap':'butt' }));
+      g.append(el('circle', { cx: r2(200 + Math.sin(.27)*160), cy: r2(200 - Math.cos(.27)*160), r:20, fill: c.ac }));
+      g.append(letters(spec, 200, 204, 190, 150, c.fg));
+    } else { // eclipse: accent disc behind, letters overlap with a halo
+      g.append(el('circle', { cx:244, cy:168, r:132, fill: c.ac }));
+      g.append(el('circle', { cx:178, cy:214, r:150, fill:'none', stroke: c.fg, 'stroke-width':14 }));
+      g.append(letters(spec, 186, 214, 220, 180, c.fg, c.ko));
+    }
+  } else if (shape === 'square'){
+    if (v === 0){ // leaf: two opposite rounded corners
+      g.append(el('path', { d: 'M40 40 H240 A120 120 0 0 1 360 160 V360 H160 A120 120 0 0 1 40 240 Z', fill: c.fg }));
+      g.append(el('circle', { cx:322, cy:78, r:18, fill: c.ac }));
+      g.append(letters(spec, 200, 204, 210, 170, c.ko));
+    } else if (v === 1){ // overlap: accent block behind, letters cross its edge with a halo
+      g.append(el('rect', { x:36, y:150, width:214, height:214, fill: c.ac }));
+      g.append(el('rect', { x:36, y:150, width:214, height:214, fill:'none', stroke: c.fg, 'stroke-width':6 }));
+      g.append(letters(spec, 222, 178, 280, 230, c.fg, c.ko));
+    } else { // stamp
+      g.append(el('rect', { x:30, y:30, width:340, height:340, fill: c.fg }));
+      g.append(el('rect', { x:52, y:52, width:296, height:296, fill:'none', stroke: c.ko, 'stroke-width':2.5 }));
+      g.append(el('rect', { x:52, y:300, width:296, height:48, fill: c.ac }));
+      g.append(letters(spec, 200, 172, 210, 170, c.ko));
+    }
+  } else if (shape === 'arch'){
+    if (v === 0){
+      g.append(el('path', { d:ARCH(70,330,24,380), fill:c.fg }));
+      g.append(el('path', { d:ARCH(94,306,48,356), fill:'none', stroke:c.ac, 'stroke-width':4 }));
+      g.append(el('polygon', { points: starPts(200, 104, 16, 12, 8, 0), fill:c.ac }));
+      g.append(letters(spec, 200, 250, 160, 140, c.ko));
+    } else if (v === 1){ // gateway bands
+      g.append(el('path', { d:ARCH(36,364,20,384), fill:c.fg }));
+      g.append(el('path', { d:ARCH(68,332,52,384), fill:c.ac }));
+      g.append(el('path', { d:ARCH(96,304,80,384), fill:c.ko }));
+      g.append(letters(spec, 200, 262, 160, 140, c.fg));
+    } else { // threshold: letter breaks the base line
+      g.append(el('path', { d:'M80 330 V160 A120 120 0 0 1 320 160 V330', fill:'none', stroke:c.fg, 'stroke-width':12 }));
+      g.append(el('line', { x1:20, y1:330, x2:380, y2:330, stroke:c.ac, 'stroke-width':10 }));
+      g.append(letters(spec, 200, 268, 190, 170, c.fg, c.ko));
+    }
+  } else if (shape === 'diamond'){
+    if (v === 0){
+      g.append(gem(c, true));
+      g.append(letters(spec, 200, 226, 104, 76, c.ko));
+    } else if (v === 1){
+      g.append(el('polygon', { points:'200,22 378,200 200,378 22,200', fill:'none', stroke:c.fg, 'stroke-width':12, 'stroke-linejoin':'miter' }));
+      g.append(el('polygon', { points:'200,58 342,200 200,342 58,200', fill:'none', stroke:c.fg, 'stroke-width':2.5 }));
+      [[200,22],[378,200],[200,378],[22,200]].forEach(([x,y]) => g.append(el('rect', { x:x-11, y:y-11, width:22, height:22, fill:c.ac, transform:'rotate(45 '+x+' '+y+')' })));
+      g.append(letters(spec, 200, 200, 160, 120, c.fg));
+    } else {
+      g.append(el('circle', { cx:200, cy:200, r:190, fill:'none', stroke:c.ac, 'stroke-width':3 }));
+      g.append(el('polygon', { points: starPts(200, 200, 176, 148, 8, Math.PI/8), fill:c.fg }));
+      g.append(el('polygon', { points: starPts(200, 200, 140, 118, 8, Math.PI/8), fill:'none', stroke:c.ko, 'stroke-width':2.5 }));
+      g.append(letters(spec, 200, 200, 160, 130, c.ko));
+    }
+  } else { // none
+    if (v === 0){
+      g.append(letters(spec, 200, 180, 320, 260, c.fg));
+      g.append(el('rect', { x:130, y:342, width:140, height:14, fill:c.ac }));
+    } else if (v === 1){
+      g.append(letters(spec, 186, 210, 290, 260, c.fg));
+      g.append(el('circle', { cx:340, cy:70, r:28, fill:c.ac }));
+    } else {
+      g.append(el('circle', { cx:262, cy:150, r:118, fill:c.ac }));
+      g.append(letters(spec, 190, 214, 300, 260, c.fg, c.ko));
+    }
+  }
+  return g;
+}
+
+// lockups: return {g, w, h}
+function lockup(spec, c, v, layout){
+  const g = el('g');
+  const showIcon = spec.type !== 'wordmark';
+  const ar = spec.nameAr, en = spec.nameEn ? spec.nameEn.toUpperCase() : '';
+  const arM = measure(ar, spec.fontAr, wt(spec.fontAr), 112, 0);
+  const enM = en ? measure(en, spec.fontLat, 400, 38, 7) : null;
+  if (layout === 'v'){
+    const iconH = showIcon ? 400 : 0;
+    const tw = Math.max(arM.w, enM ? enM.w : 0);
+    const W = Math.max(iconH, tw) + 40;
+    if (showIcon){ const m = mark(spec, c, v); m.setAttribute('transform', 'translate(' + r2((W-400)/2) + ' 0)'); g.append(m); }
+    let y = iconH + (showIcon ? 60 : 0) + arM.h/2;
+    g.append(T(ar, { fam: spec.fontAr, w: wt(spec.fontAr), size:112, cx: W/2, cy: y, fill: c.text }));
+    y += arM.h/2;
+    if (!showIcon){ g.append(el('rect', { x: r2(W/2 - 60), y: r2(y + 26), width:120, height:10, rx:5, fill:c.ac })); y += 36; }
+    if (enM){ y += 40 + enM.h/2; g.append(T(en, { fam: spec.fontLat, w:400, size:38, ls:7, cx: W/2, cy: y, fill: c.text, opacity: .85 })); y += enM.h/2; }
+    return { g, w: W, h: y + 6 };
+  }
+  // horizontal (RTL: icon on the right, name to its left, right-aligned)
+  const tw = Math.max(arM.w, enM ? enM.w : 0);
+  const iconW = showIcon ? 400 : 0, gap = showIcon ? 56 : 0;
+  const W = tw + gap + iconW, H = 400;
+  if (showIcon){ const m = mark(spec, c, v); m.setAttribute('transform', 'translate(' + r2(tw + gap) + ' 0)'); g.append(m); }
+  const blockH = arM.h + (enM ? 44 + enM.h : 0);
+  const top = (H - blockH)/2;
+  g.append(T(ar, { fam: spec.fontAr, w: wt(spec.fontAr), size:112, align:'right', x: tw, cy: top + arM.h/2, fill: c.text }));
+  if (enM) g.append(T(en, { fam: spec.fontLat, w:400, size:38, ls:7, align:'right', x: tw, cy: top + arM.h + 44 + enM.h/2, fill: c.text, opacity: .85 }));
+  if (!showIcon) g.append(el('rect', { x: r2(tw - 90), y: r2(top + blockH + 30), width:90, height:10, rx:5, fill:c.ac }));
+  return { g, w: W, h: H + (showIcon ? 0 : 40) };
+}
+function place(lk, x, y, w, h, alignX){
+  const s = Math.min(w / lk.w, h / lk.h);
+  const dx = alignX === 'right' ? x + w - lk.w*s : alignX === 'left' ? x : x + (w - lk.w*s)/2;
+  lk.g.setAttribute('transform', 'translate(' + r2(dx) + ' ' + r2(y + (h - lk.h*s)/2) + ') scale(' + r2(s*1000)/1000 + ')');
+  return lk.g;
+}
+
+/* ---------- color plan ---------- */
+function plan(spec){
+  FIXES = [];
+  const P = spec.palette, by = (r) => P.find((c) => c.role === r).hex;
+  const pri = by('أساسي'), sec = by('ثانوي'), bg = by('خلفية'), txt = by('نص'), acc = by('لمسة');
+  const all = P.map((c) => c.hex);
+  const K = { pri, sec, bg, txt, acc };
+  K.text = ensure(txt, bg, 4.5, 'النص على الخلفية', all);
+  K.markOnBg = ensure(pri, bg, 3, 'الشعار على الخلفية', all);
+  K.revFg = ensure(bg, pri, 4.5, 'الحروف على اللون الأساسي', all);
+  K.accOnBg = contrast(acc, bg) >= 1.6 ? acc : sec;
+  K.accOnPri = contrast(acc, pri) >= 1.6 ? acc : K.revFg;
+  K.cardTitle = ensure(pri, bg, 4.5, 'المسمى الوظيفي في الكرت', all);
+  K.postBg = sec;
+  K.postText = ensure(contrast(bg, sec) >= contrast(txt, sec) ? bg : txt, sec, 4.5, 'نص المنشور', all);
+  K.postAcc = contrast(acc, sec) >= 1.6 ? acc : pri;
+  K.signBoard = lum(txt) < lum(pri) ? txt : pri;
+  K.signText = ensure(bg, K.signBoard, 4.5, 'اسم المحل على اللوحة', all);
+  K.signAcc = contrast(acc, K.signBoard) >= 1.6 ? acc : sec;
+  return K;
+}
+const onBg = (K) => ({ fg: K.markOnBg, ko: K.bg, ac: K.accOnBg, text: K.text });
+const onPri = (K) => ({ fg: K.revFg, ko: K.pri, ac: K.accOnPri, text: K.revFg });
+
+/* ---------- renderers ---------- */
+function logoSVG(spec, K, v){
+  const lk = lockup(spec, onBg(K), v, 'v');
+  const pad = 70, W = lk.w + pad*2, H = lk.h + pad*2;
+  const s = svgRoot(W, H, 'شعار ' + spec.nameAr);
+  s.append(el('rect', { width: W, height: H, fill: K.bg }));
+  lk.g.setAttribute('transform', 'translate(' + pad + ' ' + pad + ')');
+  s.append(lk.g); return s;
+}
+function iconSVG(spec, K, v, bgOn){
+  const s = svgRoot(440, 440, '');
+  const c = bgOn === 'pri' ? onPri(K) : onBg(K);
+  s.append(el('rect', { width:440, height:440, fill: bgOn === 'pri' ? K.pri : K.bg }));
+  const m = mark(spec, c, v); m.setAttribute('transform', 'translate(20 20)'); s.append(m); return s;
+}
+function cardFront(spec, K, v){
+  const s = svgRoot(1050, 600, 'الوجه الأمامي لكرت العمل');
+  s.append(el('rect', { width:1050, height:600, fill: K.pri }));
+  s.append(place(lockup(spec, onPri(K), v, 'v'), 225, 95, 600, 410));
+  return s;
+}
+function cardBack(spec, K, v){
+  const s = svgRoot(1050, 600, 'الوجه الخلفي لكرت العمل');
+  s.append(el('rect', { width:1050, height:600, fill: K.bg }));
+  s.append(el('rect', { x:0, y:0, width:16, height:600, fill: K.accOnBg }));
+  const fa = spec.fontAr, fl = spec.fontLat;
+  s.append(T('الاسم الكامل', { fam: fa, w: wt(fa), size:60, align:'right', x:960, cy:150, fill: K.text }));
+  s.append(T('المسمى الوظيفي', { fam: fa, w:400, size:32, align:'right', x:960, cy:222, fill: K.cardTitle }));
+  s.append(el('rect', { x:880, y:272, width:80, height:5, rx:2.5, fill: K.accOnBg }));
+  s.append(T('05X XXX XXXX', { fam: fl, w:400, size:30, ls:2, align:'right', x:960, cy:350, fill: K.text }));
+  s.append(T('البريد الإلكتروني', { fam: fa, w:400, size:27, align:'right', x:960, cy:410, fill: K.text }));
+  s.append(T('المدينة، المملكة العربية السعودية', { fam: fa, w:400, size:27, align:'right', x:960, cy:468, fill: K.text }));
+  const m = mark(spec, onBg(K), v); m.setAttribute('transform', 'translate(110 175) scale(.62)'); s.append(m);
+  return s;
+}
+function wrapLines(str, fam, w, size, maxW){
+  const words = str.split(' '), lines = []; let cur = '';
+  words.forEach((wd) => { const t = cur ? cur + ' ' + wd : wd; if (measure(t, fam, w, size, 0).adv > maxW && cur){ lines.push(cur); cur = wd; } else cur = t; });
+  if (cur) lines.push(cur); return lines;
+}
+function postSVG(spec, K, v){
+  const s = svgRoot(1080, 1080, 'منشور للتواصل الاجتماعي');
+  s.append(el('rect', { width:1080, height:1080, fill: K.postBg }));
+  // oversized mark echo, cropped at the corner
+  const echo = mark({ ...spec, type: spec.type === 'wordmark' ? 'monogram' : spec.type }, { fg: K.postAcc, ko: K.postBg, ac: K.postAcc, text: K.postAcc }, v);
+  echo.setAttribute('transform', 'translate(-260 -230) scale(2)'); echo.setAttribute('opacity', '.22');
+  s.append(echo);
+  const fa = spec.fontAr, text = spec.sloganAr || spec.nameAr;
+  let size = 132, lines = wrapLines(text, fa, wt(fa), size, 860);
+  while (lines.length > 3 && size > 70){ size -= 12; lines = wrapLines(text, fa, wt(fa), size, 860); }
+  const lh = size * 1.45, top = 560 - (lines.length * lh)/2;
+  lines.forEach((ln, i) => s.append(T(ln, { fam: fa, w: wt(fa), size, align:'right', x:960, cy: top + lh*i + lh/2, fill: K.postText })));
+  if (spec.sloganEn) s.append(T(spec.sloganEn, { fam: spec.fontLat, w:400, size:40, ls:1, align:'right', x:960, cy: top + lines.length*lh + 40, fill: K.postText, opacity:.85 }));
+  s.append(el('rect', { x:120, y:960, width:840, height:2, fill: K.postText, opacity:.35 }));
+  s.append(place(lockup(spec, { fg: K.postText, ko: K.postBg, ac: K.postAcc, text: K.postText }, v, 'h'), 120, 860, 840, 80, 'right'));
+  return s;
+}
+function signSVG(spec, K, v){
+  const W = 1000, H = 600, s = svgRoot(W, H, 'لوحة المحل الخارجية');
+  const wall = mix(K.bg, '#8E8A84', .28), wallDk = mix(wall, '#000000', .12);
+  const glass = mix(mix(K.sec, '#2C3640', .55), '#FFFFFF', .12), frame = mix(K.txt, '#3A3A3A', .3);
+  s.append(el('rect', { width:W, height:H, fill: wall }));
+  for (let y = 40; y < 520; y += 48) s.append(el('line', { x1:0, y1:y, x2:W, y2:y, stroke: wallDk, 'stroke-width':1.2, opacity:.5 }));
+  // fascia
+  s.append(el('rect', { x:70, y:70, width:860, height:150, rx:6, fill: K.signBoard }));
+  s.append(el('rect', { x:70, y:212, width:860, height:8, fill: K.signAcc }));
+  s.append(place(lockup(spec, { fg: K.signText, ko: K.signBoard, ac: K.signAcc, text: K.signText }, v, 'h'), 110, 92, 780, 106));
+  // shopfront
+  s.append(el('rect', { x:70, y:236, width:860, height:290, fill: frame }));
+  [[86,236,316],[612,236,302]].forEach(([x,y,w]) => {
+    s.append(el('rect', { x, y: y + 14, width: w, height: 262, fill: glass }));
+    s.append(el('path', { d: 'M' + (x+30) + ' ' + (y+276) + ' L' + (x+150) + ' ' + (y+14) + ' L' + (x+196) + ' ' + (y+14) + ' L' + (x+76) + ' ' + (y+276) + 'Z', fill:'#FFFFFF', opacity:.12 }));
+    s.append(el('rect', { x, y: y + 200, width: w, height: 6, fill: frame, opacity:.6 }));
+  });
+  // door with icon decal
+  s.append(el('rect', { x:418, y:250, width:178, height:276, fill: glass }));
+  s.append(el('rect', { x:418, y:250, width:178, height:276, fill:'none', stroke: frame, 'stroke-width':6 }));
+  s.append(el('rect', { x:568, y:380, width:8, height:60, rx:4, fill: K.signAcc }));
+  const dm = mark(spec, { fg: K.bg, ko: glass, ac: K.signAcc, text: K.bg }, v); dm.setAttribute('transform', 'translate(467 300) scale(.2)'); dm.setAttribute('opacity','.9'); s.append(dm);
+  // blade sign
+  s.append(el('rect', { x:930, y:258, width:50, height:8, fill: frame }));
+  s.append(el('line', { x1:948, y1:266, x2:948, y2:290, stroke: frame, 'stroke-width':3 }));
+  s.append(el('circle', { cx:948, cy:334, r:46, fill: K.signBoard, stroke: K.signAcc, 'stroke-width':3 }));
+  const bm = mark(spec, { fg: K.signText, ko: K.signBoard, ac: K.signAcc, text: K.signText }, v); bm.setAttribute('transform', 'translate(916 302) scale(.16)'); s.append(bm);
+  // pavement
+  s.append(el('rect', { x:0, y:526, width:W, height:74, fill: mix(wall, '#000000', .25) }));
+  s.append(el('rect', { x:0, y:526, width:W, height:6, fill: mix(wall, '#000000', .35) }));
+  // planters
+  [[40, 0],[960, 0]].forEach(([x]) => {
+    s.append(el('path', { d: 'M' + (x-22) + ' 526 L' + (x-28) + ' 476 L' + (x+28) + ' 476 L' + (x+22) + ' 526Z', fill: K.signBoard }));
+    [[-18,-70],[0,-92],[18,-70],[-30,-48],[30,-48]].forEach(([dx,dy]) => s.append(el('ellipse', { cx: x + dx*.6, cy: 476 + dy/2, rx:10, ry:26, fill:'#4E6B4A', transform: 'rotate(' + dx*1.4 + ' ' + (x+dx*.6) + ' ' + (476+dy/2) + ')' })));
+  });
+  return s;
+}
+
+/* ---------- board ---------- */
+let SPEC = null, KOL = null, VAR = 0, INPUT = null, VERSION = 0;
+const board = $('#board');
+function h(tag, cls, txt){ const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+function setStatus(s, t){ const e = $('#status'); e.dataset.s = s; $('#statusTxt').textContent = t; }
+function clock(){ return new Intl.DateTimeFormat('ar-SA-u-nu-arab', { hour:'numeric', minute:'2-digit', timeZone:'Asia/Riyadh' }).format(new Date()); }
+function head(title, sub){
+  const d = h('div','phead'); d.append(h('h1', null, title)); const sm = h('small', null, sub); d.append(sm); return d;
+}
+function showLoading(){
+  board.setAttribute('aria-busy','true'); board.textContent = ''; board.classList.add('busy');
+  board.append(head(INPUT.nameAr, 'جاري التصميم'));
+  const w = h('div','empty'); w.innerHTML = '<div class="skel" aria-hidden="true"><div class="a"></div><div class="b"></div><div class="c"></div><div class="d"></div><div class="e"></div></div>';
+  board.append(w);
+  setStatus('busy', 'نصمم…');
+}
+function showError(msg){
+  board.classList.remove('busy'); board.setAttribute('aria-busy','false'); board.textContent = '';
+  board.append(head(INPUT.nameAr, VERSION ? 'آخر نسخة: ' + VERSION : 'لم تُصمم بعد'));
+  const w = h('div','state'); const p = h('p', null, msg);
+  const b = h('button','btn2','أعد المحاولة'); b.type = 'button'; b.addEventListener('click', () => run());
+  w.append(p, b); board.append(w); b.focus({ preventScroll: true });
+  setStatus('err', 'تعذّر التصميم');
+}
+const DL_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg>';
+function secHead(title, note){ const hd = document.createElement('header'); hd.append(h('h3', null, title)); if (note) hd.append(h('small', null, note)); return hd; }
+
+function render(){
+  const spec = SPEC, K = KOL = plan(SPEC);
+  board.classList.remove('busy'); board.textContent = ''; board.setAttribute('aria-busy','false');
+  board.append(head(spec.nameAr + (spec.nameEn ? ' / ' + spec.nameEn : ''), 'النسخة ' + VERSION.toLocaleString('ar-SA') + '، ' + clock() + '، ' + INPUT.sector + '، ' + INPUT.persona.join(' و')));
+  $('#crumbName').textContent = spec.nameAr;
+  setStatus('ok', 'جاهزة');
+
+  const hero = h('div','hero');
+  const left = h('div');
+  const stage = h('div','stage'); stage.style.background = K.bg; stage.append(logoSVG(spec, K, VAR));
+  const vr = h('div','vrow'); vr.setAttribute('role','group'); vr.setAttribute('aria-label','تركيب الشعار');
+  const names = variantNames(spec);
+  [0,1,2].forEach((i) => {
+    const b = h('button','vbtn'); b.type = 'button'; b.setAttribute('aria-pressed', String(i === VAR)); b.setAttribute('aria-label', 'تركيب ' + names[i]); b.title = names[i];
+    b.style.background = K.bg; b.append(iconSVG(spec, K, i, 'bg'));
+    b.addEventListener('click', () => { if (VAR === i) return; VAR = i; render(); const nb = board.querySelectorAll('.vbtn')[i]; if (nb) nb.focus({ preventScroll:true }); });
+    vr.append(b);
+  });
+  vr.append(h('span','lbl', names[VAR]));
+  left.append(stage, vr);
+
+  const idea = h('div','idea');
+  idea.append(h('p','concept', spec.concept || 'هوية مبنية على حروف الاسم وألوان القطاع.'));
+  if (spec.sloganAr){ const a = h('p','sl', spec.sloganAr); a.style.fontFamily = '"' + spec.fontAr + '"'; idea.append(a); }
+  if (spec.sloganEn){ const e = h('p','sl en', spec.sloganEn); e.style.fontFamily = '"' + spec.fontLat + '"'; e.lang = 'en'; idea.append(e); }
+  if (spec.voice.length){ const v = h('p','voice'); v.append(h('b', null, 'النبرة: ')); v.append(document.createTextNode(spec.voice.join('، '))); idea.append(v); }
+  const dl = h('div','dl');
+  const b1 = h('button'); b1.type = 'button'; b1.innerHTML = DL_ICON; b1.append(document.createTextNode('الشعار SVG')); b1.addEventListener('click', downloadLogo);
+  const b2 = h('button','ghost'); b2.type = 'button'; b2.innerHTML = DL_ICON; b2.append(document.createTextNode('الكرت PNG')); b2.addEventListener('click', downloadCard);
+  dl.append(b1, b2);
+  idea.append(dl, h('p','note','خطوط ملف SVG تُحمَّل من الإنترنت عند فتحه، حوّلها لمسارات قبل الطباعة.'));
+  hero.append(left, idea); board.append(hero);
+
+  // palette
+  const ps = h('section','sec'); ps.append(secHead('الألوان', 'اضغط اللون لنسخ الكود'));
+  const pal = h('div','palette');
+  spec.palette.forEach((c) => {
+    const b = h('button','sw'); b.type = 'button'; b.style.background = c.hex;
+    if (c.role === 'خلفية') b.style.boxShadow = 'inset 0 0 0 1px ' + mix(c.hex, '#000000', .12);
+    b.style.color = contrast('#FFFFFF', c.hex) >= contrast('#1A1A1A', c.hex) ? '#FFFFFF' : '#1A1A1A';
+    b.setAttribute('aria-label', c.name + '، ' + c.role + '، ' + c.hex + '، اضغط للنسخ');
+    const cr = c.role === 'خلفية' ? '' : '، تباين ' + contrast(c.hex, K.bg).toFixed(1);
+    const hx = h('span','hx'); const bd = document.createElement('bdi'); bd.textContent = c.hex; hx.append(bd);
+    b.append(h('span','cp','نسخ'), h('span','nm', c.name), h('span', null, c.role + cr), hx);
+    b.addEventListener('click', () => copy(c.hex, b));
+    pal.append(b);
+  });
+  ps.append(pal);
+  const notes = [...new Set(FIXES)];
+  if (spec.filledColors) notes.unshift('كمّلنا الألوان الناقصة من لوحة قطاع ' + INPUT.sector + '.');
+  if (notes.length){ const ul = h('ul','fixes'); notes.forEach((t) => ul.append(h('li', null, t))); ps.append(ul); }
+  board.append(ps);
+
+  // type
+  const ts = h('section','sec'); ts.append(secHead('الخطوط', spec.fontAr + ' و ' + spec.fontLat));
+  const tg = h('div','type');
+  const a = h('div','spec'); a.style.background = K.pri; a.style.color = K.revFg;
+  const ab = h('p','big', spec.nameAr); ab.style.fontFamily = '"' + spec.fontAr + '"'; ab.style.fontWeight = wt(spec.fontAr);
+  const al = h('p','line', 'أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن هـ و ي ١٢٣٤٥٦٧٨٩٠'); al.style.fontFamily = '"' + spec.fontAr + '"';
+  a.append(ab, al, h('p','meta', spec.fontAr + (wt(spec.fontAr) === 700 ? '، عادي وعريض' : '، وزن واحد')));
+  const l = h('div','spec lat'); l.style.background = K.bg; l.style.color = K.text;
+  const lb = h('p','big', 'Aa Gg Rr'); lb.style.fontFamily = '"' + spec.fontLat + '"'; lb.style.fontWeight = wt(spec.fontLat); lb.lang = 'en';
+  const ll = h('p','line', (spec.sloganEn || spec.nameEn || 'Quiet details') + ' 0123456789'); ll.style.fontFamily = '"' + spec.fontLat + '"'; ll.lang = 'en';
+  const lm = h('p','meta', spec.fontLat); lm.lang = 'en';
+  l.append(lb, ll, lm); tg.append(a, l); ts.append(tg); board.append(ts);
+
+  // applications
+  const ms = h('section','sec'); ms.append(secHead('التطبيقات'));
+  const mk = h('div','mocks');
+  const f1 = h('figure'); const cards = h('div','cards'); cards.append(cardFront(spec, K, VAR), cardBack(spec, K, VAR));
+  f1.append(cards, h('figcaption', null, 'كرت العمل، ٨٫٩ × ٥٫١ سم'));
+  const f2 = h('figure'); const post = h('div','post'); const hd = document.createElement('header');
+  const av = h('div','av'); av.append(iconSVG(spec, K, VAR, 'pri')); const who = h('div'); who.append(h('b', null, spec.nameAr), h('small', null, 'قبل دقيقة'));
+  hd.append(av, who); post.append(hd, postSVG(spec, K, VAR), h('p','cap', spec.sloganAr || spec.nameAr));
+  f2.append(post, h('figcaption', null, 'منشور ١٠٨٠ × ١٠٨٠'));
+  const f3 = h('figure','wide'); f3.append(signSVG(spec, K, VAR), h('figcaption', null, 'واجهة المحل واللوحة الجانبية'));
+  mk.append(f1, f2, f3); ms.append(mk); board.append(ms);
+
+  const ag = h('div','again');
+  const rb = h('button','btn2','نسخة ثانية بنفس الملف'); rb.type = 'button'; rb.addEventListener('click', () => run());
+  ag.append(rb); board.append(ag);
+}
+
+/* ---------- copy / toast ---------- */
+let tt;
+function toast(t){ const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => e.classList.remove('on'), 1800); }
+async function copy(txt, btn){
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch (e) {
+    const ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.append(ta); ta.select(); try { ok = document.execCommand('copy'); } catch (e2) {} ta.remove();
+  }
+  const cp = btn.querySelector('.cp'); btn.classList.add('done'); if (cp){ cp.textContent = ok ? 'انتسخ' : 'انسخه يدوي'; setTimeout(() => { cp.textContent = 'نسخ'; btn.classList.remove('done'); }, 1500); }
+  toast(ok ? 'انتسخ ' + txt : 'ما قدرنا ننسخ، الكود: ' + txt);
+}
+
+/* ---------- downloads ---------- */
+function safeName(){ return (SPEC.nameEn || 'brand').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'brand'; }
+function save(blob, name){
+  const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = name;
+  document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+function downloadLogo(){
+  const s = logoSVG(SPEC, KOL, VAR);
+  const st = el('style'); st.textContent = "@import url('" + fontHref(SPEC.fontAr) + "');@import url('" + fontHref(SPEC.fontLat) + "');";
+  s.insertBefore(st, s.firstChild.nextSibling);
+  const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(s);
+  save(new Blob([xml], { type:'image/svg+xml' }), safeName() + '-logo.svg');
+  toast('نزل الشعار');
+}
+// draw an SVG to canvas: shapes via <img>, text via fillText with the page's loaded fonts
+async function drawSVG(ctx, svg, ox, oy, scale){
+  const clone = svg.cloneNode(true); clone.querySelectorAll('text,title').forEach((t) => t.remove());
+  const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(clone)], { type:'image/svg+xml' }));
+  const vb = svg.viewBox.baseVal;
+  await new Promise((res, rej) => { const img = new Image(); img.onload = () => { ctx.drawImage(img, ox, oy, vb.width*scale, vb.height*scale); res(); }; img.onerror = rej; img.src = url; });
+  URL.revokeObjectURL(url);
+  svg.querySelectorAll('text').forEach((t) => {
+    let m = new DOMMatrix(), alpha = 1;
+    const chain = [];
+    for (let n = t; n && n !== svg; n = n.parentNode){
+      if (n.transform && n.transform.baseVal.numberOfItems) chain.unshift(n.transform.baseVal.consolidate().matrix);
+      if (n.getAttribute && n.getAttribute('opacity')) alpha *= +n.getAttribute('opacity');
+    }
+    chain.forEach((x) => { m = m.multiply(DOMMatrix.fromMatrix(x)); });
+    ctx.save();
+    ctx.setTransform(scale*m.a, scale*m.b, scale*m.c, scale*m.d, ox + scale*m.e, oy + scale*m.f);
+    ctx.globalAlpha = alpha;
+    ctx.font = t.getAttribute('font-weight') + ' ' + t.getAttribute('font-size') + 'px ' + t.getAttribute('font-family') + ', sans-serif';
+    if ('letterSpacing' in ctx) ctx.letterSpacing = (+t.getAttribute('letter-spacing') || 0) + 'px';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.direction = 'ltr';
+    const x = +t.getAttribute('x'), y = +t.getAttribute('y');
+    if (t.getAttribute('stroke')){ ctx.strokeStyle = t.getAttribute('stroke'); ctx.lineWidth = +t.getAttribute('stroke-width'); ctx.lineJoin = 'round'; ctx.strokeText(t.textContent, x, y); }
+    ctx.fillStyle = t.getAttribute('fill');
+    ctx.fillText(t.textContent, x, y);
+    ctx.restore();
+  });
+}
+async function downloadCard(){
+  try {
+    const sc = 2, pad = 80, gap = 60;
+    const c = document.createElement('canvas'); c.width = 1050*sc + pad*2; c.height = 600*sc*2 + gap + pad*2;
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#E4E6E1'; ctx.fillRect(0, 0, c.width, c.height);
+    await document.fonts.ready;
+    await drawSVG(ctx, cardFront(SPEC, KOL, VAR), pad, pad, sc);
+    await drawSVG(ctx, cardBack(SPEC, KOL, VAR), pad, pad + 600*sc + gap, sc);
+    c.toBlob((b) => { if (b){ save(b, safeName() + '-card.png'); toast('نزل الكرت'); } else toast('ما قدرنا نجهز الصورة، جرّب مرة ثانية'); }, 'image/png');
+  } catch (e) { toast('ما قدرنا نجهز الصورة، جرّب مرة ثانية'); }
+}
+
+/* ---------- request ---------- */
+function readInput(){
+  return {
+    nameAr: clip($('#nameAr').value, 40),
+    nameEn: clip($('#nameEn').value, 40).replace(/[^\p{L}\p{N} &'.-]/gu, ''),
+    sector: (document.querySelector('#sector input:checked') || {}).value || 'مقهى',
+    persona: [...document.querySelectorAll('#persona input:checked')].map((i) => i.value)
+  };
+}
+let busy = false;
+async function run(){
+  if (busy) return;
+  const inp = readInput();
+  if (!inp.nameAr){ $('#nameAr').focus(); hint('اكتب اسم النشاط أول.', true); return; }
+  if (inp.persona.length < 2){ hint('اختر كلمتين على الأقل تصف شخصية العلامة.', true); document.querySelector('#persona input').focus(); return; }
+  hint('');
+  busy = true; const go = $('#go'); go.disabled = true; go.textContent = 'نصمم…';
+  INPUT = inp; showLoading();
+  if (window.matchMedia('(max-width: 999px)').matches) board.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  const text = 'اسم النشاط: ' + inp.nameAr + '\nالاسم بالإنجليزي: ' + (inp.nameEn || '') + '\nالقطاع: ' + inp.sector + '\nالشخصية: ' + inp.persona.join('، ');
+  const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 30000);
+  try {
+    const r = await fetch('/api/demo', { method:'POST', headers:{ 'content-type':'application/json' }, signal: ctrl.signal,
+      body: JSON.stringify({ demo:'identity', messages:[{ role:'user', text }] }) });
+    if (!r.ok){
+      showError(r.status === 429 ? 'الطلبات كثيرة هالحين. انتظر دقيقة وجرّب مرة ثانية.'
+        : r.status === 503 ? 'الاستوديو مقفل مؤقتاً للصيانة. جرّب بعد شوي.'
+        : r.status === 403 || r.status === 415 ? 'ما قدرنا نستقبل الطلب من هذي الصفحة. حدّث الصفحة وجرّب مرة ثانية.'
+        : 'ما وصلتنا الهوية هالمرة. اضغط «أعد المحاولة».');
+      return;
+    }
+    const j = await r.json().catch(() => null);
+    if (!j || !j.data || typeof j.data !== 'object'){ showError('وصلنا رد ناقص وما نقدر نرسم منه هوية. اضغط «أعد المحاولة».'); return; }
+    const spec = normalize(j.data, inp);
+    await Promise.all([loadFont(spec.fontAr, spec.nameAr + spec.letters + (spec.sloganAr || '') + 'الاسم الكامل المسمى الوظيفي البريد الإلكتروني المدينة'), loadFont(spec.fontLat, (spec.nameEn || '') + spec.letters + (spec.sloganEn || '') + 'AaGgRr05X 0123456789')]);
+    SPEC = spec; VERSION++; VAR = hash(spec.nameAr + spec.concept) % (spec.type === 'symbol' ? 2 : 3);
+    render();
+  } catch (e) {
+    showError(e && e.name === 'AbortError' ? 'تأخر الرد أكثر من ٣٠ ثانية. اضغط «أعد المحاولة».' : 'انقطع الاتصال. تأكد من الإنترنت واضغط «أعد المحاولة».');
+  } finally {
+    clearTimeout(tm); busy = false; go.disabled = false; go.textContent = 'صمم الهوية';
+  }
+}
+$('#brief').addEventListener('submit', (e) => { e.preventDefault(); run(); });
+})();
+</script>
+</body>
+</html>

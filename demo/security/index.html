@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F1F2EE">
+<title>صَوْن | منصة المراجعة الأمنية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F2EE; --sheet:#FFFFFF; --ink:#1D2227; --ink-2:#4A525A; --ink-3:#69717A;
+  --rule:#CDD0C8; --rule-2:#E3E5DF; --cobalt:#2338A8; --cobalt-d:#1A2A80; --cobalt-t:#E8EBF8;
+  --ed:#1C2228; --ed-2:#252C33; --ed-ink:#E2E6DF; --ed-mute:#7D8790;
+  --crit:#A61B1B; --high:#B5520A; --med:#8A6800; --low:#3E6577; --pass:#2D6A3E;
+  --crit-t:#F8E7E5; --med-t:#F7F0DA; --low-t:#E5EEF1; --pass-t:#E4F0E6;
+  --sans:"Readex Pro",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;font-variant-numeric:tabular-nums}
+a{color:var(--cobalt)}
+button,select,textarea{font:inherit;color:inherit}
+button{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+.print-only{display:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* app bar */
+.bar{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule);padding-top:env(safe-area-inset-top)}
+.bar-in{display:flex;align-items:center;gap:14px;height:58px;padding-inline:max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-left));max-width:1320px;margin-inline:auto}
+.logo{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+.logo svg{width:30px;height:30px}
+.logo b{font-size:21px;font-weight:700;line-height:1;letter-spacing:-.01em}
+.bar .crumb{color:var(--ink-3);font-size:14.5px;padding-inline-start:14px;border-inline-start:1px solid var(--rule);line-height:1.2}
+.bar .meta{margin-inline-start:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-3)}
+.bar .meta bdi{font-family:var(--mono);color:var(--ink-2)}
+.state-dot{width:7px;height:7px;border-radius:50%;background:var(--rule)}
+.state-dot.run{background:var(--cobalt)}
+.state-dot.done{background:var(--pass)}
+@media (max-width:560px){.bar .crumb{display:none}.bar .meta .lbl{display:none}}
+
+/* workspace */
+.ws{max-width:1320px;margin-inline:auto;padding:20px max(16px,env(safe-area-inset-right)) 40px max(16px,env(safe-area-inset-left));display:grid;gap:20px}
+@media (min-width:1000px){.ws{grid-template-columns:minmax(0,46fr) minmax(0,54fr);gap:28px;align-items:start}.editor{position:sticky;top:78px}}
+
+/* editor */
+.editor{background:var(--ed);color:var(--ed-ink);border-radius:8px;overflow:hidden}
+.tabs{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none;background:#161B20;border-bottom:1px solid #000}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;display:flex;align-items:center;gap:7px;background:transparent;border:0;border-inline-end:1px solid #0E1215;color:var(--ed-mute);padding:11px 12px;font-family:var(--mono);font-size:12.5px;cursor:pointer;direction:ltr;position:relative}
+.tab:hover{color:var(--ed-ink)}
+.tab[aria-selected="true"]{background:var(--ed);color:#fff}
+.tab[aria-selected="true"]::after{content:"";position:absolute;inset-inline:0;top:0;height:2px;background:#7F93FF}
+.tab .ico{width:15px;height:15px}
+.tab.new{font-family:var(--sans);font-size:13px;direction:rtl}
+.code{display:grid;grid-template-columns:auto 1fr;direction:ltr;height:340px}
+@media (min-width:1000px){.code{height:430px}}
+.gutter{margin:0;padding:12px 10px 12px 14px;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:#56606A;text-align:right;user-select:none;overflow:hidden;border-right:1px solid var(--ed-2);min-width:42px}
+textarea{display:block;width:100%;height:100%;resize:none;border:0;background:transparent;color:var(--ed-ink);padding:12px 14px;font-family:var(--mono);font-size:12.5px;line-height:1.7;direction:ltr;text-align:left;outline:none;white-space:pre;overflow:auto;tab-size:2;caret-color:#9AA9FF}
+textarea::placeholder{color:#5E6872}
+textarea:focus-visible{box-shadow:inset 0 0 0 2px #7F93FF}
+.status{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px;background:#161B20;font-size:12.5px;color:var(--ed-mute)}
+.status label{display:flex;align-items:center;gap:6px}
+.status select{background:var(--ed-2);color:var(--ed-ink);border:1px solid #333C45;border-radius:4px;padding:3px 6px;font-size:12.5px}
+.status .over{color:#FF9C8F}
+.ed-foot{padding:14px;display:grid;gap:12px;background:var(--ed)}
+.go{width:100%;border:0;border-radius:6px;background:var(--cobalt);color:#fff;font-weight:600;font-size:16px;padding:13px 18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.go:hover{background:#2C44C4}
+.go:active{transform:translateY(1px)}
+.go[disabled]{opacity:.75;cursor:progress}
+.hint{margin:0;font-size:13px;line-height:1.6;color:var(--ed-mute)}
+.hint code{font-family:var(--mono);font-size:12px;color:var(--ed-ink);background:var(--ed-2);padding:1px 6px;border-radius:3px}
+.hint button{background:none;border:0;color:#9AA9FF;padding:0 2px;cursor:pointer;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+
+/* report */
+.sheet{background:var(--sheet);border-top:3px solid var(--ink);overflow-wrap:anywhere;min-width:0}
+.f .t,.checks li>*,.overview>*{min-width:0}
+.sheet-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:16px 22px 12px;flex-wrap:wrap}
+.sheet-head h1{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}
+.sheet-head .when{font-size:13px;color:var(--ink-3)}
+.sec{padding:18px 22px;border-top:1px solid var(--rule-2)}
+.sec h2{margin:0 0 12px;font-size:16px;font-weight:600;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.sec h2 .aside{font-size:13px;font-weight:400;color:var(--ink-3)}
+
+.overview{display:grid;gap:16px;align-items:center}
+@media (min-width:600px){.overview{grid-template-columns:180px 1fr;gap:24px}}
+.dial{width:180px;height:180px;margin-inline:auto;position:relative}
+.dial svg{width:100%;height:100%;display:block}
+.dial .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:6px}
+.dial .num{font-size:46px;font-weight:600;line-height:1}
+.dial .of{font-size:12.5px;color:var(--ink-3);margin-top:4px}
+.dial .band{font-size:13px;font-weight:500;margin-top:5px}
+.summary{margin:0 0 14px;font-size:16px}
+.summary.muted{color:var(--ink-3)}
+.tally{display:grid;grid-template-columns:repeat(4,1fr)}
+.tally div{padding:2px 12px;border-inline-start:1px solid var(--rule-2)}
+.tally div:first-child{border-inline-start:0;padding-inline-start:0}
+.tally b{display:block;font-size:26px;font-weight:600;line-height:1.2}
+.tally span{font-size:13px;color:var(--ink-2);display:inline-flex;align-items:center;gap:6px}
+.tally i{width:8px;height:8px;display:inline-block}
+
+.checks{list-style:none;margin:0;padding:0}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:2px 12px;padding:10px 0;border-top:1px solid var(--rule-2)}
+.checks li:first-child{border-top:0;padding-top:0}
+.mark{width:22px;height:22px;display:grid;place-items:center;grid-row:span 2;margin-top:2px;border-radius:50%}
+.mark svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mark.pass{background:var(--pass-t);color:var(--pass)}
+.mark.fail{background:var(--crit-t);color:var(--crit)}
+.mark.warn{background:var(--med-t);color:var(--med)}
+.mark.info{background:var(--low-t);color:var(--low)}
+.checks .lbl{font-weight:500;font-size:15px}
+.checks .lbl em{font-style:normal;font-size:12.5px;font-weight:400;color:var(--ink-3);margin-inline-start:8px}
+.checks .det{font-size:13.5px;color:var(--ink-2)}
+.checks code{display:block;width:fit-content;max-width:100%;margin-top:5px;text-align:left;font-family:var(--mono);font-size:12px;direction:ltr;unicode-bidi:isolate;background:#F4F5F2;border-inline-start:2px solid var(--rule);padding:2px 8px;word-break:break-all}
+
+.findings{border-top:1px solid var(--rule-2)}
+.f{border-bottom:1px solid var(--rule-2);position:relative}
+.f::before{content:"";position:absolute;inset-block:12px;inset-inline-start:-22px;width:3px;background:var(--c)}
+.f summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:13px 0}
+.f summary::-webkit-details-marker{display:none}
+.f summary:hover .t{color:var(--cobalt)}
+.sev{font-size:12.5px;font-weight:600;color:var(--c);white-space:nowrap;margin-top:2px;min-width:44px}
+.f .t{font-weight:500;font-size:15.5px;line-height:1.5}
+.chev{width:18px;height:18px;margin-top:4px;transition:transform .2s;color:var(--ink-3)}
+.f[open] .chev{transform:rotate(180deg)}
+.f .body{padding:0 0 16px;display:grid;gap:12px;padding-inline-start:56px}
+@media (max-width:520px){.f .body{padding-inline-start:0}}
+.f .body h3{margin:0 0 4px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.f .body p{margin:0;font-size:15px}
+.ev pre,.fix pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.6;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;padding:10px 12px}
+.ev pre{background:#F6F7F4;border-inline-start:3px solid var(--c)}
+.verb{font-size:12.5px;margin-top:5px;color:var(--pass);display:flex;align-items:center;gap:6px}
+.verb.no{color:var(--high)}
+.verb svg{width:14px;height:14px}
+.fix pre{background:var(--ed);color:var(--ed-ink);border-radius:4px}
+.fix .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.fix .row h3{margin:0}
+.copy{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);background:var(--sheet);border-radius:4px;padding:4px 10px;font-size:13px;cursor:pointer}
+.copy:hover{border-color:var(--ink-3)}
+.copy .ico{width:15px;height:15px}
+.copy.done{color:var(--pass);border-color:var(--pass)}
+.fix .exp{margin:0 0 8px;font-size:15px}
+
+.good{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.good li{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.good li svg{width:16px;height:16px;color:var(--pass);margin-top:4px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8}
+
+.empty{font-size:15px;color:var(--ink-3);padding:4px 0}
+.err{display:grid;gap:10px;padding:14px 16px;background:var(--crit-t);color:#5E1A14;border-inline-start:3px solid var(--crit);font-size:15px}
+.err button{justify-self:start;border:1px solid currentColor;background:transparent;border-radius:4px;padding:6px 14px;cursor:pointer;font-size:14px;font-weight:500;color:inherit}
+.sk{display:grid;gap:14px;padding-top:4px}
+.sk div{height:12px;border-radius:2px;background:linear-gradient(90deg,#ECEEE9 0%,#F6F7F4 40%,#ECEEE9 80%);background-size:300% 100%;animation:sh 1.4s ease infinite}
+.sk div:nth-child(3n+1){width:72%}.sk div:nth-child(3n+2){width:94%}.sk div:nth-child(3n){width:58%}
+@keyframes sh{from{background-position:100% 0}to{background-position:0 0}}
+.sk-note{font-size:13px;color:var(--ink-3);margin-top:2px}
+
+.actions{display:flex;flex-wrap:wrap;gap:10px;padding:16px 22px calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--rule)}
+.btn{border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:5px;padding:10px 16px;font-size:15px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{background:#000}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--paper)}
+
+footer{border-top:1px solid var(--rule);padding:16px max(16px,env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+footer .in{max-width:1320px;margin-inline:auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;font-size:13px;color:var(--ink-3)}
+footer a{color:var(--ink-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+footer a:hover{color:var(--ink);text-decoration:underline}
+footer img{height:16px;width:auto}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ---------- print ---------- */
+@media print{
+  @page{size:A4;margin:16mm 14mm 18mm}
+  body{background:#fff;font-size:10.5pt;line-height:1.55;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bar,.editor,footer,.actions,.copy,.chev,.err button{display:none!important}
+  .ws{display:block;padding:0;max-width:none}
+  .sheet{border-top:0}
+  .p-head{display:flex!important;justify-content:space-between;align-items:flex-end;border-bottom:2.5pt solid var(--ink);padding-bottom:8pt;margin-bottom:10pt}
+  .p-head .pb{display:flex;align-items:center;gap:8pt}
+  .p-head svg{width:28pt;height:28pt}
+  .p-head b{font-size:18pt;display:block;line-height:1}
+  .p-head small{font-size:8.5pt;color:var(--ink-3)}
+  .p-meta{font-size:8.5pt;color:var(--ink-2);text-align:left;direction:ltr;font-family:var(--mono);line-height:1.5}
+  .p-scope{display:block!important;font-size:9.5pt;color:var(--ink-2);margin:0 0 8pt;border:1px solid var(--rule);padding:6pt 8pt}
+  .sheet-head{padding:0 0 6pt}
+  .sec{padding:10pt 0}
+  .sec h2{break-after:avoid}
+  .dial{width:125pt;height:125pt}
+  .dial .num{font-size:30pt}
+  .overview{grid-template-columns:135pt 1fr}
+  .f{break-inside:avoid}
+  .f::before{inset-inline-start:-8pt}
+  .f summary{padding:7pt 0}
+  .f .body{display:grid!important;padding-inline-start:0}
+  .fix pre{background:#F2F3EF;color:#1D2227;border:1px solid #ccc}
+  .checks li{break-inside:avoid;padding:5pt 0}
+  .p-sample{display:block!important;margin-top:10pt}
+  .p-sample h2{font-size:11pt;margin:0 0 4pt}
+  .p-sample pre{font-family:var(--mono);font-size:7.5pt;line-height:1.45;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-all;border:1px solid var(--rule);padding:6pt;margin:0}
+  .p-foot{display:block!important;margin-top:12pt;padding-top:6pt;border-top:1px solid var(--rule);font-size:8pt;color:var(--ink-3)}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="seal" viewBox="0 0 48 48">
+      <g id="seal-ticks" stroke="#1D2227" stroke-width="1.6" stroke-linecap="round"></g>
+      <path d="M24 6.5a17.5 17.5 0 0 1 16.4 11.4" fill="none" stroke="#2338A8" stroke-width="4.2" stroke-linecap="butt"/>
+      <circle cx="24" cy="24" r="9.2" fill="none" stroke="#1D2227" stroke-width="2.4"/>
+      <path d="M24 24 L31.5 16.5" stroke="#2338A8" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="24" cy="24" r="2.4" fill="#1D2227"/>
+    </symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7z"/><path d="M14 3v4h4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="11" rx="1.5"/><path d="M15.5 8.5V5.5a1 1 0 0 0-1-1h-9a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M4.5 18.5v1.5h15v-1.5"/></symbol>
+    <symbol id="i-run" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="logo" href="#" aria-label="صَوْن، مختبر أمن تطبيقات الويب">
+      <svg aria-hidden="true"><use href="#seal"/></svg><b>صَوْن</b>
+    </a>
+    <span class="crumb">منصة المراجعة الأمنية</span>
+    <span class="meta"><span class="state-dot" id="dot"></span><span class="lbl">مراجعة</span><bdi id="ref">SWN-000000-0000</bdi></span>
+  </div>
+</header>
+
+<main class="ws">
+  <section class="editor" aria-label="العيّنة">
+    <div class="tabs" role="tablist" aria-label="العيّنات">
+      <button class="tab" role="tab" type="button" data-s="headers" aria-selected="true"><svg class="ico"><use href="#i-file"/></svg>store-response.http</button>
+      <button class="tab" role="tab" type="button" data-s="php" aria-selected="false"><svg class="ico"><use href="#i-file"/></svg>login.php</button>
+      <button class="tab" role="tab" type="button" data-s="html" aria-selected="false"><svg class="ico"><use href="#i-file"/></svg>login-form.html</button>
+      <button class="tab new" role="tab" type="button" data-s="" aria-selected="false"><svg class="ico"><use href="#i-plus"/></svg>جديدة</button>
+    </div>
+    <div class="code">
+      <pre class="gutter" id="gutter" aria-hidden="true">1</pre>
+      <label class="sr" for="input">نص العيّنة</label>
+      <textarea id="input" dir="ltr" wrap="off" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="HTTP/1.1 200 OK&#10;Server: ...&#10;&#10;nginx.conf · .htaccess · HTML · PHP · JS"></textarea>
+    </div>
+    <div class="status">
+      <label>النوع
+        <select id="kind">
+          <option value="auto">تلقائي</option>
+          <option value="headers">ترويسات HTTP</option>
+          <option value="html">HTML / نموذج</option>
+          <option value="php">PHP</option>
+          <option value="config">إعدادات خادم</option>
+          <option value="js">JavaScript</option>
+        </select>
+      </label>
+      <span style="display:flex;gap:12px"><span id="detected"></span><bdi id="count" dir="ltr">0 / 4800</bdi></span>
+    </div>
+    <div class="ed-foot">
+      <button class="go" type="button" id="go"><svg class="ico"><use href="#i-run"/></svg><span>حلّل العيّنة</span></button>
+      <p class="hint">الصق ناتج <code id="curlCmd">curl -sI https://your-site.sa</code> <button type="button" id="copyCurl">نسخ</button> أو مقطع الكود والإعدادات. الروابط لا تُفحص من هذه الشاشة، ولا تلصق مفاتيح أو كلمات مرور حقيقية.</p>
+    </div>
+  </section>
+
+  <article class="sheet" id="report" aria-labelledby="repH">
+    <div class="print-only p-head">
+      <div class="pb"><svg aria-hidden="true"><use href="#seal"/></svg><div><b>صَوْن</b><small>مختبر أمن تطبيقات الويب</small></div></div>
+      <div class="p-meta"><div id="pRef"></div><div id="pDate"></div></div>
+    </div>
+    <p class="print-only p-scope" id="pScope"></p>
+
+    <div class="sheet-head">
+      <h1 id="repH">تقرير المراجعة الأمنية</h1>
+      <span class="when" id="when">مسودة</span>
+    </div>
+
+    <div class="sec">
+      <div class="overview">
+        <div class="dial" id="dial" role="img" aria-label="درجة الأمان: لم تُحسب بعد">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <g id="ticks"></g>
+            <circle cx="100" cy="100" r="74" fill="none" stroke="#E3E5DF" stroke-width="10" stroke-dasharray="348.7 465" transform="rotate(135 100 100)"/>
+            <circle id="arc" cx="100" cy="100" r="74" fill="none" stroke="#2338A8" stroke-width="10" stroke-dasharray="0 465" transform="rotate(135 100 100)" style="transition:stroke-dasharray .9s ease"/>
+          </svg>
+          <div class="val"><span class="num" id="score">—</span><span class="of">من 100</span><span class="band" id="band">بانتظار التحليل</span></div>
+        </div>
+        <div>
+          <p class="summary muted" id="summary">بانتظار التحليل.</p>
+          <div class="tally" aria-label="عدد الملاحظات حسب الخطورة">
+            <div><b id="n-crit">0</b><span><i style="background:var(--crit)"></i>حرج</span></div>
+            <div><b id="n-high">0</b><span><i style="background:var(--high)"></i>عالي</span></div>
+            <div><b id="n-med">0</b><span><i style="background:var(--med)"></i>متوسط</span></div>
+            <div><b id="n-low">0</b><span><i style="background:var(--low)"></i>منخفض</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" aria-labelledby="h-auto">
+      <h2 id="h-auto"><span>فحص آلي</span><span class="aside" id="autoSum"></span></h2>
+      <ul class="checks" id="checks"></ul>
+    </div>
+
+    <div class="sec" aria-labelledby="h-ai" aria-live="polite">
+      <h2 id="h-ai"><span>ملاحظات المحلل</span><span class="aside" id="aiSum"></span></h2>
+      <div id="aiBox"></div>
+    </div>
+
+    <div class="sec" id="goodSec" hidden aria-labelledby="h-good">
+      <h2 id="h-good">ممارسات سليمة</h2>
+      <ul class="good" id="good"></ul>
+    </div>
+
+    <div class="print-only p-sample">
+      <h2>العيّنة المُحلّلة</h2>
+      <pre id="pSample"></pre>
+    </div>
+    <div class="print-only p-foot">يستند هذا التقرير إلى النص المقدَّم للمراجعة فقط، ولا يغني عن اختبار اختراق شامل للبيئة الحية. مختبر صَوْن لأمن تطبيقات الويب.</div>
+
+    <div class="actions">
+      <button class="btn" type="button" id="print"><svg class="ico"><use href="#i-down"/></svg>تحميل التقرير PDF</button>
+      <button class="btn ghost" type="button" id="expand">فتح كل الملاحظات</button>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="in">
+    <span>صَوْن، مختبر أمن تطبيقات الويب. جميع الحقوق محفوظة.</span>
+    <span style="display:flex;flex-wrap:wrap;gap:8px 16px">
+      <a href="https://yazeedalharthi.sa/#services">تصميم وتطوير <img src="/assets/yh-mark-on-light.svg" alt="" width="24" height="16"> يزيد الحارثي</a>
+      <a href="https://yazeedalharthi.sa/#services">تبي نسخة لمنشأتك؟ اطلب عرض سعر</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var MAX = 4800;
+var $ = function(s){return document.querySelector(s)};
+var input = $('#input'), kindSel = $('#kind');
+
+var SAMPLES = {
+headers: [
+'HTTP/1.1 200 OK',
+'Date: Thu, 19 Nov 2026 09:12:44 GMT',
+'Content-Type: text/html; charset=UTF-8',
+'Server: Apache/2.4.41 (Ubuntu)',
+'X-Powered-By: PHP/7.4.3',
+'X-Frame-Options: SAMEORIGIN',
+'Set-Cookie: PHPSESSID=8f2c1a9e4b7d03; path=/',
+'Set-Cookie: cart_id=55120; path=/; Secure',
+'Cache-Control: no-cache',
+'Vary: Accept-Encoding'
+].join('\n'),
+php: [
+'<?php',
+'session_start();',
+'$user = $_POST[\'username\'];',
+'$pass = $_POST[\'password\'];',
+'',
+'$conn = mysqli_connect("localhost", "root", "", "shop");',
+'$sql = "SELECT * FROM users WHERE username = \'" . $user . "\' AND password = \'" . md5($pass) . "\'";',
+'$result = mysqli_query($conn, $sql);',
+'',
+'if (mysqli_num_rows($result) > 0) {',
+'    $_SESSION[\'user\'] = $user;',
+'    echo "أهلاً " . $user;',
+'} else {',
+'    echo "خطأ في الدخول: " . mysqli_error($conn);',
+'}',
+'?>'
+].join('\n'),
+html: [
+'<div id="notice"></div>',
+'<form action="http://shop.example.sa/login.php" method="post">',
+'  <input type="text" name="username" placeholder="اسم المستخدم">',
+'  <input type="password" name="password" placeholder="كلمة المرور">',
+'  <button type="submit" onclick="track(\'login\')">دخول</button>',
+'</form>',
+'<script>',
+'  var msg = new URLSearchParams(location.search).get("msg");',
+'  document.getElementById("notice").innerHTML = msg;',
+'<\/script>',
+'<a href="https://partner.example.com" target="_blank">شركاؤنا</a>'
+].join('\n')
+};
+
+var KIND_AR = {headers:'ترويسات HTTP', html:'HTML / نموذج', php:'PHP', config:'إعدادات خادم', js:'JavaScript', unknown:'غير محدد'};
+
+/* ---------- helpers ---------- */
+function el(tag, cls, text){var e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e;}
+function clip(s,n){s=String(s==null?'':s); return s.length>n? s.slice(0,n-1)+'…' : s;}
+function norm(s){return String(s||'').replace(/\s+/g,' ').trim();}
+function lines(t){return t.split(/\r?\n/);}
+function findLine(t, re){var L=lines(t); for(var i=0;i<L.length;i++){ if(re.test(L[i])) return L[i].trim(); } return '';}
+function fnv(s){var h=0x811c9dc5; for(var i=0;i<s.length;i++){h^=s.charCodeAt(i); h=Math.imul(h,0x01000193)>>>0;} return h;}
+
+function detect(t){
+  var s=t.trim(); if(!s) return 'unknown';
+  if(/<\?php|\$_(GET|POST|REQUEST|COOKIE|SESSION)\b|mysqli_|->prepare\(/.test(s)) return 'php';
+  if(/^\s*HTTP\/[\d.]+\s+\d{3}/m.test(s)) return 'headers';
+  var hl=lines(s).filter(function(l){return /^[A-Za-z][A-Za-z0-9-]{1,40}:\s*\S/.test(l)}).length;
+  if(/\bserver\s*\{|\blocation\s+[\/~=]|\badd_header\b|server_tokens|RewriteEngine|<IfModule|Header\s+(always\s+)?set|ServerTokens|\blisten\s+\d+/i.test(s)) return 'config';
+  if(hl>=3 && hl>=lines(s).filter(function(l){return l.trim()}).length*0.6) return 'headers';
+  if(/<(form|input|script|html|head|body|div|a|meta|iframe)\b/i.test(s)) return 'html';
+  if(/\b(function|const|let|var)\b|=>|document\.|window\./.test(s)) return 'js';
+  if(hl>=2) return 'headers';
+  return 'unknown';
+}
+
+/* each check: {g: group, label, status: pass|fail|warn|info, det, ev} */
+function C(label,status,det,ev){return {label:label,status:status,det:det,ev:ev||''};}
+
+function checkHeaders(t){
+  var H={}, out=[];
+  lines(t).forEach(function(l){var m=l.match(/^\s*([A-Za-z0-9-]+)\s*:\s*(.*)$/); if(m){var k=m[1].toLowerCase(); (H[k]=H[k]||[]).push({v:m[2].trim(),line:l.trim()});}});
+  function g(k){return H[k]&&H[k][0];}
+  var hsts=g('strict-transport-security');
+  if(!hsts) out.push(C('Strict-Transport-Security','fail','الترويسة غائبة: المتصفح ما يُجبَر على HTTPS في الزيارات القادمة.'));
+  else { var ma=(hsts.v.match(/max-age\s*=\s*"?(\d+)/i)||[])[1]; ma=ma?+ma:0;
+    if(ma<15552000) out.push(C('Strict-Transport-Security','warn','موجودة لكن max-age أقل من 180 يوماً.',hsts.line));
+    else out.push(C('Strict-Transport-Security','pass','مفعّلة'+(/includesubdomains/i.test(hsts.v)?' وتشمل النطاقات الفرعية.':'.'),hsts.line)); }
+  var csp=g('content-security-policy');
+  if(!csp) out.push(C('Content-Security-Policy','fail','الترويسة غائبة: لا توجد طبقة تحدّ من أثر حقن السكربتات (XSS).'));
+  else if(/'unsafe-inline'|'unsafe-eval'/i.test(csp.v)) out.push(C('Content-Security-Policy','warn','موجودة لكن تسمح بـ unsafe-inline أو unsafe-eval.',csp.line));
+  else out.push(C('Content-Security-Policy','pass','موجودة بدون استثناءات خطرة ظاهرة.',csp.line));
+  var xcto=g('x-content-type-options');
+  out.push(xcto&&/nosniff/i.test(xcto.v)?C('X-Content-Type-Options','pass','nosniff مفعّلة.',xcto.line):C('X-Content-Type-Options','fail','غائبة أو بدون nosniff.',xcto?xcto.line:''));
+  var xfo=g('x-frame-options'), fa=csp&&/frame-ancestors/i.test(csp.v);
+  if(fa||(xfo&&/deny|sameorigin/i.test(xfo.v))) out.push(C('حماية التأطير (Clickjacking)','pass',fa?'frame-ancestors في CSP.':'X-Frame-Options: '+xfo.v,fa?csp.line:xfo.line));
+  else out.push(C('حماية التأطير (Clickjacking)','fail','لا X-Frame-Options ولا frame-ancestors: يمكن تضمين الموقع في إطار خبيث.',xfo?xfo.line:''));
+  var rp=g('referrer-policy');
+  out.push(rp?C('Referrer-Policy','pass',rp.v,rp.line):C('Referrer-Policy','warn','غائبة: قد تتسرب روابط الصفحات الكاملة لمواقع خارجية.'));
+  var pp=g('permissions-policy');
+  out.push(pp?C('Permissions-Policy','pass','محددة.',pp.line):C('Permissions-Policy','warn','غائبة: لا تقييد صريح للكاميرا والميكروفون والموقع.'));
+  var ck=H['set-cookie']||[];
+  if(!ck.length) out.push(C('أعلام الكوكيز','info','لا توجد Set-Cookie في العيّنة.'));
+  ck.forEach(function(c){
+    var name=(c.v.split('=')[0]||'cookie').trim(), miss=[];
+    if(!/;\s*secure\b/i.test(c.v)) miss.push('Secure');
+    if(!/;\s*httponly\b/i.test(c.v)) miss.push('HttpOnly');
+    if(!/;\s*samesite\s*=/i.test(c.v)) miss.push('SameSite');
+    var sess=/sess|sid|token|auth|jwt/i.test(name);
+    out.push(miss.length?C('كوكي '+name, sess&&miss.indexOf('HttpOnly')>-1?'fail':'warn','ينقصها: '+miss.join('، ')+(sess?' (كوكي جلسة).':'.'),c.line):C('كوكي '+name,'pass','Secure وHttpOnly وSameSite موجودة.',c.line));
+  });
+  var sv=g('server'), xp=g('x-powered-by'), an=g('x-aspnet-version');
+  if(sv&&/\d/.test(sv.v)) out.push(C('كشف إصدار الخادم','fail','Server يكشف رقم الإصدار.',sv.line));
+  else if(sv) out.push(C('كشف إصدار الخادم','pass','Server بدون رقم إصدار.',sv.line));
+  if(xp) out.push(C('X-Powered-By','fail','تكشف التقنية'+(/\d/.test(xp.v)?' وإصدارها':'')+'، احذفها.',xp.line));
+  if(an) out.push(C('X-AspNet-Version','fail','تكشف إصدار ASP.NET.',an.line));
+  return out;
+}
+
+function checkJS(t){
+  var out=[], l;
+  if((l=findLine(t,/\beval\s*\(|new\s+Function\s*\(|set(Timeout|Interval)\s*\(\s*["'`]/))) out.push(C('تنفيذ نص كـ كود','fail','eval أو Function أو مؤقت بنص: باب لتنفيذ كود حقنه المهاجم.',l));
+  if((l=findLine(t,/\.(innerHTML|outerHTML)\s*\+?=\s*(?!\s*["'`][^"'`$]*["'`]\s*;?\s*$)|insertAdjacentHTML\s*\(/))) out.push(C('إدراج HTML من متغير','warn','innerHTML بقيمة متغيرة قد تفتح DOM XSS، استخدم textContent.',l));
+  if((l=findLine(t,/document\.write(ln)?\s*\(/))) out.push(C('document.write','warn','يكتب HTML مباشرة في الصفحة.',l));
+  if((l=findLine(t,/(api[_-]?key|secret|passw(or)?d|access[_-]?token)\s*[:=]\s*["'][^"']{6,}["']/i))) out.push(C('سرّ مكتوب في الكود','fail','مفتاح أو كلمة مرور ظاهرة لأي زائر.',l));
+  if((l=findLine(t,/localStorage\.setItem\s*\(\s*["'][^"']*(token|jwt|pass|auth)/i))) out.push(C('رمز دخول في localStorage','warn','أي XSS يقدر يقرأه، الأفضل كوكي HttpOnly.',l));
+  if((l=findLine(t,/(fetch|open)\s*\(\s*["'`]http:\/\//i))) out.push(C('طلب عبر http','warn','بيانات تنتقل بدون تشفير.',l));
+  return out;
+}
+
+function checkHTML(t){
+  var out=[], l;
+  if((l=findLine(t,/<form[^>]*action\s*=\s*["']?http:\/\//i))) out.push(C('النموذج يُرسل عبر http','fail','البيانات، ومنها كلمة المرور، تنتقل نصاً مكشوفاً.',l));
+  var hasPw=/type\s*=\s*["']?password/i.test(t);
+  if(hasPw&&(l=findLine(t,/<form[^>]*method\s*=\s*["']?get/i))) out.push(C('كلمة مرور في الرابط','fail','method=get يضع كلمة المرور في الرابط والسجلات.',l));
+  if(hasPw&&/<form/i.test(t)&&!/name\s*=\s*["']?[^"'\s>]*(csrf|token|nonce|authenticity)/i.test(t)) out.push(C('رمز CSRF','warn','لا يظهر حقل مخفي لرمز CSRF في النموذج.',findLine(t,/<form/i)));
+  if(hasPw&&/<form[^>]*action\s*=\s*["']?https:\/\//i.test(t)) out.push(C('النموذج يُرسل عبر https','pass','الإرسال مشفّر.',findLine(t,/<form/i)));
+  if((l=findLine(t,/<script[^>]+src\s*=\s*["']?http:\/\//i))) out.push(C('سكربت خارجي عبر http','fail','محتوى مختلط يمكن العبث به في الطريق.',l));
+  var inl=(t.match(/<script(?![^>]*\bsrc\s*=)[^>]*>/gi)||[]).length;
+  if(inl) out.push(C('سكربت مضمّن','warn',inl+' وسم سكربت مضمّن: يصعّب تطبيق CSP صارمة بدون nonce.',findLine(t,/<script(?![^>]*\bsrc\s*=)/i)));
+  if((l=findLine(t,/\son[a-z]+\s*=\s*["']/i))) out.push(C('أحداث مضمّنة (onclick…)','warn','معالجات أحداث داخل HTML تتطلب unsafe-inline في CSP.',l));
+  if((l=findLine(t,/href\s*=\s*["']\s*javascript:/i))) out.push(C('رابط javascript:','warn','نمط يسهّل حقن السكربتات.',l));
+  if((l=findLine(t,/target\s*=\s*["']?_blank/i))&&!/rel\s*=\s*["'][^"']*(noopener|noreferrer)/i.test(l)) out.push(C('target="_blank" بدون rel','warn','أضف rel="noopener noreferrer".',l));
+  var js=(t.match(/<script(?![^>]*\bsrc)[^>]*>([\s\S]*?)<\/script>/gi)||[]).join('\n');
+  return out.concat(js?checkJS(js):[]);
+}
+
+function checkPHP(t){
+  var out=[], l, taint=[];
+  lines(t).forEach(function(x){var m=x.match(/(\$[A-Za-z_]\w*)\s*=\s*[^;]*\$_(GET|POST|REQUEST|COOKIE)\b/); if(m) taint.push(m[1]);});
+  if((l=findLine(t,/\b(select|insert|update|delete)\b[^;]*(["']\s*\.\s*\$|\{\$|["'][^"']*\$[A-Za-z_])/i))) out.push(C('استعلام SQL بدمج نصوص','fail','مدخلات تُدمج داخل الاستعلام مباشرة: حقن SQL.',l));
+  if((l=findLine(t,/->prepare\s*\(|bind_param|bindValue|bindParam/))) out.push(C('عبارات مُعدّة','pass','يستخدم prepare/bind.',l));
+  if((l=findLine(t,/\b(md5|sha1)\s*\(/i))) out.push(C('تجزئة كلمة المرور','fail','md5/sha1 تنكسر بسرعة، استخدم password_hash.',l));
+  if((l=findLine(t,/password_(hash|verify)\s*\(/))) out.push(C('تجزئة كلمة المرور','pass','password_hash/verify.',l));
+  var outRe=new RegExp('\\b(echo|print)\\b[^;]*(\\$_(GET|POST|REQUEST|COOKIE)'+(taint.length?'|'+taint.map(function(v){return v.replace('$','\\$')+'\\b'}).join('|'):'')+')');
+  if((l=findLine(t,outRe))&&!/htmlspecialchars|htmlentities|esc_html/.test(l)) out.push(C('طباعة مدخلات بدون ترميز','fail','قيمة من المستخدم تُطبع كما هي: XSS.',l));
+  if((l=findLine(t,/(echo|print|die|exit)\b[^;]*(mysqli_error|->error\b|getMessage\(\))/))) out.push(C('عرض أخطاء قاعدة البيانات','warn','رسائل الخطأ تكشف بنية الجداول للمهاجم.',l));
+  if((l=findLine(t,/(mysqli_connect|new\s+mysqli|new\s+PDO)\s*\([^)]*["']root["']/i))) out.push(C('اتصال بحساب root','fail','بيانات اتصال قاعدة البيانات مكتوبة في الكود وبصلاحيات كاملة.',l));
+  if(/\$_SESSION\s*\[/.test(t)&&!/session_regenerate_id/.test(t)) out.push(C('تجديد معرّف الجلسة','warn','لا يظهر session_regenerate_id بعد الدخول (تثبيت الجلسة).',findLine(t,/\$_SESSION\s*\[/)));
+  if((l=findLine(t,/display_errors['"]?\s*,\s*['"]?(1|on|true)/i))) out.push(C('display_errors','warn','عرض الأخطاء مفعّل.',l));
+  if(/<(form|input|script)\b/i.test(t)) out=out.concat(checkHTML(t.replace(/<\?php[\s\S]*?(\?>|$)/g,'')));
+  return out;
+}
+
+function checkConfig(t){
+  var out=[], l;
+  if((l=findLine(t,/server_tokens\s+on|ServerTokens\s+(Full|OS|Prod?\b(?!uctOnly))|ServerSignature\s+On/i))) out.push(C('كشف إصدار الخادم','fail','الخادم يعلن إصداره في الترويسات وصفحات الخطأ.',l));
+  else if((l=findLine(t,/server_tokens\s+off|ServerTokens\s+Prod(uctOnly)?/i))) out.push(C('كشف إصدار الخادم','pass','الإصدار مخفي.',l));
+  if((l=findLine(t,/autoindex\s+on|Options\s+[^#\n]*(?:^|\s)\+?Indexes/i))&&!/-Indexes/.test(l)) out.push(C('عرض محتويات المجلدات','fail','أي مجلد بدون index يظهر بقائمة ملفاته.',l));
+  if((l=findLine(t,/ssl_protocols[^;]*TLSv1(\.1)?(?![.\d])|SSLProtocol[^\n]*(\+|\s)TLSv1(\.1)?(?![.\d])/i))) out.push(C('بروتوكولات TLS قديمة','fail','TLS 1.0/1.1 مسموحة.',l));
+  [['Strict-Transport-Security','fail'],['Content-Security-Policy','warn'],['X-Content-Type-Options','warn']].forEach(function(p){
+    var line=findLine(t,new RegExp(p[0],'i')); out.push(line?C(p[0],'pass','مضافة في الإعدادات.',line):C(p[0],p[1],'لا تُضاف في هذه الإعدادات.'));
+  });
+  if((l=findLine(t,/listen\s+80\b/))&&!/return\s+30[18]\s+https|RewriteRule[^\n]*https/i.test(t)) out.push(C('تحويل http إلى https','warn','المنفذ 80 بدون تحويل ظاهر إلى https.',l));
+  return out;
+}
+
+function runChecks(t,k){
+  if(k==='headers') return checkHeaders(t);
+  if(k==='html') return checkHTML(t);
+  if(k==='php') return checkPHP(t);
+  if(k==='config') return checkConfig(t);
+  if(k==='js') return checkJS(t);
+  return [];
+}
+
+/* ---------- rendering ---------- */
+var MARK={pass:'<svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg>',fail:'<svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg>',warn:'<svg viewBox="0 0 16 16"><path d="M8 3.5v5.5M8 12v.5"/></svg>',info:'<svg viewBox="0 0 16 16"><path d="M8 7v5M8 4v.5"/></svg>'}, ST_AR={pass:'سليم',fail:'ناقص',warn:'يحتاج مراجعة',info:'معلومة'};
+var current={text:'',kind:'unknown',checks:[]};
+
+function curKind(t){return kindSel.value==='auto'?detect(t):kindSel.value;}
+
+function refresh(){
+  var t=input.value, k=curKind(t);
+  current.text=t; current.kind=k;
+  $('#detected').textContent=KIND_AR[k]; gutter();
+  var c=$('#count'); c.textContent=t.length+' / '+MAX; c.classList.toggle('over',t.length>MAX);
+  var d=new Date(), y=String(d.getFullYear()).slice(2), mo=('0'+(d.getMonth()+1)).slice(-2), da=('0'+d.getDate()).slice(-2);
+  var ref='SWN-'+y+mo+da+'-'+(fnv(t)%0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+  $('#ref').textContent=ref; $('#pRef').textContent=ref;
+  var list=runChecks(t,k); current.checks=list;
+  var ul=$('#checks'); ul.textContent='';
+  if(!t.trim()){ ul.appendChild(rowInfo('الصق نصاً في العيّنة لتظهر نتائج الفحص الآلي.')); $('#autoSum').textContent=''; return; }
+  if(!list.length){ ul.appendChild(rowInfo(k==='unknown'?'ما تعرّفنا على نوع النص. اختر النوع يدوياً أو اعتمد على ملاحظات المحلل.':'لم تنطبق أي قاعدة آلية على هذا النص.')); $('#autoSum').textContent=''; return; }
+  var pass=0;
+  list.forEach(function(c){
+    if(c.status==='pass') pass++;
+    var li=el('li'); var m=el('span','mark '+c.status); m.innerHTML=MARK[c.status]; m.setAttribute('role','img'); m.setAttribute('aria-label',ST_AR[c.status]);
+    var lb=el('div','lbl',c.label); lb.appendChild(el('em','',ST_AR[c.status]));
+    var dt=el('div','det',c.det);
+    if(c.ev){ var cd=el('code','',clip(c.ev,110)); cd.dir='ltr'; dt.appendChild(cd); }
+    li.appendChild(m); li.appendChild(lb); li.appendChild(dt); ul.appendChild(li);
+  });
+  $('#autoSum').textContent=pass+' سليم من '+list.length;
+}
+function rowInfo(msg){var li=el('li'); var m=el('span','mark info'); m.innerHTML=MARK.info; li.appendChild(m); li.appendChild(el('div','lbl',msg)); li.appendChild(el('div','det','')); return li;}
+
+/* dial ticks */
+(function(){
+  var g=$('#ticks'), ns='http://www.w3.org/2000/svg';
+  for(var i=0;i<=50;i++){
+    var a=(135+i*5.4)*Math.PI/180, major=i%5===0, r1=major?84:86, r2=92;
+    var ln=document.createElementNS(ns,'line');
+    ln.setAttribute('x1',100+r1*Math.cos(a)); ln.setAttribute('y1',100+r1*Math.sin(a));
+    ln.setAttribute('x2',100+r2*Math.cos(a)); ln.setAttribute('y2',100+r2*Math.sin(a));
+    ln.setAttribute('stroke',major?'#4A525A':'#B9BDB5'); ln.setAttribute('stroke-width',major?'1.6':'1');
+    g.appendChild(ln);
+  }
+  var sg=document.getElementById('seal-ticks');
+  for(var j=0;j<24;j++){var b=j*15*Math.PI/180, r1=j%6===0?18.5:20, q=document.createElementNS(ns,'line');
+    q.setAttribute('x1',(24+r1*Math.cos(b)).toFixed(2)); q.setAttribute('y1',(24+r1*Math.sin(b)).toFixed(2));
+    q.setAttribute('x2',(24+22.6*Math.cos(b)).toFixed(2)); q.setAttribute('y2',(24+22.6*Math.sin(b)).toFixed(2)); sg.appendChild(q);}
+})();
+
+function setScore(s){
+  var arc=$('#arc'), num=$('#score'), band=$('#band'), dial=$('#dial');
+  if(s==null){arc.setAttribute('stroke-dasharray','0 465'); num.textContent='—'; band.textContent='بانتظار التحليل'; band.style.color=''; dial.setAttribute('aria-label','درجة الأمان: لم تُحسب بعد'); return;}
+  var col=s<40?'#A61B1B':s<65?'#B5520A':s<85?'#8A6800':'#2D6A3E';
+  var lab=s<40?'وضع حرج':s<65?'يحتاج إصلاحاً عاجلاً':s<85?'مقبول مع ملاحظات':'جيد';
+  arc.setAttribute('stroke',col); arc.setAttribute('stroke-dasharray',(348.7*s/100).toFixed(1)+' 465');
+  num.textContent=s; band.textContent=lab; band.style.color=col;
+  dial.setAttribute('aria-label','درجة الأمان '+s+' من 100، '+lab);
+}
+function setTally(c){['crit','high','med','low'].forEach(function(k){$('#n-'+k).textContent=c?c[k]:0;});}
+
+var SEV={'حرج':{k:'crit',c:'var(--crit)',o:0},'عالي':{k:'high',c:'var(--high)',o:1},'متوسط':{k:'med',c:'var(--med)',o:2},'منخفض':{k:'low',c:'var(--low)',o:3}};
+
+function sanitize(d){
+  if(!d||typeof d!=='object'||Array.isArray(d)) return null;
+  var s=Math.round(Number(d.score)); if(!isFinite(s)) return null; s=Math.max(0,Math.min(100,s));
+  var f=Array.isArray(d.findings)?d.findings:[];
+  f=f.filter(function(x){return x&&typeof x==='object'&&x.title;}).slice(0,10).map(function(x){
+    var sev=String(x.severity||'').trim(); if(!SEV[sev]) sev='منخفض';
+    return {severity:sev,title:clip(x.title,160),evidence:clip(x.evidence||'',400),why:clip(x.why||'',600),fix:clip(x.fix||'',1500)};
+  }).sort(function(a,b){return SEV[a.severity].o-SEV[b.severity].o;});
+  var g=(Array.isArray(d.good)?d.good:[]).filter(function(x){return typeof x==='string'&&x.trim();}).slice(0,6).map(function(x){return clip(x,200);});
+  return {score:s,summary:clip(d.summary||'',500),findings:f,good:g};
+}
+
+function splitFix(fx){
+  var s=String(fx).replace(/```[a-zA-Z]*\n?/g,'').trim(), L=s.split('\n');
+  var exp=[], code=[], i=0;
+  while(i<L.length && /[؀-ۿ]/.test(L[i]) && !/[;{}<>$]|^\s*(add_header|Header|header\(|<)/.test(L[i])){exp.push(L[i]); i++;}
+  code=L.slice(i);
+  while(code.length&&!code[0].trim()) code.shift();
+  if(!code.length&&exp.length===0) code=L;
+  return {exp:exp.join(' ').trim(), code:code.join('\n').replace(/\s+$/,'')};
+}
+
+function copyText(txt,btn){
+  function ok(){btn.textContent='تم النسخ'; btn.classList.add('done'); setTimeout(function(){btn.textContent=btn.dataset.l||'نسخ'; btn.classList.remove('done');},1600);}
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(ok,fallback);} else fallback();
+  function fallback(){var ta=document.createElement('textarea'); ta.value=txt; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); ok();}catch(e){} document.body.removeChild(ta);}
+}
+
+var chevSVG='<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+
+function renderReport(r, srcText){
+  setScore(r.score);
+  var sm=$('#summary'); sm.classList.remove('muted'); sm.textContent=r.summary||'اكتمل التحليل.';
+  var cnt={crit:0,high:0,med:0,low:0}; r.findings.forEach(function(f){cnt[SEV[f.severity].k]++;}); setTally(cnt);
+  var box=$('#aiBox'); box.textContent='';
+  $('#aiSum').textContent=r.findings.length?r.findings.length+' ملاحظة':'';
+  if(!r.findings.length){ box.appendChild(el('p','empty','لا توجد ثغرات مثبتة بدليل في هذه العيّنة.')); }
+  var wrap=el('div','findings'), nsrc=norm(srcText);
+  r.findings.forEach(function(f,i){
+    var d=el('details','f'); d.style.setProperty('--c',SEV[f.severity].c); if(i===0) d.open=true;
+    var s=el('summary'); s.appendChild(el('span','sev',f.severity)); s.appendChild(el('span','t',f.title));
+    s.insertAdjacentHTML('beforeend',chevSVG); d.appendChild(s);
+    var b=el('div','body');
+    if(f.evidence){
+      var ev=el('div','ev'); ev.appendChild(el('h4','','الدليل من نصك')); ev.appendChild(el('pre','',f.evidence));
+      var hit=nsrc.indexOf(norm(f.evidence))>-1;
+      ev.appendChild(el('div','verb'+(hit?'':' no'),hit?'مطابق حرفياً للعيّنة':'هذا الاقتباس لا يطابق العيّنة حرفياً، راجعه بنفسك'));
+      b.appendChild(ev);
+    }
+    if(f.why){var w=el('div'); w.appendChild(el('h4','','ليش يهمك')); w.appendChild(el('p','',f.why)); b.appendChild(w);}
+    if(f.fix){
+      var sp=splitFix(f.fix), fx=el('div','fix'), row=el('div','row'); row.appendChild(el('h4','','الإصلاح'));
+      var cb=el('button','copy','نسخ الإصلاح'); cb.type='button'; cb.dataset.l='نسخ الإصلاح';
+      cb.addEventListener('click',function(){copyText(sp.code||sp.exp,cb);}); row.appendChild(cb); fx.appendChild(row);
+      if(sp.exp) fx.appendChild(el('p','exp',sp.exp));
+      if(sp.code) fx.appendChild(el('pre','',sp.code));
+      b.appendChild(fx);
+    }
+    d.appendChild(b); wrap.appendChild(d);
+  });
+  box.appendChild(wrap);
+  var gs=$('#goodSec'), gl=$('#good'); gl.textContent='';
+  r.good.forEach(function(g){var li=el('li'); li.innerHTML='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>'; li.appendChild(el('span','',g)); gl.appendChild(li);}); gs.hidden=!r.good.length;
+}
+
+function resetReport(){
+  setScore(null); setTally(null);
+  var sm=$('#summary'); sm.classList.add('muted'); sm.textContent='بانتظار التحليل.'; $('#when').textContent='مسودة'; $('#dot').className='state-dot';
+  $('#aiSum').textContent=''; $('#goodSec').hidden=true;
+  var box=$('#aiBox'); box.textContent=''; box.appendChild(el('p','empty','لا توجد ملاحظات بعد. شغّل التحليل لإصدار التقرير.'));
+}
+
+function showError(msg){
+  var box=$('#aiBox'); box.textContent='';
+  var s=el('div','err'); s.setAttribute('role','alert'); s.appendChild(el('div','',msg));
+  var b=el('button','','أعد التحليل'); b.type='button'; b.addEventListener('click',analyze); s.appendChild(b);
+  box.appendChild(s);
+}
+
+var busy=false, stepTimer=null;
+function showLoading(){
+  var box=$('#aiBox'); box.textContent='';
+  var s=el('div','sk'); s.setAttribute('aria-hidden','true'); for(var i=0;i<7;i++) s.appendChild(el('div'));
+  box.appendChild(s); var n=el('p','sk-note','جارٍ إعداد الملاحظات'); box.appendChild(n);
+  var msgs=['جارٍ إعداد الملاحظات','مطابقة الأدلة بالعيّنة','كتابة الإصلاحات'], k=0;
+  stepTimer=setInterval(function(){ if(k<msgs.length-1){k++; n.textContent=msgs[k];} },2800);
+}
+
+async function analyze(){
+  if(busy) return;
+  var t=input.value;
+  if(!t.trim()){ input.focus(); showError('العيّنة فاضية. الصق ترويسات أو كوداً، أو اختر عيّنة جاهزة.'); return; }
+  if(/^\s*https?:\/\/\S+\s*$/.test(t)){ showError('هذا رابط فقط. المختبر لا يزور الروابط من هنا؛ الصق ترويسات الاستجابة (مثلاً ناتج curl -sI) أو الكود نفسه.'); return; }
+  busy=true; var go=$('#go'); go.disabled=true; go.lastChild.textContent='جارٍ التحليل…'; $('#dot').className='state-dot run'; $('#when').textContent='قيد التحليل';
+  setScore(null); setTally(null); $('#goodSec').hidden=true; $('#aiSum').textContent='';
+  var sm=$('#summary'); sm.classList.add('muted'); sm.textContent='قيد التحليل.';
+  showLoading();
+  var src=t.slice(0,MAX), kind=current.kind;
+  var ctrl=new AbortController(), tm=setTimeout(function(){ctrl.abort();},30000);
+  var msg;
+  try{
+    var r=await fetch('/api/demo',{method:'POST',headers:{'content-type':'application/json'},signal:ctrl.signal,
+      body:JSON.stringify({demo:'security',messages:[{role:'user',text:'نوع العيّنة: '+KIND_AR[kind]+'\n----- بداية العيّنة -----\n'+src+'\n----- نهاية العيّنة -----'}]})});
+    if(r.status===429) msg='المختبر عليه ضغط الحين. انتظر دقيقة ثم أعد التحليل.';
+    else if(r.status===503) msg='خدمة التحليل متوقفة مؤقتاً. نتائج الفحص الآلي أعلاه ما زالت صالحة.';
+    else if(r.status===403||r.status===415) msg='تعذّر إرسال الطلب من هذا المتصفح. حدّث الصفحة وجرّب مرة ثانية.';
+    else if(!r.ok) msg='ما اكتمل التحليل هذي المرة. أعد المحاولة بعد لحظات.';
+    else {
+      var j=await r.json(); var rep=sanitize(j&&j.data);
+      if(!rep) msg='وصل رد غير مكتمل من المحلل. أعد التحليل.';
+      else { renderReport(rep,src); current.report=rep; $('#dot').className='state-dot done'; $('#when').textContent='صدر '+new Date().toLocaleTimeString('ar-SA-u-nu-latn',{timeZone:'Asia/Riyadh',hour:'numeric',minute:'2-digit'}); }
+    }
+  }catch(e){
+    msg=e&&e.name==='AbortError'?'أخذ التحليل أطول من 30 ثانية. جرّب مرة ثانية أو قصّر العيّنة.':'انقطع الاتصال. تأكد من الإنترنت وأعد التحليل.';
+  }finally{
+    clearTimeout(tm); clearInterval(stepTimer); busy=false; go.disabled=false; go.lastChild.textContent='حلّل العيّنة';
+  }
+  if(msg){ showError(msg); $('#summary').textContent='لم تُحسب الدرجة بعد.'; $('#dot').className='state-dot'; $('#when').textContent='مسودة'; }
+  else if(window.matchMedia('(max-width:999px)').matches){ $('#report').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'}); }
+}
+
+/* ---------- wiring ---------- */
+function loadSample(key){
+  document.querySelectorAll('.tab').forEach(function(c){c.setAttribute('aria-selected',String(c.dataset.s===key));});
+  input.value=key?SAMPLES[key]:''; kindSel.value='auto'; refresh(); resetReport();
+  if(!key) input.focus();
+}
+document.querySelectorAll('.tab').forEach(function(c){c.addEventListener('click',function(){loadSample(c.dataset.s);});});
+var gut=$('#gutter');
+function gutter(){var n=Math.max(1,input.value.split('\n').length), a=[]; for(var i=1;i<=n;i++) a.push(i); gut.textContent=a.join('\n'); gut.scrollTop=input.scrollTop;}
+input.addEventListener('scroll',function(){gut.scrollTop=input.scrollTop;});
+var deb; input.addEventListener('input',function(){ gutter(); clearTimeout(deb); deb=setTimeout(refresh,180); });
+kindSel.addEventListener('change',refresh);
+$('#go').addEventListener('click',analyze);
+$('#copyCurl').addEventListener('click',function(){copyText($('#curlCmd').textContent,this);});
+$('#copyCurl').dataset.l='نسخ';
+var allOpen=false;
+$('#expand').addEventListener('click',function(){allOpen=!allOpen; document.querySelectorAll('details.f').forEach(function(d){d.open=allOpen;}); this.textContent=allOpen?'طيّ الملاحظات':'فتح كل الملاحظات';});
+
+var openState=[];
+function beforePrint(){
+  $('#pDate').textContent=new Date().toLocaleString('en-GB',{timeZone:'Asia/Riyadh',year:'numeric',month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'})+' (Riyadh)';
+  $('#pScope').textContent='نطاق المراجعة: نص ملصوق من نوع «'+KIND_AR[current.kind]+'» ('+current.text.length+' حرف). لا يشمل التقرير زيارة الموقع الحي.';
+  var L=lines(current.text); $('#pSample').textContent=L.slice(0,60).join('\n')+(L.length>60?'\n…':'');
+  openState=[]; document.querySelectorAll('details.f').forEach(function(d){openState.push(d.open); d.open=true;});
+}
+function afterPrint(){ document.querySelectorAll('details.f').forEach(function(d,i){ if(i<openState.length) d.open=openState[i]; }); }
+window.addEventListener('beforeprint',beforePrint); window.addEventListener('afterprint',afterPrint);
+$('#print').addEventListener('click',function(){beforePrint(); window.print();});
+
+loadSample('headers');
+})();
+</script>
+</body>
+</html>

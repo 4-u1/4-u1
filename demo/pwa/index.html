@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>رِواء — عاداتك الصحية اليومية</title>
+<meta name="description" content="رِواء: تتبّع الماء والمشي والنوم كل يوم، مع مدرّب يرد عليك. يتثبّت على شاشة جوالك ويشتغل بدون إنترنت.">
+<meta name="theme-color" content="#0F2F2A">
+<link rel="manifest" href="/demo/pwa/manifest.webmanifest">
+<link rel="icon" href="/demo/pwa/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/demo/pwa/icons/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/demo/pwa/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="رِواء">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#0F2F2A; --pine-2:#1E4A41; --pine-3:#2C6156;
+  --mint:#E3F3EC; --mint-2:#CFEBDF; --foam:#F4FBF7;
+  --melon:#F0425F; --melon-deep:#B81E3E; --rind:#1E8A62; --sun:#FFC23D;
+  --ink:#0F2F2A; --muted:#48655E; --line:#C3DDD2;
+  --display:"Baloo Bhaijaan 2", "Readex Pro", system-ui, sans-serif;
+  --body:"Readex Pro", system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--mint);color:var(--ink);font-family:var(--body);font-variant-numeric:tabular-nums;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--melon);outline-offset:2px;border-radius:10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none !important}
+
+/* ---------- stage ---------- */
+.stage{min-height:100%;display:flex;justify-content:center}
+.pitch{display:none}
+.app{position:relative;width:100%;max-width:480px;height:100vh;height:100dvh;display:flex;flex-direction:column;background:var(--mint);overflow:hidden}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){.scroll{scroll-behavior:auto}}
+
+/* ---------- hero ---------- */
+.hero{background:var(--pine);color:var(--mint);padding:calc(env(safe-area-inset-top) + 14px) 20px 26px;border-end-start-radius:34px;border-end-end-radius:34px;position:relative}
+.topbar{display:flex;align-items:center;gap:10px}
+.mark{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:800;font-size:26px;line-height:1;letter-spacing:0}
+.mark svg{width:30px;height:30px;flex:none}
+.topbar .grow{flex:1}
+.net{font-size:12px;padding:4px 10px;border-radius:99px;background:var(--sun);color:var(--pine);font-weight:500}
+.pill{border:0;border-radius:99px;padding:7px 14px;font-size:14px;font-weight:500;background:var(--mint);color:var(--pine);display:inline-flex;align-items:center;gap:6px}
+.pill svg{width:16px;height:16px}
+.greet{margin:18px 0 0;font-size:14px;color:#A9D3C4}
+.greet b{display:block;font-family:var(--display);font-weight:700;font-size:24px;line-height:1.25;color:var(--mint)}
+.ringrow{display:flex;align-items:center;gap:18px;margin-top:16px}
+.ring{position:relative;width:168px;height:168px;flex:none}
+.ring svg{width:100%;height:100%;display:block}
+.ring .track{stroke:var(--pine-2)}
+.ring .arc{stroke:var(--melon);transition:stroke-dashoffset .7s cubic-bezier(.3,.8,.3,1)}
+.ring .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.ring .pct{font-family:var(--display);font-weight:800;font-size:44px;line-height:1;direction:ltr}
+.ring .pct small{font-size:22px}
+.ring .of{font-size:13px;color:#A9D3C4;margin-top:4px}
+.streak{flex:1;min-width:0}
+.flame{display:flex;align-items:center;gap:8px}
+.flame svg{width:34px;height:40px;flex:none;transform-origin:50% 90%}
+.flame .n{font-family:var(--display);font-weight:800;font-size:40px;line-height:1}
+.streak .lbl{font-size:14px;color:#A9D3C4;margin:2px 0 10px}
+.nudge{font-size:14px;line-height:1.55;background:var(--pine-2);border-radius:14px;padding:9px 12px;margin:0}
+.flame.pop svg{animation:pop .9s ease}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.35) rotate(-6deg)}70%{transform:scale(.95)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.ring .arc{transition:none}.flame.pop svg{animation:none}}
+
+/* week strip */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:20px;padding:0;list-style:none}
+.week li{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:#A9D3C4}
+.week svg{width:30px;height:30px}
+.week .today{color:var(--mint);font-weight:600}
+.week .future{opacity:.45}
+
+/* ---------- body sections ---------- */
+.section{padding:20px 18px 8px}
+.install{display:flex;align-items:center;gap:12px;padding:14px 18px;margin:0;border-bottom:1px solid var(--line)}
+.install img{width:40px;height:40px;border-radius:10px;flex:none}
+.install p{margin:0;flex:1;font-size:14px;line-height:1.5}
+.install p b{display:block;font-size:15px}
+.install .x{border:0;background:none;padding:6px;border-radius:8px;color:var(--muted)}
+.install .x svg{width:18px;height:18px;display:block}
+.btn{border:0;border-radius:14px;padding:10px 16px;font-weight:600;font-size:15px;background:var(--pine);color:var(--mint);white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+h2{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.3;margin:0 0 10px}
+
+.water{background:#D3ECF4;border-radius:28px 28px 28px 8px;padding:16px 16px 14px;position:relative;margin-bottom:8px}
+.water .head{display:flex;align-items:baseline;gap:8px}
+.water .head h3{margin:0;font-size:17px;font-weight:600;flex:1}
+.water .cnt{font-family:var(--display);font-weight:800;font-size:28px;line-height:1;direction:ltr}
+.water .cnt small{font-size:16px;color:var(--muted)}
+.cups{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:12px 0}
+.cups svg{width:100%;height:auto;display:block}
+.cups .cup-f{fill:#3F8FB0;transition:transform .35s ease;transform-origin:50% 100%;transform:scaleY(0)}
+.cups .on .cup-f{transform:scaleY(1)}
+@media (prefers-reduced-motion:reduce){.cups .cup-f{transition:none}}
+.cups path.cup-o{fill:none;stroke:#2F6F89;stroke-width:2}
+.wctl{display:flex;gap:10px}
+.wctl button{flex:1;border:0;border-radius:14px;padding:10px;font-weight:600;background:#fff;color:#1F5870;display:flex;align-items:center;justify-content:center;gap:6px}
+.wctl button.add{background:#1F5870;color:#fff}
+.wctl svg{width:18px;height:18px}
+
+.habits{list-style:none;margin:6px 0 0;padding:0}
+.habits li+li{border-top:1px solid var(--line)}
+.habit{width:100%;border:0;background:none;display:flex;align-items:center;gap:14px;padding:14px 2px;text-align:start;border-radius:0}
+.habit:active{background:var(--mint-2)}
+.habit .ic{width:30px;height:30px;display:grid;place-items:center;flex:none;color:var(--pine-3)}
+.habit .ic svg{width:26px;height:26px}
+.habit[aria-pressed="true"] .ic{color:var(--rind)}
+.habit .t{flex:1;min-width:0}
+.habit .t b{display:block;font-weight:500;font-size:16px;line-height:1.35}
+.habit .t span{font-size:13px;color:var(--muted)}
+.habit .chk{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;transition:background .2s,border-color .2s}
+.habit .chk svg{width:18px;height:18px;opacity:0;transform:scale(.5);transition:opacity .2s,transform .25s}
+.habit[aria-pressed="true"] .chk{background:var(--rind);border-color:var(--rind)}
+.habit[aria-pressed="true"] .chk svg{opacity:1;transform:scale(1)}
+.habit[aria-pressed="true"] .t b{color:var(--rind)}
+@media (prefers-reduced-motion:reduce){.habit .chk,.habit .chk svg{transition:none}}
+
+.teaser{margin:18px 0 6px;background:var(--pine);color:var(--mint);border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.teaser p{margin:0;font-size:15px}
+.teaser p b{font-family:var(--display);font-size:19px;font-weight:700;display:block}
+.chipq{border:1.5px solid var(--pine-3);background:var(--pine-2);color:var(--mint);border-radius:16px;padding:10px 12px;text-align:start;font-size:14px;line-height:1.5}
+
+/* ---------- coach ---------- */
+.coach-hero{background:var(--pine);color:var(--mint);padding:calc(env(safe-area-inset-top) + 14px) 20px 16px;border-end-start-radius:34px;border-end-end-radius:34px}
+.ctitle{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.2;margin:14px 0 0}
+.ctx{display:grid;grid-template-columns:repeat(3,1fr);margin-top:12px;border-top:1px solid var(--pine-2);padding-top:10px}
+.ctx div{padding-inline:10px;border-inline-start:1px solid var(--pine-2)}
+.ctx div:first-child{padding-inline-start:0;border:0}
+.ctx b{display:block;font-family:var(--display);font-weight:800;font-size:22px;line-height:1.1}
+.ctx span{font-size:12px;color:#A9D3C4}
+.offline-note{display:flex;gap:10px;align-items:flex-start;background:#FFF1C9;border:1px solid #E9C35B;border-radius:16px;padding:12px 14px;margin:16px 18px 0;font-size:14px}
+.offline-note svg{width:22px;height:22px;flex:none;margin-top:1px}
+.offline-note b{display:block;font-size:15px}
+.chips{display:flex;flex-direction:column;padding:18px 18px 0}
+.empty{margin:0 0 6px;font-size:14px;color:var(--muted)}
+.chip{border:0;border-bottom:1px solid var(--line);background:none;border-radius:0;padding:13px 2px;text-align:start;font-size:15px;line-height:1.5;color:var(--ink);display:flex;align-items:center;gap:10px}
+.chip::before{content:"";width:7px;height:9px;flex:none;background:var(--melon);border-radius:50% 50% 50% 50%/60% 60% 40% 40%}
+.chip:active{background:var(--mint-2)}
+.chip:disabled{opacity:.5;cursor:not-allowed}
+.log{display:flex;flex-direction:column;gap:10px;padding:16px 18px 8px}
+.msg{max-width:88%;padding:11px 14px;border-radius:20px;font-size:15px;line-height:1.7;white-space:pre-line;overflow-wrap:anywhere}
+.msg.u{align-self:flex-start;background:var(--pine);color:var(--mint);border-start-start-radius:6px}
+.msg.a{align-self:flex-end;background:#fff;border:1px solid var(--line);border-start-end-radius:6px}
+.msg.a .who{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--rind);margin-bottom:2px}
+.msg.a .who svg{width:16px;height:16px}
+.msg.err{align-self:stretch;max-width:none;background:#FDE4E8;border:1px solid #F3A9B6;color:#6E1226;white-space:normal}
+.msg.err .btn{margin-top:8px;background:var(--melon-deep);color:#fff;padding:8px 14px;font-size:14px}
+.msg.skel{width:78%}
+.typing{display:flex;flex-direction:column;gap:9px;padding:6px 0 4px}
+.typing i{display:block;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--mint) 0,var(--mint-2) 40%,var(--mint) 80%);background-size:200% 100%;animation:shim 1.3s infinite linear}
+.typing i:nth-child(1){width:92%}.typing i:nth-child(2){width:100%}.typing i:nth-child(3){width:58%}
+@keyframes shim{from{background-position:100% 0}to{background-position:-100% 0}}
+@media (prefers-reduced-motion:reduce){.typing i{animation:none}}
+.composer{display:flex;gap:8px;align-items:flex-end;padding:10px 14px;background:var(--mint);border-top:1px solid var(--line)}
+.composer textarea{flex:1;resize:none;border:1.5px solid var(--line);border-radius:18px;padding:10px 14px;background:#fff;font-size:16px;line-height:1.5;min-height:46px;max-height:130px}
+.composer textarea:focus-visible{outline:none;border-color:var(--rind);box-shadow:0 0 0 3px rgba(30,138,98,.25)}
+.send{width:46px;height:46px;border-radius:50%;border:0;background:var(--melon);color:#fff;display:grid;place-items:center;flex:none}
+.send svg{width:22px;height:22px}
+.send:disabled{background:#9DB7AE;cursor:not-allowed}
+.count{font-size:12px;color:var(--muted);padding:0 18px 4px;text-align:end}
+
+/* ---------- tab bar ---------- */
+.tabs{display:flex;background:#fff;border-top:1px solid var(--line);padding:6px 10px calc(env(safe-area-inset-bottom) + 6px)}
+.tab{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;border-radius:14px;font-size:13px;color:var(--muted)}
+.tab svg{width:26px;height:26px}
+.tab[aria-selected="true"]{color:var(--pine);font-weight:600}
+.tab[aria-selected="true"] svg .fillme{fill:var(--melon)}
+
+/* ---------- footer ---------- */
+.credit{padding:22px 18px 26px;text-align:center;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:6px}
+.credit a{color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.credit a:hover{color:var(--ink)}
+.credit img{height:16px;width:auto}
+.credit .quote{color:var(--pine);text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- iOS hint + toast ---------- */
+.ios{position:absolute;inset-inline:12px;bottom:calc(env(safe-area-inset-bottom) + 76px);background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 12px 40px rgba(15,47,42,.28);display:flex;gap:12px;align-items:center;z-index:5;border:1px solid var(--line)}
+.ios img{width:44px;height:44px;border-radius:11px;flex:none}
+.ios p{margin:0;flex:1;font-size:14px;line-height:1.55}
+.ios p b{display:block;font-size:15px}
+.ios .share{display:inline-block;width:18px;height:18px;vertical-align:-3px;color:#1F6FD6}
+.ios .x{border:0;background:var(--mint);border-radius:50%;width:30px;height:30px;display:grid;place-items:center;flex:none}
+.ios .x svg{width:16px;height:16px}
+.ios::after{content:"";position:absolute;bottom:-8px;inset-inline-start:calc(50% - 8px);width:16px;height:16px;background:#fff;transform:rotate(45deg);border-inline-end:1px solid var(--line);border-bottom:1px solid var(--line)}
+.toast{position:absolute;top:calc(env(safe-area-inset-top) + 12px);inset-inline:20px;background:var(--sun);color:var(--pine);font-weight:600;border-radius:16px;padding:10px 14px;text-align:center;z-index:6;box-shadow:0 8px 24px rgba(15,47,42,.25);font-size:15px}
+
+/* ---------- desktop ---------- */
+@media (min-width:960px){
+  .stage{align-items:center;gap:72px;padding:24px 40px;min-height:100vh}
+  .pitch{display:block;max-width:440px}
+  .pitch .big{font-family:var(--display);font-weight:800;font-size:132px;line-height:1.15;margin:0;color:var(--pine);display:flex;align-items:center;gap:18px}
+  .pitch .big svg{width:96px;height:96px}
+  .pitch .lead{font-family:var(--display);font-weight:500;font-size:30px;line-height:1.45;margin:18px 0 30px;color:var(--pine-2)}
+  .pitch .how{font-size:14px;color:var(--muted);margin:10px 0 0}
+  .app{height:min(840px, calc(100vh - 48px));max-width:410px;border-radius:44px;border:10px solid var(--pine);box-shadow:0 30px 70px rgba(15,47,42,.25)}
+  .hero,.coach-hero{padding-top:20px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo" viewBox="0 0 512 512">
+      <circle cx="256" cy="256" r="150" fill="none" stroke="#1E4A41" stroke-width="56"/>
+      <circle cx="256" cy="256" r="150" fill="none" stroke="#F0425F" stroke-width="56" stroke-linecap="round" stroke-dasharray="706.9 942.5" transform="rotate(-90 256 256) scale(1 -1) translate(0 -512)"/>
+      <path d="M256 168c0 0-62 70-62 112a62 62 0 0 0 124 0c0-42-62-112-62-112z" fill="#BFEBD8"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M20 12L5 4.5l2.2 7.5L5 19.5z" fill="currentColor" transform="scale(-1 1) translate(-24 0)"/></symbol>
+    <symbol id="i-walk" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="4.5" r="1.8"/><path d="M10 21l2.2-6.2L15 17v4M8.5 11.5L11 8.5l3 1 2 3.2 2.5.8M12.2 14.8L11 8.5"/></g></symbol>
+    <symbol id="i-stretch" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.2" r="1.8"/><path d="M4 8.5l8 1.5 8-1.5M12 10v5l-3.5 6M12 15l3.5 6"/></g></symbol>
+    <symbol id="i-veg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5h15a7.5 7.5 0 0 1-15 0z"/><path d="M12 12.5V8c0-2 1.5-3.8 3.8-4.2M12 8c-1.6-2.2-4-2.6-5.5-2"/></g></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M4.5 19.5l15-15"/></g></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/><path d="M16.5 4.5v3M15 6h3"/></g></symbol>
+    <symbol id="i-flame" viewBox="0 0 34 40"><path d="M17 2c2 7 10 11 10 21a10 10 0 0 1-20 0c0-5 2.5-8 5-10 0 4 2 6 4 6-2-6 0-12 1-17z" fill="#FFC23D"/><path d="M17 22c1.5 3 5 4.5 5 9a5 5 0 0 1-10 0c0-2.5 1.5-4 3-5 0 1.5.8 2.5 2 2.5-.6-2.2-.6-4.2 0-6.5z" fill="#F0425F"/></symbol>
+    <symbol id="i-today" viewBox="0 0 26 26"><circle cx="13" cy="13" r="9.5" fill="none" stroke="currentColor" stroke-width="2.2" opacity=".35"/><path class="fillme" d="M13 3.5a9.5 9.5 0 0 1 9.5 9.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle class="fillme" cx="13" cy="13" r="3.5" fill="currentColor"/></symbol>
+    <symbol id="i-coach" viewBox="0 0 26 26"><path d="M4 6.5A3 3 0 0 1 7 3.5h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-6l-5 4.5v-4.5H7a3 3 0 0 1-3-3z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path class="fillme" d="M13 7.2s-2.6 3-2.6 4.8a2.6 2.6 0 0 0 5.2 0c0-1.8-2.6-4.8-2.6-4.8z" fill="currentColor"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.7 16a5 5 0 0 1 6.6 0" fill="none" stroke="#8A6400" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="1.4" fill="#8A6400"/><path d="M4 3l16 18" stroke="#8A6400" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M7 11H5.5v9.5h13V11H17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="stage">
+  <aside class="pitch" aria-label="رِواء">
+    <p class="big"><svg aria-hidden="true"><use href="#logo"/></svg>رِواء</p>
+    <p class="lead">كوب ماء، مشية قصيرة، ونومة أبكر.<br>كل يوم شوي.</p>
+    <button class="btn" id="pitchInstall" hidden>ثبّت رِواء</button>
+    <p class="how" id="pitchHow">تقدر تثبّته من قائمة المتصفح، أو افتحه من جوالك وأضفه للشاشة الرئيسية.</p>
+  </aside>
+
+  <main class="app" id="app">
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <div class="scroll" id="scroll">
+      <!-- ===== TODAY ===== -->
+      <section id="view-today" aria-labelledby="t-today">
+        <div class="hero">
+          <div class="topbar">
+            <span class="mark"><svg aria-hidden="true"><use href="#logo"/></svg>رِواء</span>
+            <span class="grow"></span>
+            <span class="net" data-offline hidden>بدون اتصال</span>
+            <button class="pill" data-install hidden><svg aria-hidden="true"><use href="#i-down"/></svg>تثبيت</button>
+          </div>
+          <p class="greet" id="dateLine"><b id="t-today">صباح الخير</b><span id="dateText"></span></p>
+          <div class="ringrow">
+            <div class="ring" role="img" id="ringBox" aria-label="">
+              <svg viewBox="0 0 168 168" aria-hidden="true">
+                <circle class="track" cx="84" cy="84" r="70" fill="none" stroke-width="18"/>
+                <circle class="arc" id="arc" cx="84" cy="84" r="70" fill="none" stroke-width="18" stroke-linecap="round" stroke-dasharray="439.82" stroke-dashoffset="439.82" transform="rotate(-90 84 84) scale(1 -1) translate(0 -168)"/>
+              </svg>
+              <div class="center"><span class="pct" id="pct">0<small>%</small></span><span class="of" id="ofText"></span></div>
+            </div>
+            <div class="streak">
+              <div class="flame" id="flame"><svg aria-hidden="true"><use href="#i-flame"/></svg><span class="n" id="streakN">0</span></div>
+              <p class="lbl" id="streakLbl">أيام متتالية</p>
+              <p class="nudge" id="nudge"></p>
+            </div>
+          </div>
+          <ol class="week" id="week" aria-label="هذا الأسبوع"></ol>
+        </div>
+
+        <div class="install" id="installCard" hidden>
+          <img src="/demo/pwa/icons/apple-touch-icon.png" alt="">
+          <p id="installText"><b>رِواء على شاشتك الرئيسية</b>يفتح بلمسة، ويشتغل بدون نت.</p>
+          <button class="btn" id="installBtn">تثبيت</button>
+          <button class="x" id="installClose" aria-label="إخفاء"><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+
+        <div class="section">
+          <h2>عادات اليوم</h2>
+          <div class="water" id="water">
+            <div class="head"><h3>شرب الماء</h3><span class="cnt" id="waterCnt">0<small>/8</small></span></div>
+            <div class="cups" id="cups" aria-hidden="true"></div>
+            <div class="wctl">
+              <button id="waterMinus" aria-label="نقّص كوب"><svg aria-hidden="true"><use href="#i-minus"/></svg>كوب</button>
+              <button class="add" id="waterPlus" aria-label="أضف كوب ماء"><svg aria-hidden="true"><use href="#i-plus"/></svg>شربت كوب</button>
+            </div>
+          </div>
+          <ul class="habits" id="habits"></ul>
+
+          <div class="teaser">
+            <p><b>كيف كان يومك؟</b>مدرّبك جاهز لو تبي خطة لباقي اليوم.</p>
+            <button class="chipq" id="teaserChip">يومي كان زحمة دوام وما مشيت، أبي خطة لباقي اليوم</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== COACH ===== -->
+      <section id="view-coach" aria-labelledby="t-coach" hidden>
+        <div class="coach-hero">
+          <div class="topbar">
+            <span class="mark"><svg aria-hidden="true"><use href="#logo"/></svg>رِواء</span>
+            <span class="grow"></span>
+            <span class="net" data-offline hidden>بدون اتصال</span>
+            <button class="pill" data-install hidden><svg aria-hidden="true"><use href="#i-down"/></svg>تثبيت</button>
+          </div>
+          <h1 class="ctitle" id="t-coach">المدرّب</h1>
+          <div class="ctx" id="ctxChips" aria-label="إنجاز اليوم"></div>
+        </div>
+        <div class="offline-note" id="offlineNote" role="status" hidden>
+          <svg aria-hidden="true"><use href="#i-wifi"/></svg>
+          <span><b>تحتاج اتصال</b>المدرّب يحتاج إنترنت. عاداتك وسلسلتك شغّالة عادي، وكل شي ينحفظ على جهازك.</span>
+        </div>
+        <div class="chips" id="chips"><p class="empty">قل لي كيف مشى يومك، أو اختر وحدة من هذي:</p></div>
+        <div class="log" id="log" aria-live="polite"></div>
+      </section>
+
+      <footer class="credit">
+        <a href="https://yazeedalharthi.sa/#services">تصميم وتطوير <img src="/assets/yh-mark-on-light.svg" alt="" width="24" height="16"> يزيد الحارثي</a>
+        <a class="quote" href="https://yazeedalharthi.sa/#services">تبي نسخة لمنشأتك؟ اطلب عرض سعر</a>
+      </footer>
+    </div>
+
+    <form class="composer" id="composer" hidden>
+      <label class="sr" for="input">رسالتك للمدرّب</label>
+      <textarea id="input" rows="1" maxlength="380" placeholder="كيف كان يومك؟"></textarea>
+      <button class="send" id="send" type="submit" aria-label="أرسل"><svg aria-hidden="true"><use href="#i-send"/></svg></button>
+    </form>
+
+    <div class="ios" id="iosHint" role="dialog" aria-label="طريقة التثبيت على آيفون" hidden>
+      <img src="/demo/pwa/icons/apple-touch-icon.png" alt="">
+      <p><b>ثبّت رِواء على آيفونك</b>اضغط مشاركة <svg class="share" aria-label="مشاركة"><use href="#i-share"/></svg> ← إضافة إلى الشاشة الرئيسية</p>
+      <button class="x" id="iosClose" aria-label="إغلاق"><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="أقسام التطبيق">
+      <button class="tab" role="tab" id="tab-today" aria-controls="view-today" aria-selected="true"><svg aria-hidden="true"><use href="#i-today"/></svg>اليوم</button>
+      <button class="tab" role="tab" id="tab-coach" aria-controls="view-coach" aria-selected="false"><svg aria-hidden="true"><use href="#i-coach"/></svg>المدرّب</button>
+    </nav>
+  </main>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var KEY = 'riwaa.v1', WATER_GOAL = 8, COUNTS_AT = 4;
+  var HABITS = [
+    {id:'walk',    name:'المشي',               sub:'30 دقيقة',              icon:'i-walk',    bg:'#DDF1E7'},
+    {id:'stretch', name:'تمدد وحركة خفيفة',     sub:'10 دقائق',              icon:'i-stretch', bg:'#FBE3E8'},
+    {id:'veg',     name:'وجبة فيها خضار أو فاكهة', sub:'مرة باليوم على الأقل', icon:'i-veg',     bg:'#FFF0D1'},
+    {id:'nophone', name:'ساعة بدون جوال',       sub:'قبل النوم',             icon:'i-phone',   bg:'#E8EEEC'},
+    {id:'sleep',   name:'نوم قبل 11 الليل',      sub:'7 ساعات أو أكثر',       icon:'i-moon',    bg:'#DCEBE6'}
+  ];
+  var NAMES = {water:'الماء', walk:'المشي', stretch:'التمدد', veg:'الخضار', nophone:'ساعة بدون جوال', sleep:'النوم بدري'};
+
+  /* ---------- storage (try/catch, falls back to memory) ---------- */
+  var mem = null;
+  function load(){
+    try { var raw = localStorage.getItem(KEY); if (raw) { var d = JSON.parse(raw); if (d && d.days) return d; } } catch(e){}
+    return mem;
+  }
+  function save(){
+    mem = state;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+  }
+  function keyOf(d){ var m = d.getMonth()+1, dd = d.getDate(); return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd; }
+  function addDays(d, n){ var x = new Date(d); x.setDate(x.getDate()+n); return x; }
+
+  function seed(){
+    // Example history so the first screen is alive: five counted days, then today in progress.
+    var t = new Date(), days = {};
+    var pattern = [
+      {water:5, done:['walk','sleep']},                                  // 6 days ago (not counted)
+      {water:8, done:['walk','veg','sleep']},
+      {water:7, done:['walk','stretch','veg','nophone']},
+      {water:8, done:['stretch','veg','sleep']},
+      {water:6, done:['walk','veg','nophone','sleep']},
+      {water:8, done:['walk','stretch','veg']}
+    ];
+    for (var i = 0; i < pattern.length; i++) days[keyOf(addDays(t, i-6))] = pattern[i];
+    days[keyOf(t)] = {water:3, done:['stretch','veg']};
+    return {days:days, v:1};
+  }
+
+  var state = load() || seed();
+  save();
+
+  function day(k){ var d = state.days[k]; if (!d) { d = {water:0, done:[]}; state.days[k] = d; } return d; }
+  function peek(k){ return state.days[k] || {water:0, done:[]}; }
+  function doneCount(d){ return d.done.length + (d.water >= WATER_GOAL ? 1 : 0); }
+  function fraction(d){ return doneCount(d) / 6; } // ring % = completed habits out of 6 (water counts once it reaches 8)
+  function counts(d){ return doneCount(d) >= COUNTS_AT; }
+  function streak(){
+    var t = new Date(), n = 0, start = counts(peek(keyOf(t))) ? 0 : -1;
+    for (var i = start; i > -400; i--) { if (counts(peek(keyOf(addDays(t, i))))) n++; else break; }
+    return n;
+  }
+
+  /* ---------- today view ---------- */
+  var todayKey = keyOf(new Date());
+  var CIRC = 439.82;
+
+  function buildCups(){
+    var box = $('cups'), html = '';
+    for (var i = 0; i < WATER_GOAL; i++) {
+      html += '<svg viewBox="0 0 28 36"><clipPath id="cc'+i+'"><path d="M4 4h20l-2.4 28H6.4z"/></clipPath>' +
+              '<rect class="cup-f" clip-path="url(#cc'+i+')" x="0" y="6" width="28" height="30"/>' +
+              '<path class="cup-o" d="M4 4h20l-2.4 28H6.4z" stroke-linejoin="round"/></svg>';
+    }
+    box.innerHTML = html;
+  }
+
+  function buildHabits(){
+    var ul = $('habits');
+    HABITS.forEach(function(h){
+      var li = document.createElement('li');
+      var b = document.createElement('button');
+      b.className = 'habit'; b.type = 'button'; b.dataset.id = h.id; b.setAttribute('aria-pressed','false');
+      b.innerHTML = '<span class="ic"><svg aria-hidden="true"><use href="#'+h.icon+'"/></svg></span>' +
+        '<span class="t"><b></b><span></span></span><span class="chk"><svg aria-hidden="true"><use href="#i-check"/></svg></span>';
+      b.querySelector('.t b').textContent = h.name;
+      b.querySelector('.t span').textContent = h.sub;
+      b.addEventListener('click', function(){ toggle(h.id); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+
+  function toggle(id){
+    var d = day(todayKey), before = counts(d), i = d.done.indexOf(id);
+    if (i === -1) d.done.push(id); else d.done.splice(i, 1);
+    save(); render(); celebrate(before, counts(d));
+  }
+  function water(delta){
+    var d = day(todayKey), before = counts(d);
+    d.water = Math.max(0, Math.min(16, d.water + delta));
+    save(); render(); celebrate(before, counts(d));
+  }
+  function celebrate(before, after){
+    if (!before && after) {
+      var f = $('flame'); f.classList.remove('pop'); void f.offsetWidth; f.classList.add('pop');
+      toast('يومك انحسب! السلسلة صارت ' + streak() + ' ' + dayWord(streak()));
+    }
+  }
+  function dayWord(n){ return n === 1 ? 'يوم' : (n === 2 ? 'يومين' : (n >= 3 && n <= 10 ? 'أيام' : 'يوم')); }
+
+  function render(){
+    var d = peek(todayKey), n = doneCount(d), fr = fraction(d), pct = Math.round(fr*100), s = streak();
+    $('arc').setAttribute('stroke-dashoffset', String(CIRC * (1 - fr)));
+    $('pct').firstChild.nodeValue = pct;
+    $('ofText').textContent = n + ' من 6 عادات';
+    $('ringBox').setAttribute('aria-label', 'إنجاز اليوم ' + pct + ' بالمية، ' + n + ' من 6 عادات');
+    $('streakN').textContent = s;
+    $('streakLbl').textContent = s === 2 ? 'يومين متتاليين' : (s === 1 ? 'يوم متتالي' : 'أيام متتالية');
+    var left = COUNTS_AT - n;
+    $('nudge').textContent = left > 0
+      ? (left === 1 ? 'باقي عادة وحدة ويحسب يومك.' : (left === 2 ? 'باقي عادتين ويحسب يومك.' : 'باقي ' + left + ' عادات ويحسب يومك.'))
+      : (n === 6 ? 'يوم كامل! كل العادات خالصة.' : 'يومك انحسب. كمّل الباقي على راحتك.');
+
+    // water
+    $('waterCnt').firstChild.nodeValue = d.water;
+    var cups = $('cups').children;
+    for (var i = 0; i < cups.length; i++) cups[i].classList.toggle('on', i < d.water);
+    $('waterMinus').disabled = d.water === 0;
+    $('water').setAttribute('aria-label', 'شرب الماء: ' + d.water + ' من 8 أكواب');
+
+    // habits
+    var btns = $('habits').querySelectorAll('.habit');
+    for (var j = 0; j < btns.length; j++) btns[j].setAttribute('aria-pressed', d.done.indexOf(btns[j].dataset.id) !== -1 ? 'true' : 'false');
+
+    renderWeek();
+    renderCtx();
+  }
+
+  function renderWeek(){
+    var t = new Date(), start = addDays(t, -t.getDay()); // week starts Sunday
+    var labels = ['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+    var ol = $('week'); ol.textContent = '';
+    for (var i = 0; i < 7; i++) {
+      var dt = addDays(start, i), k = keyOf(dt), isToday = k === todayKey, future = dt > t && !isToday;
+      var d = peek(k), fr = future ? 0 : fraction(d), ok = !future && counts(d);
+      var li = document.createElement('li');
+      if (isToday) li.className = 'today'; else if (future) li.className = 'future';
+      var c = 2*Math.PI*11;
+      li.innerHTML = '<svg viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="11" fill="'+(ok?'#F0425F':'none')+'" stroke="#2C6156" stroke-width="4"/>' +
+        (ok ? '<path d="M10 15.5l3.3 3.3L20 12" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>' :
+        '<circle cx="15" cy="15" r="11" fill="none" stroke="#F0425F" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+(c*fr).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 15 15) scale(1 -1) translate(0 -30)"/>') + '</svg>';
+      var span = document.createElement('span'); span.textContent = labels[i]; li.appendChild(span);
+      li.setAttribute('aria-label', labels[i] + (future ? '' : (ok ? '، انحسب' : '، ' + doneCount(d) + ' من 6')));
+      ol.appendChild(li);
+    }
+  }
+
+  function renderDate(){
+    var now = new Date(), h = now.getHours();
+    $('t-today').textContent = h < 12 ? 'صباح الخير' : 'مساء الخير';
+    var g = '', hj = '';
+    try { g = new Intl.DateTimeFormat('ar-u-ca-gregory-nu-latn', {weekday:'long', day:'numeric', month:'long'}).format(now); } catch(e){ g = now.toDateString(); }
+    try { hj = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-latn', {day:'numeric', month:'long'}).format(now).replace(/\s*هـ$/, ''); } catch(e){}
+    $('dateText').textContent = g + (hj ? '، ' + hj + ' هـ' : '');
+  }
+
+  /* ---------- coach ---------- */
+  var CHIPS = [
+    'يومي كان زحمة دوام وما مشيت، أبي خطة لباقي اليوم',
+    'سوّ لي خطة أسبوع أبدأ فيها المشي',
+    'أنام متأخر دايم، أبي أعدّل نومي',
+    'كيف أشرب ماء أكثر وأنا بالدوام؟'
+  ];
+  var history = [], busy = false, lastText = '';
+
+  function ctxLine(){
+    var d = peek(todayKey), now = new Date(), h = now.getHours();
+    var part = h < 12 ? 'الصباح' : (h < 17 ? 'الظهر/العصر' : (h < 21 ? 'المساء' : 'الليل'));
+    var done = [], left = [];
+    if (d.water >= WATER_GOAL) done.push(NAMES.water); else left.push(NAMES.water);
+    HABITS.forEach(function(x){ (d.done.indexOf(x.id) !== -1 ? done : left).push(NAMES[x.id]); });
+    return '[سياق التطبيق: الوقت ' + part + '، أنجز ' + doneCount(d) + ' من 6 عادات' +
+      (done.length ? ' (' + done.join('، ') + ')' : '') + '، الماء ' + d.water + ' من 8 أكواب، السلسلة ' + streak() + ' أيام' +
+      (left.length ? '، الباقي: ' + left.join('، ') : '') + ']';
+  }
+  function renderCtx(){
+    var d = peek(todayKey), box = $('ctxChips'); box.textContent = '';
+    [[doneCount(d) + '/6', 'عادات اليوم'], [d.water + '/8', 'أكواب ماء'], [String(streak()), 'أيام السلسلة']].forEach(function(t){
+      var c = document.createElement('div'), b = document.createElement('b'), s = document.createElement('span');
+      b.textContent = t[0]; s.textContent = t[1]; c.appendChild(b); c.appendChild(s); box.appendChild(c);
+    });
+  }
+
+  function buildChips(){
+    var box = $('chips');
+    CHIPS.forEach(function(t){
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = t;
+      b.addEventListener('click', function(){ ask(t); });
+      box.appendChild(b);
+    });
+  }
+
+  function bubble(role, text){
+    var el = document.createElement('div');
+    el.className = 'msg ' + (role === 'user' ? 'u' : 'a');
+    if (role !== 'user') {
+      var who = document.createElement('span'); who.className = 'who';
+      who.innerHTML = '<svg aria-hidden="true"><use href="#logo"/></svg>';
+      who.appendChild(document.createTextNode('مدرّب رِواء'));
+      el.appendChild(who);
+    }
+    if (text != null) el.appendChild(document.createTextNode(text));
+    $('log').appendChild(el); scrollEnd(); return el;
+  }
+  function scrollEnd(){ var s = $('scroll'); s.scrollTop = s.scrollHeight; }
+
+  function cleanReply(t){
+    return String(t || '').replace(/\r/g, '').replace(/^#+\s*/gm, '').replace(/\*\*?/g, '').replace(/^\s*[-*]\s+/gm, '• ').replace(/\n{3,}/g, '\n\n').trim().slice(0, 1600);
+  }
+
+  function errorBubble(msg, canRetry){
+    var el = document.createElement('div'); el.className = 'msg err'; el.setAttribute('role', 'alert');
+    var p = document.createElement('div'); p.textContent = msg; el.appendChild(p);
+    if (canRetry) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = 'أعد المحاولة';
+      b.addEventListener('click', function(){ el.remove(); send(lastText, true); });
+      el.appendChild(b);
+    }
+    $('log').appendChild(el); scrollEnd();
+  }
+
+  function ask(text){
+    text = String(text || '').trim();
+    if (!text || busy) return;
+    if (!navigator.onLine) { setOffline(true); return; }
+    showView('coach');
+    $('chips').hidden = true;
+    bubble('user', text);
+    send(text, false);
+  }
+
+  function send(text, isRetry){
+    if (busy) return;
+    if (!navigator.onLine) { setOffline(true); errorBubble('تحتاج اتصال بالإنترنت عشان يرد المدرّب. عاداتك شغّالة عادي.', true); return; }
+    busy = true; lastText = text; syncComposer();
+    var msgs = history.slice(-6).concat([{role:'user', text:(ctxLine() + '\n' + text).slice(0, 500)}]);
+    var wait = bubble('assistant', null);
+    var dots = document.createElement('span'); dots.className = 'typing'; dots.setAttribute('role', 'status'); dots.setAttribute('aria-label', 'المدرّب يكتب');
+    dots.innerHTML = '<i></i><i></i><i></i>'; wait.appendChild(dots); wait.classList.add('skel');
+    var ctrl = new AbortController(), tm = setTimeout(function(){ ctrl.abort(); }, 30000);
+    fetch('/api/demo', {method:'POST', headers:{'content-type':'application/json'}, signal:ctrl.signal,
+      body: JSON.stringify({demo:'pwa', messages:msgs})})
+      .then(function(r){
+        return r.json().catch(function(){ return {}; }).then(function(j){ return {status:r.status, ok:r.ok, j:j}; });
+      })
+      .then(function(res){
+        wait.remove();
+        var reply = res.ok && res.j && typeof res.j.text === 'string' ? cleanReply(res.j.text) : '';
+        if (reply) {
+          bubble('assistant', reply);
+          history.push({role:'user', text:text}, {role:'assistant', text:reply.slice(0, 500)});
+          history = history.slice(-8);
+        } else if (res.status === 429) {
+          errorBubble('المدرّب عنده ضغط رسائل الحين. ارجع له بعد دقيقة وجرّب مرة ثانية.', true);
+        } else if (res.status === 503) {
+          errorBubble('المدرّب مو متاح الحين. عاداتك وسلسلتك شغّالة عادي، جرّب المدرّب بعد شوي.', true);
+        } else {
+          errorBubble('ما وصلنا رد من المدرّب هالمرة. جرّب مرة ثانية.', true);
+        }
+      })
+      .catch(function(e){
+        wait.remove();
+        if (e && e.name === 'AbortError') errorBubble('تأخر رد المدرّب أكثر من اللازم. جرّب مرة ثانية.', true);
+        else if (!navigator.onLine) { setOffline(true); errorBubble('تحتاج اتصال بالإنترنت عشان يرد المدرّب. عاداتك شغّالة عادي.', true); }
+        else errorBubble('تعذّر الوصول للمدرّب. تأكد من الاتصال وجرّب مرة ثانية.', true);
+      })
+      .then(function(){ clearTimeout(tm); busy = false; syncComposer(); });
+  }
+
+  function syncComposer(){
+    var off = !navigator.onLine, v = $('input').value.trim();
+    $('send').disabled = busy || off || !v;
+    $('input').disabled = off;
+    $('input').placeholder = off ? 'تحتاج اتصال' : 'كيف كان يومك؟';
+    var chips = $('chips').querySelectorAll('.chip');
+    for (var i = 0; i < chips.length; i++) chips[i].disabled = busy || off;
+    $('teaserChip').disabled = off;
+  }
+
+  $('composer').addEventListener('submit', function(e){
+    e.preventDefault();
+    var t = $('input').value.trim(); if (!t || busy) return;
+    $('input').value = ''; autosize(); ask(t);
+  });
+  function autosize(){ var ta = $('input'); ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 130) + 'px'; syncComposer(); }
+  $('input').addEventListener('input', autosize);
+  $('input').addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && window.matchMedia('(hover:hover)').matches) { e.preventDefault(); $('composer').requestSubmit(); }
+  });
+  $('teaserChip').addEventListener('click', function(){ ask(this.textContent); });
+  $('waterPlus').addEventListener('click', function(){ water(1); });
+  $('waterMinus').addEventListener('click', function(){ water(-1); });
+
+  /* ---------- tabs ---------- */
+  function showView(v){
+    var coach = v === 'coach';
+    $('view-today').hidden = coach; $('view-coach').hidden = !coach;
+    $('composer').hidden = !coach;
+    $('tab-today').setAttribute('aria-selected', String(!coach));
+    $('tab-coach').setAttribute('aria-selected', String(coach));
+    $('scroll').scrollTop = coach ? $('scroll').scrollHeight : 0;
+    if (coach) renderCtx();
+  }
+  $('tab-today').addEventListener('click', function(){ showView('today'); });
+  $('tab-coach').addEventListener('click', function(){ showView('coach'); });
+
+  /* ---------- online / offline ---------- */
+  function setOffline(off){
+    var els = document.querySelectorAll('[data-offline]');
+    for (var i = 0; i < els.length; i++) els[i].hidden = !off;
+    $('offlineNote').hidden = !off;
+    syncComposer();
+  }
+  window.addEventListener('online', function(){ setOffline(false); });
+  window.addEventListener('offline', function(){ setOffline(true); });
+
+  /* ---------- toast ---------- */
+  var toastTm;
+  function toast(msg){
+    var t = $('toast'); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTm); toastTm = setTimeout(function(){ t.hidden = true; }, 2800);
+  }
+
+  /* ---------- install ---------- */
+  var deferred = null;
+  var ua = navigator.userAgent || '';
+  var isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var standalone = window.navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  function flag(k, v){ try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch(e){ return null; } }
+
+  function showInstallUI(show){
+    var els = document.querySelectorAll('[data-install]');
+    for (var i = 0; i < els.length; i++) els[i].hidden = !show;
+    $('pitchInstall').hidden = !show;
+    $('installCard').hidden = !show || flag('riwaa.installCard') === 'off';
+    if (show) $('pitchHow').hidden = true;
+  }
+  function doInstall(){
+    if (deferred) {
+      var p = deferred; deferred = null;
+      p.prompt();
+      p.userChoice.then(function(c){ if (c && c.outcome === 'accepted') showInstallUI(false); else { deferred = null; showInstallUI(false); } })
+        .catch(function(){});
+    } else if (isIOS) {
+      $('iosHint').hidden = false;
+    }
+  }
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; if (!standalone) showInstallUI(true); });
+  window.addEventListener('appinstalled', function(){ deferred = null; showInstallUI(false); toast('تم التثبيت. تلقاه على شاشتك الرئيسية.'); });
+  document.querySelectorAll('[data-install]').forEach(function(b){ b.addEventListener('click', doInstall); });
+  $('pitchInstall').addEventListener('click', doInstall);
+  $('installBtn').addEventListener('click', doInstall);
+  $('installClose').addEventListener('click', function(){ $('installCard').hidden = true; flag('riwaa.installCard', 'off'); });
+  $('iosClose').addEventListener('click', function(){ $('iosHint').hidden = true; flag('riwaa.iosHint', 'off'); });
+
+  if (isIOS && !standalone) {
+    // iOS has no install prompt: show the card with the manual steps, and the hint once.
+    $('installText').innerHTML = '<b>خلّه على شاشتك</b>';
+    $('installText').appendChild(document.createTextNode('اضغط مشاركة ← إضافة إلى الشاشة الرئيسية'));
+    $('installBtn').textContent = 'كيف؟';
+    $('installCard').hidden = flag('riwaa.installCard') === 'off';
+    if (flag('riwaa.iosHint') !== 'off') setTimeout(function(){ $('iosHint').hidden = false; }, 1600);
+  }
+
+  /* ---------- service worker ---------- */
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('/demo/pwa/sw.js', {scope:'/demo/pwa/'}).catch(function(){});
+    });
+  }
+
+  /* ---------- go ---------- */
+  buildCups(); buildHabits(); buildChips();
+  renderDate(); render();
+  setOffline(!navigator.onLine);
+  syncComposer();
+  // roll over to a new day if the app stays open past midnight
+  setInterval(function(){ var k = keyOf(new Date()); if (k !== todayKey) { todayKey = k; renderDate(); render(); } }, 60000);
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) { var k = keyOf(new Date()); if (k !== todayKey) { todayKey = k; renderDate(); render(); } } });
+})();
+</script>
+</body>
+</html>

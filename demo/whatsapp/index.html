@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F4F3F5">
+<title>عيادات مَرمَر | أسنان وجلدية في حي الياسمين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --stone:#F4F3F5;      /* marble white */
+  --stone-2:#EAE7EC;    /* shadowed marble */
+  --vein:#D3CDD8;
+  --ink:#2B1730;        /* aubergine ink */
+  --ink-2:#4A3550;
+  --muted:#6D6172;
+  --rule:#DAD5DE;
+  --paper:#FFFFFF;
+  --brass:#8A621F;      /* the one accent */
+  --brass-tint:#F5ECDA;
+  --danger:#9B2C2C;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{
+  margin:0;background:var(--stone);color:var(--ink);
+  font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-size:16px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.ico{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1160px;margin-inline:auto;padding-inline:20px}
+h1,h2,h3{font-family:"Reem Kufi","IBM Plex Sans Arabic",sans-serif;font-weight:600;margin:0;line-height:1.25}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:0;z-index:20;background:rgba(244,243,245,.94);border-bottom:1px solid var(--rule)}
+.bar .wrap{display:flex;align-items:center;gap:28px;height:60px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex:none}
+.logo-word{font-family:"Reem Kufi",sans-serif;font-weight:700;font-size:1.45rem;letter-spacing:0;line-height:1}
+.logo-sub{display:block;font-family:"IBM Plex Sans Arabic",sans-serif;font-size:.68rem;font-weight:400;color:var(--muted);margin-block-start:3px}
+.nav{display:none;gap:26px;font-size:.92rem}
+.nav a{text-decoration:none;color:var(--ink-2);padding-block:4px;border-bottom:1.5px solid transparent}
+.nav a:hover{border-color:var(--ink)}
+.bar-end{margin-inline-start:auto;display:flex;align-items:center;gap:10px}
+.mine{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:.88rem;padding:7px 10px;border-radius:8px}
+.mine:hover{background:var(--stone-2)}
+.badge{min-width:20px;height:20px;border-radius:10px;background:var(--brass);color:#fff;font-size:.72rem;display:none;place-items:center;padding-inline:5px}
+.badge.on{display:inline-grid}
+.cta{
+  display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:0;
+  text-decoration:none;border-radius:8px;padding:9px 16px;font-size:.9rem;font-weight:500
+}
+.cta:hover{background:var(--ink-2)}
+.cta:active{transform:translateY(1px)}
+.bar .cta{display:none}
+
+/* ---------- hero ---------- */
+.hero{padding-block:18px 8px}
+.hero-grid{display:grid;gap:18px;grid-template-columns:minmax(0,1fr)}
+.hero h1{font-size:1.6rem;font-weight:600;max-width:20ch}
+.hero-sub{margin:6px 0 0;color:var(--muted);font-size:.95rem;max-width:42ch}
+.status{display:flex;align-items:center;gap:8px;margin-block-start:12px;font-size:.86rem;color:var(--ink-2)}
+.status i{width:8px;height:8px;border-radius:50%;background:#9A8F9E;flex:none}
+.status.open i{background:#3F7A4E}
+.facade{display:none}
+
+/* ---------- chat window ---------- */
+.chat{
+  background:var(--paper);border-radius:18px;
+  border:1px solid var(--rule);
+  display:flex;flex-direction:column;overflow:hidden;
+  height:min(calc(100svh - 288px),600px);min-height:440px;
+  box-shadow:0 1px 0 var(--rule),0 24px 48px -36px rgba(43,23,48,.5);
+}
+.chat-top{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.chat-top .who{flex:1;min-width:0;line-height:1.35}
+.chat-top b{display:block;font-weight:500;font-size:.96rem}
+.chat-top small{color:var(--muted);font-size:.76rem}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--stone-2);display:grid;place-items:center;flex:none}
+.ghost{background:transparent;border:0;color:var(--muted);font-size:.8rem;padding:6px 8px;border-radius:6px;display:inline-flex;gap:4px;align-items:center}
+.ghost:hover{background:var(--stone);color:var(--ink)}
+
+.log{flex:1;overflow-y:auto;padding:14px 14px 10px;display:flex;flex-direction:column;gap:8px;background:var(--stone)}
+.log>*{flex:none}
+.stamp{align-self:center;font-size:.72rem;color:var(--muted);margin-block:2px 4px}
+.msg{max-width:85%;padding:9px 13px 5px;font-size:.94rem;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg time{display:block;font-size:.66rem;color:var(--muted);text-align:end;margin-block-start:1px}
+.msg.bot{align-self:flex-start;background:var(--paper);border-radius:4px 16px 16px 16px;box-shadow:0 1px 0 var(--rule)}
+.msg.me{align-self:flex-end;background:var(--ink);color:#fff;border-radius:16px 4px 16px 16px}
+.msg.me time{color:#CDBFD0}
+/* reply options attached to the greeting */
+.opts{align-self:flex-start;width:85%;max-width:330px;background:var(--paper);border-radius:4px 4px 16px 16px;margin-block-start:-6px;box-shadow:0 1px 0 var(--rule);overflow:hidden}
+.opts button{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+  background:none;border:0;border-top:1px solid var(--rule);padding:11px 14px;
+  font-size:.9rem;color:var(--ink);text-align:start
+}
+.opts button:hover{background:var(--stone)}
+.opts button:active{background:var(--stone-2)}
+.opts button:disabled{color:#A79DAB;cursor:default;background:none}
+.opts .ico{width:16px;height:16px;color:var(--muted)}
+
+.typing{align-self:flex-start;background:var(--paper);border-radius:4px 16px 16px 16px;padding:12px 14px;display:flex;gap:5px;box-shadow:0 1px 0 var(--rule)}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--ink-2);opacity:.3;animation:pulse 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.18s}.typing span:nth-child(3){animation-delay:.36s}
+@keyframes pulse{40%{opacity:.9}}
+
+.err{align-self:stretch;display:flex;align-items:center;gap:10px;justify-content:space-between;background:#FBF1F1;color:var(--danger);border-inline-start:3px solid var(--danger);padding:9px 12px;font-size:.86rem;border-radius:4px}
+.err button{flex:none;background:none;border:1px solid currentColor;color:var(--danger);border-radius:6px;padding:4px 12px;font-size:.8rem}
+.err button:hover{background:#F5E1E1}
+
+/* appointment slip */
+.slip{align-self:flex-start;width:min(310px,88%);background:var(--brass-tint);border-radius:6px;position:relative;font-size:.86rem;color:#4B3A1A}
+.slip::before,.slip::after{content:"";position:absolute;top:44px;width:14px;height:14px;border-radius:50%;background:var(--stone)}
+.slip::before{inset-inline-start:-7px}.slip::after{inset-inline-end:-7px}
+.slip-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1.5px dashed #D9C49B;font-weight:600;color:var(--brass)}
+.slip dl{margin:0;padding:10px 14px 4px;display:grid;grid-template-columns:auto 1fr;gap:3px 14px}
+.slip dt{color:#8C7650}
+.slip dd{margin:0;font-weight:500}
+.slip p{margin:0;padding:4px 14px 12px;font-size:.75rem;color:#7D6943}
+.note{align-self:center;display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--ink-2);padding:6px 4px;border-block:1px solid var(--rule);margin-block:4px}
+
+.composer{display:flex;gap:8px;align-items:flex-end;padding:10px 12px;border-top:1px solid var(--rule);background:var(--paper)}
+.composer textarea{flex:1;resize:none;border:1px solid var(--rule);border-radius:12px;background:var(--stone);padding:10px 12px;font:inherit;font-size:16px;line-height:1.4;max-height:110px;color:var(--ink)}
+.composer textarea:focus{outline:none;border-color:var(--ink-2);background:var(--paper)}
+.composer textarea:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.send{width:44px;height:44px;border-radius:12px;border:0;background:var(--ink);color:#fff;display:grid;place-items:center;flex:none}
+.send:hover{background:var(--ink-2)}
+.send:disabled{opacity:.45;cursor:default}
+.send .ico{transform:scaleX(-1)}
+
+/* ---------- sections ---------- */
+section.block{padding-block:48px 8px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1.5px solid var(--ink);padding-bottom:10px;margin-bottom:6px}
+.sec-head h2{font-size:1.5rem}
+.sec-head span{font-size:.82rem;color:var(--muted)}
+
+/* price list */
+.prices{display:grid;gap:28px;grid-template-columns:minmax(0,1fr)}
+.prices h3{font-size:1.05rem;font-weight:600;margin-block:18px 4px;display:flex;align-items:center;gap:8px}
+.plist{list-style:none;margin:0;padding:0}
+.plist li{display:grid;grid-template-columns:1fr auto;gap:0 12px;padding-block:11px;border-bottom:1px solid var(--rule);align-items:baseline}
+.plist .n{font-weight:500}
+.plist .d{grid-column:1;font-size:.8rem;color:var(--muted)}
+.plist .p{grid-row:1;grid-column:2;white-space:nowrap;font-weight:500}
+.plist .p small{font-weight:400;color:var(--muted);font-size:.76rem}
+.plist .bk{grid-column:2;grid-row:2;justify-self:end;background:none;border:0;padding:2px 0;color:var(--brass);font-size:.8rem;text-decoration:underline;text-underline-offset:3px}
+.plist .bk:hover{color:var(--ink)}
+.offer{margin-block-start:14px;font-size:.88rem;color:var(--ink-2);padding-inline-start:12px;border-inline-start:3px solid var(--brass)}
+
+/* doctors */
+.docs{list-style:none;margin:0;padding:0}
+.docs li{display:grid;grid-template-columns:56px 1fr;gap:4px 16px;padding-block:18px;border-bottom:1px solid var(--rule);align-items:start}
+.docs .mark{grid-row:span 3;width:56px;height:56px;border-radius:28px 28px 6px 6px;background:var(--stone-2);display:grid;place-items:center;color:var(--ink)}
+.docs .mark .ico{width:28px;height:28px}
+.docs b{font-family:"Reem Kufi",sans-serif;font-weight:600;font-size:1.1rem}
+.docs .sp{color:var(--ink-2);font-size:.9rem}
+.docs .days{font-size:.8rem;color:var(--muted)}
+
+/* visit */
+.visit{display:grid;gap:28px;grid-template-columns:minmax(0,1fr)}
+.hours{width:100%;border-collapse:collapse;font-size:.92rem}
+.hours th,.hours td{text-align:start;padding:10px 0;border-bottom:1px solid var(--rule);font-weight:400}
+.hours td{text-align:end}
+.hours tr.today th,.hours tr.today td{font-weight:600}
+.hours tr.today th::after{content:"اليوم";font-weight:400;font-size:.72rem;color:var(--brass);margin-inline-start:8px}
+.addr{margin:14px 0 0;font-size:.92rem}
+.addr span{display:block;color:var(--muted);font-size:.84rem}
+.map{width:100%;height:auto;display:block;border-radius:10px;background:#ECE9EE}
+
+/* my appointments */
+.appts{list-style:none;margin:0;padding:0}
+.appts .empty{padding:22px 0;color:var(--muted);font-size:.92rem;border-bottom:1px solid var(--rule)}
+.appts .empty button{background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:.92rem}
+.appt{display:grid;grid-template-columns:72px 1fr auto;gap:2px 16px;padding-block:16px;border-bottom:1px solid var(--rule);align-items:center}
+.appt .day{grid-row:span 2;font-family:"Reem Kufi",sans-serif;font-weight:600;font-size:1.02rem;line-height:1.2;text-align:center;border-inline-end:1px solid var(--rule);padding-inline-end:12px}
+.appt .day small{display:block;font-family:"IBM Plex Sans Arabic",sans-serif;font-weight:400;font-size:.74rem;color:var(--muted)}
+.appt strong{font-weight:500}
+.appt p{margin:0;font-size:.82rem;color:var(--muted);grid-column:2}
+.appt .st{grid-row:span 2;font-size:.76rem;color:var(--brass);display:flex;align-items:center;gap:4px}
+.appt.fresh{animation:land 1.2s ease-out}
+@keyframes land{from{background:var(--brass-tint)}to{background:transparent}}
+
+/* footer */
+.foot{margin-block-start:56px;border-top:1px solid var(--rule);padding-block:22px calc(84px + var(--safe-b));font-size:.8rem;color:var(--muted)}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between}
+.foot a{text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.foot a:hover{color:var(--ink);text-decoration:underline}
+.foot img{height:16px;width:auto}
+.foot .quote{color:var(--ink-2);font-weight:500}
+
+/* mobile dock: jump back to the chat */
+.dock{
+  position:fixed;inset-inline:12px;bottom:calc(12px + var(--safe-b));z-index:30;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--ink);color:#fff;border:0;border-radius:14px;padding:13px;font-size:.95rem;font-weight:500;
+  box-shadow:0 14px 30px -14px rgba(43,23,48,.7);
+  transform:translateY(140%);transition:transform .25s ease
+}
+.dock.show{transform:none}
+
+@media (min-width:720px){
+  .prices{grid-template-columns:1fr 1fr;column-gap:56px}
+  .visit{grid-template-columns:5fr 6fr;column-gap:56px;align-items:start}
+}
+@media (min-width:980px){
+  .bar .wrap{height:72px}
+  .nav{display:flex}
+  .bar .cta{display:inline-flex}
+  .hero{padding-block:44px 16px}
+  .hero-grid{grid-template-columns:minmax(0,1fr) 410px;column-gap:64px;align-items:start}
+  .hero h1{font-size:2.6rem;line-height:1.2;max-width:none}
+  .hero-sub{font-size:1.05rem}
+  .facade{display:block;width:100%;max-width:560px;height:auto;margin-block-start:28px}
+  .chat{height:640px}
+  section.block{padding-block:72px 8px}
+  .docs{display:grid;grid-template-columns:repeat(3,1fr);column-gap:40px}
+  .docs li{grid-template-columns:1fr;border-bottom:0;padding-block:22px 0}
+  .docs .mark{grid-row:auto;margin-block-end:8px}
+  .dock{display:none}
+  .foot{padding-block-end:22px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c.8-3.6 3.4-5.6 6.5-5.6s5.7 2 6.5 5.6M16.5 9h4.5m-2-2 2 2-2 2"/></symbol>
+    <symbol id="i-new" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-tooth" viewBox="0 0 24 24"><path d="M7.5 3.5c-2.4 0-4 1.9-4 4.4 0 2 .9 3.3 1.5 4.6.7 1.6.8 3.7 1.3 5.6.4 1.6.9 2.4 1.7 2.4 1.5 0 1.4-4.8 4-4.8s2.5 4.8 4 4.8c.8 0 1.3-.8 1.7-2.4.5-1.9.6-4 1.3-5.6.6-1.3 1.5-2.6 1.5-4.6 0-2.5-1.6-4.4-4-4.4-1.9 0-2.6 1-4.5 1s-2.6-1-4.5-1z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M7.5 4.5c-2.2 0-3.5 1.7-3.5 3.9 0 1.8.8 3 1.3 4.1.6 1.4.7 3.3 1.2 5 .4 1.4.8 2.1 1.5 2.1 1.3 0 1.2-4.2 3.5-4.2s2.2 4.2 3.5 4.2c.6 0 1-.6 1.4-2"/><path d="M18 3v5M15.5 5.5h5M19 11.5v3M17.5 13h3"/></symbol>
+    <symbol id="i-root" viewBox="0 0 24 24"><path d="M6 4c-1.6.4-2.5 1.9-2.5 3.6 0 1.7.8 2.8 1.3 3.9.6 1.4.7 3.2 1.1 4.9.3 1.4.8 3.6 1.6 3.6 1.4 0 1.4-5 4.5-5s3.1 5 4.5 5c.8 0 1.3-2.2 1.6-3.6.4-1.7.5-3.5 1.1-4.9.5-1.1 1.3-2.2 1.3-3.9 0-1.7-.9-3.2-2.5-3.6-1.6-.4-3 .9-6 .9S7.6 3.6 6 4z"/><path d="M12 10.5v4"/></symbol>
+    <symbol id="i-skin" viewBox="0 0 24 24"><path d="M12 3.5c3 3.7 6 7.3 6 10.5a6 6 0 0 1-12 0c0-3.2 3-6.8 6-10.5z"/><path d="M9.2 14.5a2.8 2.8 0 0 0 2.8 2.8"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="عيادات مَرمَر، الصفحة الرئيسية">
+      <svg width="34" height="38" viewBox="0 0 34 38" aria-hidden="true">
+        <defs><linearGradient id="slab" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E2DDE6"/></linearGradient></defs>
+        <path d="M2 37V17A15 15 0 0 1 32 17v20z" fill="url(#slab)" stroke="#2B1730" stroke-width="1.6"/>
+        <path d="M2.8 25c5-3.6 8.4 2.8 13.4-.8S25.6 15 31.2 19" fill="none" stroke="#8A621F" stroke-width="1.3"/>
+        <path d="M7 33c3-1.5 5 .6 8-.4" fill="none" stroke="#B9AFC0" stroke-width="1"/>
+        <path d="M9 37V22a8 8 0 0 1 16 0v15" fill="none" stroke="#2B1730" stroke-width="1.6"/>
+      </svg>
+      <span><span class="logo-word">مَرمَر</span><span class="logo-sub">عيادات الأسنان والجلدية</span></span>
+    </a>
+    <nav class="nav" aria-label="أقسام الموقع">
+      <a href="#services">الخدمات والأسعار</a>
+      <a href="#doctors">الأطباء</a>
+      <a href="#visit">الدوام والموقع</a>
+    </nav>
+    <div class="bar-end">
+      <a class="mine" href="#mine"><svg class="ico"><use href="#i-cal"/></svg>مواعيدي <span class="badge num" id="badge">0</span></a>
+      <a class="cta" href="#chat" data-focus-chat>احجز موعد</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>أسنان وجلدية، في حي الياسمين</h1>
+        <p class="hero-sub">اسألنا عن أي خدمة أو احجز موعدك من المحادثة. نرد عليك في أي وقت، حتى بعد الدوام.</p>
+        <p class="status" id="status"><i></i><span id="status-text">الدوام: السبت إلى الخميس 10 ص – 10 م</span></p>
+        <svg class="facade" viewBox="0 0 560 360" role="img" aria-label="واجهة مبنى عيادات مرمر">
+          <defs>
+            <linearGradient id="fw" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E4E0E8"/></linearGradient>
+            <linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A3A60"/><stop offset="1" stop-color="#2B1730"/></linearGradient>
+            <linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B1730" stop-opacity=".16"/><stop offset="1" stop-color="#2B1730" stop-opacity="0"/></linearGradient>
+            <clipPath id="fc"><rect x="70" y="58" width="420" height="270"/></clipPath>
+          </defs>
+          <ellipse cx="280" cy="332" rx="250" ry="10" fill="#2B1730" opacity=".07"/>
+          <rect x="70" y="58" width="420" height="270" fill="url(#fw)" stroke="#2B1730" stroke-width="1.5"/>
+          <g clip-path="url(#fc)" fill="none" stroke="#D3CDD8">
+            <path d="M60 120c60-30 90 40 160 10s110-60 170-20 80 30 120 10" stroke-width="1.2"/>
+            <path d="M200 132c10 30-10 60 20 90" stroke-width=".8"/>
+            <path d="M60 250c70-20 120 30 200 0s120-50 240-10" stroke-width="1.4"/>
+            <path d="M380 236c-10 30 20 50 0 92" stroke-width=".8"/>
+          </g>
+          <rect x="70" y="58" width="420" height="34" fill="#2B1730"/>
+          <text x="280" y="82" text-anchor="middle" font-family="Reem Kufi, sans-serif" font-weight="700" font-size="20" fill="#F4F3F5">مَرمَر</text>
+          <path d="M70 92h420" stroke="#8A621F" stroke-width="2"/>
+          <g stroke="#2B1730" stroke-width="1.5">
+            <path d="M100 328V186a50 50 0 0 1 100 0v142z" fill="url(#gl)"/>
+            <path d="M230 328V176a50 50 0 0 1 100 0v152z" fill="url(#gl)"/>
+            <path d="M360 328V186a50 50 0 0 1 100 0v142z" fill="url(#gl)"/>
+          </g>
+          <g fill="#FFFFFF" opacity=".13">
+            <path d="M120 328l60-190 14 30-50 160z"/>
+            <path d="M250 328l60-200 14 30-50 170z"/>
+            <path d="M380 328l60-190 14 30-50 160z"/>
+          </g>
+          <path d="M280 220v108M262 270v12M298 270v12" stroke="#C9A866" stroke-width="1.5"/>
+          <path d="M150 230v98M410 230v98" stroke="#F4F3F5" stroke-opacity=".25" stroke-width="1"/>
+          <rect x="70" y="318" width="420" height="10" fill="#E2DDE6" stroke="#2B1730" stroke-width="1.5"/>
+          <rect x="70" y="328" width="420" height="20" fill="url(#gd)"/>
+          <g fill="none" stroke="#2B1730" stroke-width="1.5" stroke-linecap="round">
+            <path d="M38 328c4-60 2-110 10-160"/>
+            <path d="M48 170c-18-8-34-4-44 8M48 170c-6-18-20-26-34-26M48 170c10-16 26-20 40-14M48 170c18-2 30 8 34 22M48 170c-2 14-12 26-24 30"/>
+            <path d="M512 328c-3-40 0-70-6-100"/>
+            <path d="M506 230c-14-6-24 0-30 10M506 230c4-14 16-20 28-16M506 230c12 2 18 12 18 22"/>
+          </g>
+          <path d="M20 348h520" stroke="#2B1730" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <section class="chat" id="chat" aria-label="المحادثة مع استقبال مرمر">
+        <div class="chat-top">
+          <span class="avatar" aria-hidden="true">
+            <svg width="22" height="24" viewBox="0 0 34 38"><path d="M2 37V17A15 15 0 0 1 32 17v20z" fill="#fff" stroke="#2B1730" stroke-width="2"/><path d="M9 37V22a8 8 0 0 1 16 0v15" fill="none" stroke="#2B1730" stroke-width="2"/><path d="M2.8 25c5-3.6 8.4 2.8 13.4-.8S25.6 15 31.2 19" fill="none" stroke="#8A621F" stroke-width="1.6"/></svg>
+          </span>
+          <div class="who">
+            <b>استقبال مَرمَر</b>
+            <small>سلمى، نرد على مدار الساعة</small>
+          </div>
+          <button class="ghost" id="reset" type="button"><svg class="ico" style="width:16px;height:16px"><use href="#i-new"/></svg>محادثة جديدة</button>
+        </div>
+        <div class="log" id="log" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <form class="composer" id="form" autocomplete="off">
+          <label for="input" class="sr">اكتب رسالتك</label>
+          <textarea id="input" rows="1" maxlength="400" placeholder="اكتب رسالتك"></textarea>
+          <button class="send" id="send" type="submit" aria-label="إرسال"><svg class="ico"><use href="#i-send"/></svg></button>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <section class="block" id="services" aria-labelledby="h-services">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="h-services">الخدمات والأسعار</h2><span>بالريال، شاملة الضريبة</span></div>
+      <div class="prices">
+        <div>
+          <h3><svg class="ico"><use href="#i-tooth"/></svg>الأسنان</h3>
+          <ul class="plist">
+            <li><span class="n">كشف واستشارة</span><span class="p num"><bdi>100</bdi> <small>ر.س</small></span><span class="d">فحص كامل وخطة علاج</span><button class="bk" type="button" data-book="كشف واستشارة أسنان">احجز</button></li>
+            <li><span class="n">تنظيف وتلميع</span><span class="p num"><bdi>250</bdi> <small>ر.س</small></span><span class="d">حوالي ٤٥ دقيقة</span><button class="bk" type="button" data-book="تنظيف وتلميع الأسنان">احجز</button></li>
+            <li><span class="n">حشوة تجميلية</span><span class="p num"><bdi>350–500</bdi> <small>ر.س</small></span><span class="d">حسب حجم الحشوة</span><button class="bk" type="button" data-book="حشوة تجميلية">احجز</button></li>
+            <li><span class="n">علاج عصب</span><span class="p num"><bdi>1,200–1,800</bdi> <small>ر.س</small></span><span class="d">حسب السن</span><button class="bk" type="button" data-book="علاج عصب">احجز</button></li>
+            <li><span class="n">تبييض بالعيادة</span><span class="p num"><bdi>1,200</bdi> <small>ر.س</small></span><span class="d">جلسة وحدة، حوالي ساعة</span><button class="bk" type="button" data-book="تبييض الأسنان">احجز</button></li>
+            <li><span class="n">فينير</span><span class="p num"><bdi>1,500</bdi> <small>ر.س للسن</small></span><span class="d">التقسيط متاح</span><button class="bk" type="button" data-book="فينير">احجز</button></li>
+            <li><span class="n">تقويم شفاف</span><span class="p num">من <bdi>9,000</bdi> <small>ر.س</small></span><span class="d">السعر النهائي بعد الكشف، التقسيط متاح</span><button class="bk" type="button" data-book="كشف تقويم شفاف">احجز</button></li>
+          </ul>
+        </div>
+        <div>
+          <h3><svg class="ico"><use href="#i-skin"/></svg>الجلدية والليزر</h3>
+          <ul class="plist">
+            <li><span class="n">استشارة جلدية</span><span class="p num"><bdi>200</bdi> <small>ر.س</small></span><span class="d">مع د. نورة السبيعي</span><button class="bk" type="button" data-book="استشارة جلدية">احجز</button></li>
+            <li><span class="n">تنظيف بشرة عميق</span><span class="p num"><bdi>450</bdi> <small>ر.س</small></span><span class="d">هيدرافيشل</span><button class="bk" type="button" data-book="تنظيف بشرة عميق">احجز</button></li>
+            <li><span class="n">ليزر إزالة الشعر</span><span class="p num">من <bdi>300</bdi> <small>ر.س</small></span><span class="d">الجسم كامل <bdi class="num">1,500</bdi> ر.س</span><button class="bk" type="button" data-book="ليزر إزالة الشعر">احجز</button></li>
+            <li><span class="n">جلسة علاج حب الشباب</span><span class="p num"><bdi>400</bdi> <small>ر.س</small></span><span class="d">بعد الاستشارة</span><button class="bk" type="button" data-book="جلسة علاج حب الشباب">احجز</button></li>
+          </ul>
+          <p class="offer">هالشهر: الكشف مجاني لأول زيارة إذا حجزت تنظيف أسنان أو تنظيف بشرة.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="doctors" aria-labelledby="h-doctors">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="h-doctors">الأطباء</h2><span>أيام التواجد في العيادة</span></div>
+      <ul class="docs">
+        <li><span class="mark"><svg class="ico"><use href="#i-spark"/></svg></span><b>د. ريم العتيبي</b><span class="sp">تجميل وتقويم الأسنان: تبييض، فينير، تقويم شفاف</span><span class="days">الأحد، الثلاثاء، الخميس</span></li>
+        <li><span class="mark"><svg class="ico"><use href="#i-root"/></svg></span><b>د. فهد القحطاني</b><span class="sp">طب أسنان عام وعلاج عصب، وحالات الطوارئ</span><span class="days">من السبت إلى الخميس</span></li>
+        <li><span class="mark"><svg class="ico"><use href="#i-skin"/></svg></span><b>د. نورة السبيعي</b><span class="sp">الجلدية والليزر والعناية بالبشرة</span><span class="days">السبت، الإثنين، الأربعاء، الجمعة</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="visit" aria-labelledby="h-visit">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="h-visit">الدوام والموقع</h2><span>بتوقيت الرياض</span></div>
+      <div class="visit">
+        <div>
+          <table class="hours num" id="hours">
+            <caption class="sr">ساعات الدوام</caption>
+            <tbody>
+              <tr data-d="6"><th scope="row">السبت</th><td><bdi>10:00 ص – 10:00 م</bdi></td></tr>
+              <tr data-d="0"><th scope="row">الأحد</th><td><bdi>10:00 ص – 10:00 م</bdi></td></tr>
+              <tr data-d="1"><th scope="row">الإثنين</th><td><bdi>10:00 ص – 10:00 م</bdi></td></tr>
+              <tr data-d="2"><th scope="row">الثلاثاء</th><td><bdi>10:00 ص – 10:00 م</bdi></td></tr>
+              <tr data-d="3"><th scope="row">الأربعاء</th><td><bdi>10:00 ص – 10:00 م</bdi></td></tr>
+              <tr data-d="4"><th scope="row">الخميس</th><td><bdi>10:00 ص – 10:00 م</bdi></td></tr>
+              <tr data-d="5"><th scope="row">الجمعة</th><td><bdi>4:00 م – 10:00 م</bdi></td></tr>
+            </tbody>
+          </table>
+          <p class="addr">حي الياسمين، طريق أنس بن مالك، مبنى مرمر، الدور الأرضي
+            <span>قبل تقاطع طريق الملك عبدالعزيز. مواقف مجانية خلف المبنى، ومدخل مهيأ للكراسي المتحركة.</span></p>
+        </div>
+        <svg class="map" viewBox="0 0 600 340" role="img" aria-label="رسم توضيحي لموقع العيادة على طريق أنس بن مالك قرب تقاطع طريق الملك عبدالعزيز">
+          <rect width="600" height="340" fill="#ECE9EE"/>
+          <g fill="#E1DDE5">
+            <rect x="24" y="24" width="150" height="96" rx="4"/><rect x="24" y="168" width="150" height="148" rx="4"/>
+            <rect x="222" y="24" width="160" height="96" rx="4"/><rect x="222" y="168" width="76" height="148" rx="4"/>
+            <rect x="430" y="24" width="146" height="96" rx="4"/><rect x="430" y="168" width="146" height="148" rx="4"/>
+          </g>
+          <g stroke="#FFFFFF" stroke-linecap="round">
+            <path d="M0 144h600" stroke-width="22"/>
+            <path d="M406 0v340" stroke-width="26"/>
+            <path d="M198 0v340" stroke-width="10"/>
+            <path d="M298 168v148" stroke-width="0"/>
+          </g>
+          <path d="M0 144h600" stroke="#D3CDD8" stroke-width="1" stroke-dasharray="10 10"/>
+          <path d="M406 0v340" stroke="#D3CDD8" stroke-width="1" stroke-dasharray="10 10"/>
+          <rect x="306" y="168" width="76" height="70" rx="4" fill="#2B1730"/>
+          <path d="M318 238v-22a26 26 0 0 1 52 0v22" fill="none" stroke="#F4F3F5" stroke-width="1.5"/>
+          <rect x="306" y="246" width="76" height="40" rx="4" fill="none" stroke="#8A621F" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <text x="344" y="271" text-anchor="middle" font-size="12" fill="#8A621F" font-family="IBM Plex Sans Arabic, sans-serif">مواقف</text>
+          <text x="120" y="139" text-anchor="middle" font-size="13" fill="#6D6172" font-family="IBM Plex Sans Arabic, sans-serif">طريق أنس بن مالك</text>
+          <text x="0" y="0" font-size="13" fill="#6D6172" font-family="IBM Plex Sans Arabic, sans-serif" text-anchor="middle" transform="translate(400 250) rotate(-90)">طريق الملك عبدالعزيز</text>
+          <g transform="translate(344 150)">
+            <path d="M0 0c-10-12-16-19-16-27a16 16 0 0 1 32 0c0 8-6 15-16 27z" fill="#8A621F"/>
+            <circle cy="-27" r="5.5" fill="#fff"/>
+          </g>
+          <text x="500" y="72" text-anchor="middle" font-size="14" fill="#9A8F9E" font-family="IBM Plex Sans Arabic, sans-serif">حي الياسمين</text>
+          <g transform="translate(560 300)" fill="none" stroke="#9A8F9E" stroke-width="1.2"><path d="M0 -14v28M-5 -8l5-6 5 6"/></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="mine" aria-labelledby="h-mine">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="h-mine">مواعيدي</h2><span>تتحدث تلقائياً مع كل حجز</span></div>
+      <ul class="appts" id="appts" aria-live="polite">
+        <li class="empty" id="appts-empty">ما عندك مواعيد قادمة. <button type="button" data-focus-chat>احجز من المحادثة</button></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>عيادات مَرمَر. جميع الحقوق محفوظة.</span>
+    <a href="https://yazeedalharthi.sa/#services">تصميم وتطوير <img src="/assets/yh-mark-on-light.svg" alt=""> يزيد الحارثي</a>
+    <a class="quote" href="https://yazeedalharthi.sa/#services">تبي نسخة لمنشأتك؟ اطلب عرض سعر</a>
+  </div>
+</footer>
+
+<button class="dock" id="dock" type="button" data-focus-chat aria-hidden="true" tabindex="-1"><svg class="ico"><use href="#i-chat"/></svg>تحدث مع الاستقبال</button>
+
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var log = $('log'), form = $('form'), input = $('input'), send = $('send');
+  var appts = $('appts'), badge = $('badge');
+
+  var GREETING = 'هلا والله، معك سلمى من استقبال مَرمَر.\nكيف أقدر أخدمك؟';
+  var OPTIONS = ['كم سعر تنظيف الأسنان؟','أبي موعد بكرة العصر','وين موقعكم؟','أبي أكلم موظف'];
+  var history = [], busy = false, booked = [], lastUserText = '';
+
+  /* ---------- Riyadh time ---------- */
+  var TZ = 'Asia/Riyadh';
+  function fmt(d, o){ try{ return new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', Object.assign({timeZone:TZ}, o)).format(d); }catch(e){ return ''; } }
+  function nowCtx(){ return fmt(new Date(),{weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'numeric',minute:'2-digit'}); }
+  function clock(){ return fmt(new Date(),{hour:'numeric',minute:'2-digit'}); }
+  function riyadh(){
+    try{
+      var p = new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short',hour:'numeric',minute:'numeric',hourCycle:'h23'}).formatToParts(new Date());
+      var g = function(t){ var x = p.find(function(q){return q.type===t;}); return x ? x.value : ''; };
+      return {day:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(g('weekday')), min:(+g('hour'))*60 + (+g('minute'))};
+    }catch(e){ var d = new Date(); return {day:d.getDay(), min:d.getHours()*60+d.getMinutes()}; }
+  }
+  function paintHours(){
+    var r = riyadh(), open = r.day === 5 ? 16*60 : 10*60, close = 22*60;
+    var row = document.querySelector('#hours tr[data-d="'+r.day+'"]'); if(row) row.classList.add('today');
+    var st = $('status'), tx = $('status-text');
+    if(r.min >= open && r.min < close){ st.classList.add('open'); tx.textContent = 'مفتوح الآن حتى 10:00 م'; }
+    else {
+      var next = (r.min < open) ? (r.day === 5 ? 'اليوم 4:00 م' : 'اليوم 10:00 ص') : (r.day === 4 ? 'بكرة 4:00 م' : 'بكرة 10:00 ص');
+      tx.textContent = 'مغلق الآن، نفتح ' + next + '. المحادثة متاحة';
+    }
+  }
+
+  /* ---------- helpers ---------- */
+  function el(tag, cls, text){ var n = document.createElement(tag); if(cls) n.className = cls; if(text != null) n.textContent = text; return n; }
+  function icon(id, size){
+    var s = document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('class','ico'); s.setAttribute('aria-hidden','true');
+    if(size){ s.style.width = size+'px'; s.style.height = size+'px'; }
+    var u = document.createElementNS('http://www.w3.org/2000/svg','use'); u.setAttribute('href','#'+id); s.appendChild(u); return s;
+  }
+  function clip(s, n){ s = String(s||'').replace(/[\u0000-\u001f]/g,' ').replace(/\s+/g,' ').trim(); return s.length > n ? s.slice(0,n) + '…' : s; }
+  function down(){ log.scrollTop = log.scrollHeight; }
+  function addMsg(who, text){
+    var b = el('div','msg '+who); b.appendChild(document.createTextNode(text));
+    b.appendChild(el('time','num',clock())); log.appendChild(b); down(); return b;
+  }
+
+  /* ---------- model output → text + structured actions ---------- */
+  function parse(raw){
+    var out = {text:'', booking:null, handoff:null}, t = String(raw||'');
+    t = t.replace(/\[\[\s*BOOKING\s*\|([^\]]*)\]\]/gi, function(_, body){
+      var f = body.split('|').map(function(x){ return clip(x,60); });
+      if(f.length >= 4 && f[0] && f[1] && f[2]) out.booking = {service:f[0], day:f[1], time:f[2], name:f[3]||'', doctor:f[4]||''};
+      return '';
+    });
+    t = t.replace(/\[\[\s*HANDOFF\s*(?:\|([^\]]*))?\]\]/gi, function(_, why){ out.handoff = {reason: clip(why||'',40)}; return ''; });
+    t = t.replace(/\[\[[^\]]*\]\]/g,'').replace(/^\s*سياق:.*$/gm,'');
+    out.text = t.replace(/\n{3,}/g,'\n\n').trim();
+    return out;
+  }
+
+  function slip(b){
+    var c = el('div','slip');
+    var h = el('div','slip-head'); h.appendChild(icon('i-check',18)); h.appendChild(el('span',null,'تم تأكيد موعدك'));
+    c.appendChild(h);
+    var dl = el('dl');
+    [['الخدمة',b.service],['اليوم',b.day],['الوقت',b.time],['الطبيب',b.doctor],['الاسم',b.name]].forEach(function(p){
+      if(!p[1]) return; dl.appendChild(el('dt',null,p[0])); var dd = el('dd'); var bi = el('bdi',null,p[1]); dd.appendChild(bi); dl.appendChild(dd);
+    });
+    c.appendChild(dl);
+    c.appendChild(el('p',null,'تشرفنا قبل الموعد بـ 10 دقايق. الإلغاء أو التعديل مجاني قبل الموعد بـ 12 ساعة.'));
+    log.appendChild(c); down();
+  }
+  function handoffNote(){
+    var n = el('div','note'); n.appendChild(icon('i-person',16)); n.appendChild(el('span',null,'تم تحويلك لموظف الاستقبال'));
+    log.appendChild(n); down();
+  }
+
+  /* ---------- مواعيدي ---------- */
+  function renderAppts(freshIndex){
+    appts.textContent = '';
+    if(!booked.length){
+      var e = el('li','empty'); e.appendChild(document.createTextNode('ما عندك مواعيد قادمة. '));
+      var bt = el('button',null,'احجز من المحادثة'); bt.type = 'button'; bt.setAttribute('data-focus-chat',''); e.appendChild(bt);
+      appts.appendChild(e);
+    }
+    booked.forEach(function(b, i){
+      var li = el('li','appt' + (i === freshIndex ? ' fresh' : ''));
+      var parts = b.day.split(/\s+/);
+      var d = el('span','day'); d.appendChild(el('bdi',null,parts[0] || b.day));
+      if(parts.length > 1){ var sm = el('small','num'); sm.appendChild(el('bdi',null,parts.slice(1).join(' '))); d.appendChild(sm); }
+      li.appendChild(d);
+      var s = el('strong'); s.appendChild(el('bdi',null,b.service)); li.appendChild(s);
+      var st = el('span','st'); st.appendChild(icon('i-check',14)); st.appendChild(el('span',null,'مؤكد')); li.appendChild(st);
+      var p = el('p','num'); p.appendChild(el('bdi',null,b.time + (b.doctor ? '، ' + b.doctor : '') + (b.name ? '، باسم ' + b.name : ''))); li.appendChild(p);
+      appts.appendChild(li);
+    });
+    badge.textContent = booked.length; badge.classList.toggle('on', booked.length > 0);
+  }
+  function addBooking(b){
+    var i = booked.findIndex(function(x){ return x.service === b.service; });
+    if(i >= 0) booked[i] = b; else { booked.push(b); i = booked.length - 1; }
+    renderAppts(i);
+  }
+
+  /* ---------- request cycle ---------- */
+  function setBusy(v){
+    busy = v; send.disabled = v;
+    Array.prototype.forEach.call(document.querySelectorAll('.opts button, .plist .bk'), function(b){ b.disabled = v; });
+  }
+  function showTyping(){
+    var t = el('div','typing'); t.id = 'typing'; t.setAttribute('role','status'); t.setAttribute('aria-label','سلمى تكتب');
+    t.appendChild(el('span')); t.appendChild(el('span')); t.appendChild(el('span')); log.appendChild(t); down();
+  }
+  function hideTyping(){ var t = $('typing'); if(t) t.remove(); }
+  function errorMsg(code){
+    var m = {
+      rate:'وصلت رسائل كثيرة خلال وقت قصير. انتظر دقايق وأعد الإرسال.',
+      timeout:'الرد أخذ وقت أطول من المعتاد ولم يصل.',
+      config:'المحادثة متوقفة مؤقتاً. حاول بعد شوي.',
+      guard:'تعذّر إرسال الرسالة. حدّث الصفحة وأعد الإرسال.',
+      net:'انقطع الاتصال. تأكد من الإنترنت وأعد الإرسال.',
+      fail:'لم يصل الرد هالمرة.'
+    }[code] || 'لم يصل الرد هالمرة.';
+    var b = el('div','err'); b.setAttribute('role','alert'); b.appendChild(el('span',null,m));
+    var r = el('button',null,'أعد الإرسال'); r.type = 'button';
+    r.addEventListener('click', function(){ b.remove(); request(); });
+    b.appendChild(r); log.appendChild(b); down(); r.focus({preventScroll:true});
+  }
+  function payload(){
+    var msgs = history.slice(-12).map(function(m){ return {role:m.role, text:m.text}; });
+    while(msgs.length && msgs[0].role !== 'user') msgs.shift();
+    var last = msgs[msgs.length - 1];
+    if(last && last.role === 'user') last.text = 'سياق: ' + nowCtx() + ' بتوقيت الرياض\n' + last.text;
+    return {demo:'whatsapp', messages:msgs};
+  }
+  async function request(){
+    if(busy) return;
+    setBusy(true); showTyping();
+    var ctrl = new AbortController(), timer = setTimeout(function(){ ctrl.abort(); }, 30000);
+    var code = null, data = null;
+    try{
+      var r = await fetch('/api/demo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload()),signal:ctrl.signal});
+      if(r.status === 429) code = 'rate';
+      else if(r.status === 503) code = 'config';
+      else if(r.status === 403 || r.status === 415) code = 'guard';
+      else if(!r.ok) code = 'fail';
+      else { data = await r.json().catch(function(){ return null; }); if(!data || typeof data.text !== 'string' || !data.text.trim()) code = 'fail'; }
+    }catch(e){ code = (e && e.name === 'AbortError') ? 'timeout' : 'net'; }
+    finally{ clearTimeout(timer); }
+    hideTyping(); setBusy(false);
+    if(code){ errorMsg(code); return; }
+    reply(data.text);
+  }
+  function reply(raw){
+    var p = parse(raw);
+    history.push({role:'assistant', text:String(raw).slice(0,1500)});
+    if(p.text) addMsg('bot', p.text);
+    if(p.booking){ slip(p.booking); addBooking(p.booking); }
+    if(p.handoff) handoffNote();
+    if(!p.text && !p.booking && !p.handoff) errorMsg('fail');
+  }
+  function submit(text){
+    text = String(text||'').trim().slice(0,400);
+    if(!text || busy) return;
+    lastUserText = text;
+    addMsg('me', text); history.push({role:'user', text:text});
+    request();
+  }
+
+  /* ---------- wiring ---------- */
+  form.addEventListener('submit', function(e){
+    e.preventDefault(); var v = input.value; if(!v.trim() || busy) return;
+    input.value = ''; grow(); submit(v);
+  });
+  input.addEventListener('keydown', function(e){ if(e.key === 'Enter' && !e.shiftKey && !e.isComposing){ e.preventDefault(); form.requestSubmit(); } });
+  function grow(){ input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 110) + 'px'; }
+  input.addEventListener('input', grow);
+
+  function focusChat(){
+    $('chat').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'center'});
+    setTimeout(function(){ input.focus({preventScroll:true}); }, 350);
+  }
+  document.addEventListener('click', function(e){
+    var f = e.target.closest('[data-focus-chat]');
+    if(f){ e.preventDefault(); focusChat(); return; }
+    var bk = e.target.closest('[data-book]');
+    if(bk && !busy){ input.value = 'أبي أحجز ' + bk.getAttribute('data-book') + ' '; grow(); focusChat(); }
+  });
+
+  function start(){
+    log.textContent = ''; history = [];
+    log.appendChild(el('div','stamp num','اليوم ' + clock()));
+    addMsg('bot', GREETING);
+    var o = el('div','opts'); o.setAttribute('role','group'); o.setAttribute('aria-label','اختيارات سريعة');
+    OPTIONS.forEach(function(t){
+      var b = el('button'); b.type = 'button'; b.appendChild(el('span',null,t)); b.appendChild(icon('i-back',16));
+      b.addEventListener('click', function(){ submit(t); });
+      o.appendChild(b);
+    });
+    log.appendChild(o);
+  }
+  $('reset').addEventListener('click', function(){ if(!busy){ start(); input.focus(); } });
+
+  // mobile dock appears once the chat scrolls out of view
+  var dock = $('dock');
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      var show = !es[0].isIntersecting;
+      dock.classList.toggle('show', show); dock.setAttribute('aria-hidden', show ? 'false' : 'true'); dock.tabIndex = show ? 0 : -1;
+    },{threshold:0.15}).observe($('chat'));
+  }
+
+  paintHours(); start(); renderAppts(-1);
+})();
+</script>
+</body>
+</html>

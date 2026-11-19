@@ -5,3 +5,4 @@ Disallow: /quote/
 Disallow: /invoice/
 
 Sitemap: https://yazeedalharthi.sa/sitemap.xml
+Disallow: /demo/

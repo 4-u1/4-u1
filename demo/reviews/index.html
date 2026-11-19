@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#26313A">
+<title>حَرّة | آراء الضيوف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --basalt:#26313A; --basalt-2:#323F49; --basalt-3:#4A5863;
+  --bg:#EEF0EB; --pane:#FBFBF9; --rule:#D8DCD4; --rule-2:#E7E9E3;
+  --ink:#1E272E; --muted:#5D6872; --faint:#8A939A;
+  --saffron:#D9A21B; --saffron-h:#E7B239;
+  --pos:#3D7A57; --neu:#978F80; --neg:#B4384A; --mix:#BF8226;
+  --pos-bg:#E2EEE6; --neg-bg:#F7E4E7; --mix-bg:#F6EDDD;
+  --sans:"Readex Pro",system-ui,sans-serif; --kufi:"Reem Kufi","Readex Pro",sans-serif;
+  --sb:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 14.5px/1.6 var(--sans);font-variant-numeric:tabular-nums}
+button,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--saffron);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- app bar ---------- */
+.appbar{background:var(--basalt);color:#E9EDEA;display:flex;align-items:center;gap:20px;height:52px;
+  padding-inline:max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-left));position:sticky;top:0;z-index:20}
+.logo{display:flex;align-items:center;gap:9px;color:inherit;text-decoration:none}
+.logo svg{width:26px;height:26px}
+.logo b{font-family:var(--kufi);font-weight:700;font-size:22px;line-height:1}
+.logo span{font-size:12.5px;color:#9EA9B1;border-inline-start:1px solid var(--basalt-3);padding-inline-start:9px;line-height:1.2}
+.nav{display:none;gap:2px;height:100%}
+.nav span{display:flex;align-items:center;padding-inline:12px;font-size:14px;color:#A9B3BA;border-bottom:2px solid transparent}
+.nav span[aria-current]{color:#fff;border-bottom-color:var(--saffron)}
+.who{margin-inline-start:auto;display:flex;align-items:center;gap:9px;font-size:13px;color:#C3CBD1}
+.who i{font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--basalt-3);color:#fff;display:grid;place-items:center;font-size:12px}
+.who .nm{display:none}
+@media (min-width:980px){.nav{display:flex}.who .nm{display:inline}}
+
+/* ---------- batch bar ---------- */
+.batchbar{background:var(--pane);border-bottom:1px solid var(--rule);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.crumb{display:flex;flex-direction:column;min-width:0}
+.crumb small{font-size:12px;color:var(--faint)}
+.crumb h1{margin:0;font-size:17px;font-weight:600;line-height:1.35}
+.batchbar .meta{font-size:12.5px;color:var(--muted);display:none}
+.tools{margin-inline-start:auto;display:none;gap:8px;align-items:center}
+@media (min-width:980px){.tools{display:flex}.batchbar .meta{display:block;border-inline-start:1px solid var(--rule);padding-inline-start:12px}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:6px;border:1px solid transparent;padding:0 14px;height:38px;font-size:14px;font-weight:500;background:none;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--saffron);color:#211800;font-weight:600}
+.btn-primary:hover{background:var(--saffron-h)}
+.btn-primary:disabled{background:#DCD6C6;color:#77705F;cursor:not-allowed;transform:none}
+.btn-line{border-color:var(--rule);background:var(--pane)}
+.btn-line:hover{border-color:var(--basalt-3)}
+.btn-line:disabled{color:var(--faint);border-color:var(--rule-2);cursor:not-allowed}
+.btn-ghost{color:var(--muted);height:32px;padding:0 8px;font-size:13px}
+.btn-ghost:hover{color:var(--ink);background:var(--rule-2)}
+
+/* ---------- mobile segment ---------- */
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--pane);border-bottom:1px solid var(--rule);position:sticky;top:52px;z-index:15}
+.seg button{border:0;background:none;height:44px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent}
+.seg button[aria-selected="true"]{color:var(--ink);font-weight:600;border-bottom-color:var(--basalt)}
+.seg bdi{color:var(--faint);font-weight:400;margin-inline-start:4px}
+@media (min-width:980px){.seg{display:none}}
+
+/* ---------- split ---------- */
+.split{display:block}
+.pane{background:var(--pane)}
+.pane-in{padding-bottom:calc(84px + var(--sb))}
+@media (max-width:979px){ .pane[data-hide="1"]{display:none} }
+@media (min-width:980px){
+  .split{display:grid;grid-template-columns:minmax(380px,34%) 1fr;height:calc(100vh - 52px - 61px)}
+  .pane{overflow:auto}
+  .pane-in{padding-bottom:24px}
+  #p-input{border-inline-end:1px solid var(--rule)}
+  #p-out{background:var(--bg)}
+}
+
+/* input pane */
+.phead{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--rule-2);position:sticky;top:0;background:var(--pane);z-index:2}
+.phead h2{margin:0;font-size:14.5px;font-weight:600}
+.phead .cnt{font-size:12.5px;color:var(--muted)}
+.phead .cnt.over{color:var(--neg)}
+.mode{margin-inline-start:auto;display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.mode button{border:0;background:none;height:30px;padding:0 10px;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--muted)}
+.mode button[aria-pressed="true"]{background:var(--basalt);color:#fff}
+@media (max-width:979px){.phead{top:96px}}
+
+.rows{list-style:none;margin:0;padding:0}
+.rows li{display:grid;grid-template-columns:34px 1fr;gap:8px;padding:9px 16px 9px 12px;border-bottom:1px solid var(--rule-2);border-inline-start:3px solid transparent;cursor:text;transition:background .4s}
+.rows li:hover{background:#F3F4F0}
+.rows .n{color:var(--faint);font-size:12px;padding-top:2px;text-align:end}
+.rows .tx{min-width:0;overflow-wrap:anywhere}
+.rows li.urg{border-inline-start-color:var(--neg)}
+.rows li.urg .n{color:var(--neg);font-weight:600}
+.rows li.hit{background:#FBF0D2}
+.rows .tag{display:inline-block;font-size:11.5px;color:var(--neg);margin-inline-start:6px}
+.empty-list{padding:28px 16px;color:var(--muted)}
+
+.editor{padding:12px 16px}
+textarea{display:block;width:100%;min-height:340px;resize:vertical;border:1px solid var(--rule);border-radius:4px;background:#fff;padding:10px 12px;font-size:14px;line-height:1.75}
+textarea:focus-visible{outline-offset:-1px;border-color:var(--saffron)}
+@media (min-width:980px){textarea{min-height:calc(100vh - 290px)}}
+.edfoot{display:flex;gap:4px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.edfoot p{margin:0;font-size:12.5px;color:var(--muted);margin-inline-end:auto}
+.edfoot p.warn{color:var(--neg)}
+
+/* ---------- results ---------- */
+.out-in{padding:0 0 calc(84px + var(--sb))}
+@media (min-width:980px){.out-in{padding:20px 24px 28px;max-width:1040px}}
+.blk{background:var(--pane);border-bottom:1px solid var(--rule);padding:16px}
+@media (min-width:980px){.blk{border:1px solid var(--rule);border-radius:4px;margin-bottom:16px;padding:18px 20px}}
+.blk h2{margin:0 0 12px;font-size:14.5px;font-weight:600;display:flex;align-items:baseline;gap:8px}
+.blk h2 bdi{font-weight:400;color:var(--faint);font-size:13px}
+
+/* KPI */
+.kpi{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:640px){.kpi{grid-template-columns:auto 1fr;align-items:center;gap:28px}}
+.score{display:flex;align-items:baseline;gap:6px}
+.score b{font-family:var(--kufi);font-weight:700;font-size:58px;line-height:.95}
+.score span{color:var(--faint);font-size:14px}
+.score-l{font-size:13px;color:var(--muted);margin-top:2px}
+.score-l.lo{color:var(--neg)}.score-l.mid{color:var(--mix)}.score-l.hi{color:var(--pos)}
+#field{display:block;width:100%;height:auto}
+.fieldcap{font-size:12px;color:var(--faint);margin-top:4px}
+.dist{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule-2)}
+#stack{display:block;width:100%;height:10px}
+.legend{display:grid;grid-template-columns:repeat(3,1fr);margin-top:10px}
+.lg{padding-inline-start:10px;border-inline-start:1px solid var(--rule-2)}
+.lg:first-child{padding-inline-start:0;border:0}
+.lg b{font-size:22px;font-weight:600;display:block;line-height:1.2}
+.lg span{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.lg span::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
+.note{font-size:12.5px;color:var(--mix);margin:10px 0 0}
+
+/* urgent table */
+.utab{width:100%;border-collapse:collapse}
+.utab th{font-size:12px;font-weight:500;color:var(--faint);text-align:start;padding:0 8px 8px;border-bottom:1px solid var(--rule)}
+.utab td{padding:10px 8px;border-bottom:1px solid var(--rule-2);vertical-align:top}
+.utab td:first-child,.utab th:first-child{padding-inline-start:0}
+.utab .q{font-size:14px}
+.utab .iss{color:var(--neg);font-weight:500}
+@media (max-width:719px){
+  .utab thead{display:none}
+  .utab tr{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:12px 0;border-bottom:1px solid var(--rule-2)}
+  .utab td{border:0;padding:0}
+  .utab td.q{grid-column:1/-1;margin-bottom:6px}
+  .utab td[data-l]::before{content:attr(data-l);display:block;font-size:11.5px;color:var(--faint)}
+  .utab td.iss{grid-column:1/-1}
+  .utab td.act{grid-column:1/-1;margin-top:4px}
+}
+.none{color:var(--muted);margin:0}
+
+/* verify chip */
+.vf{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;margin-inline-start:6px;vertical-align:1px;border:0;background:none;padding:0;white-space:nowrap}
+.vf svg.i{width:13px;height:13px;stroke-width:1.8}
+.vf.ok{color:var(--pos)}
+button.vf.ok:hover{text-decoration:underline}
+.vf.bad{color:var(--neg);background:var(--neg-bg);padding:1px 6px;border-radius:3px}
+
+/* themes */
+.themes-grid{display:grid;gap:18px}
+@media (min-width:1100px){.themes-grid{grid-template-columns:1fr 1fr;gap:28px}}
+#themes-svg{display:block;width:100%}
+.quotes{list-style:none;margin:0;padding:0}
+.quotes li{padding:8px 0;border-bottom:1px solid var(--rule-2)}
+.quotes li:last-child{border:0}
+.quotes .t{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.quotes .t::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
+.quotes .q{margin:2px 0 0}
+
+/* actions */
+.todo{margin:0;padding:0;list-style:none;counter-reset:a}
+.todo li{counter-increment:a;display:grid;grid-template-columns:26px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--rule-2)}
+.todo li:last-child{border:0}
+.todo li::before{content:counter(a);font-weight:600;color:var(--saffron);font-size:15px;line-height:1.5}
+
+/* replies */
+.reply{padding:12px 0;border-bottom:1px solid var(--rule-2)}
+.reply:last-child{border:0;padding-bottom:0}
+.reply .to{font-size:12.5px;color:var(--muted);margin:0 0 6px}
+.reply .body{margin:0;background:#fff;border:1px solid var(--rule-2);border-inline-start:3px solid var(--basalt-3);padding:10px 12px;white-space:pre-wrap;border-radius:0 3px 3px 0}
+.reply .rf{display:flex;justify-content:flex-end;margin-top:6px}
+.btn-copy{height:32px;font-size:13px}
+.btn-copy.done{color:var(--pos);border-color:var(--pos)}
+
+.stamp{font-size:12px;color:var(--faint);padding:12px 16px}
+@media (min-width:980px){.stamp{padding:0}}
+
+/* empty + skeleton */
+.idle{padding:16px}
+@media (min-width:980px){.idle{padding:0}}
+.idle-msg{display:flex;align-items:center;gap:10px;color:var(--muted);margin:0 0 14px;font-size:14px}
+.sk{background:var(--pane);border:1px solid var(--rule);border-radius:4px;padding:18px 20px;margin-bottom:12px}
+.sk i{display:block;height:10px;border-radius:2px;background:var(--rule-2);margin-bottom:10px}
+.sk i.big{height:44px;width:90px;margin-bottom:14px}
+.loading .sk i{background:linear-gradient(90deg,var(--rule-2) 0 40%,#F6F7F3 50%,var(--rule-2) 60% 100%);background-size:300% 100%;animation:sh 1.3s linear infinite}
+@keyframes sh{from{background-position:100% 0}to{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){.loading .sk i{animation:none}.rows li{transition:none}}
+
+/* error */
+.err{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--neg-bg);color:#5F1622;border:1px solid #E5B9C0;border-radius:4px;padding:12px 14px;margin:16px}
+@media (min-width:980px){.err{margin:0 0 16px}}
+.err p{margin:0;flex:1 1 220px}
+.err .btn{background:var(--basalt);color:#fff;height:34px}
+
+/* mobile bottom bar */
+.dock{position:fixed;inset-inline:0;bottom:0;z-index:30;background:rgba(251,251,249,.97);border-top:1px solid var(--rule);
+  padding:10px max(16px,env(safe-area-inset-right)) calc(10px + var(--sb)) max(16px,env(safe-area-inset-left));display:flex;gap:8px}
+.dock .btn-primary{flex:1;height:46px;font-size:15.5px}
+.dock .btn-line{height:46px;width:46px;padding:0}
+@media (min-width:980px){.dock{display:none}}
+
+/* footer */
+.credit{display:flex;gap:8px 20px;justify-content:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted);padding:18px 16px calc(96px + var(--sb))}
+.credit a{color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.credit a:hover{color:var(--ink);text-decoration:underline}
+.credit img{height:16px;width:auto}
+.credit .rights{color:var(--faint)}
+@media (min-width:980px){.credit{padding:12px 16px;border-top:1px solid var(--rule);background:var(--pane)}}
+
+.print-h{display:none}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff}
+  .appbar,.batchbar,.seg,#p-input,.dock,.credit,.err,.btn-copy,.idle{display:none!important}
+  .split{display:block;height:auto}.pane{overflow:visible}
+  .pane[data-hide="1"]{display:block!important}
+  #p-out{background:#fff}.out-in{padding:0}
+  .blk{border:1px solid #bbb;border-radius:0;margin-bottom:10px;break-inside:avoid}
+  .print-h{display:block;margin:0 0 12px;font-size:13px;color:#444}
+  .print-h b{font-size:17px;color:#000;display:block}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19h14"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><path d="M9 9h10v11H9zM15 9V5H5v11h4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 8v5M12 16.5v.01M10.3 4.2L2.8 18a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M5 20v-7M10 20V5M15 20v-10M20 20v-5"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 7L4 12l5 5M4 12h11a5 5 0 0 1 0 10h-2"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></symbol>
+</svg>
+
+<header class="appbar">
+  <a class="logo" href="#" aria-label="حَرّة، العمليات">
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <polygon points="7.5,1.5 12.5,4.4 12.5,10.2 7.5,13.1 2.5,10.2 2.5,4.4" fill="#D9A21B"/>
+      <polygon points="18.5,1.5 23.5,4.4 23.5,10.2 18.5,13.1 13.5,10.2 13.5,4.4" fill="#5B6974"/>
+      <polygon points="13,11.2 18,14.1 18,19.9 13,22.8 8,19.9 8,14.1" fill="#93A0A8"/>
+    </svg>
+    <b>حَرّة</b><span>العمليات</span>
+  </a>
+  <nav class="nav" aria-label="أقسام العمليات">
+    <span>الطلبات</span><span>المخزون</span><span>الجودة</span><span aria-current="page">آراء الضيوف</span><span>الفريق</span>
+  </nav>
+  <div class="who"><span class="nm">نوف السبيعي، الجودة</span><i aria-hidden="true">ن س</i></div>
+</header>
+
+<div class="batchbar">
+  <div class="crumb"><small>آراء الضيوف</small><h1>دفعة 8 – 14 نوفمبر</h1></div>
+  <div class="meta">الفروع: العليا، الملقا، جدة الروضة، الطائف الشفا</div>
+  <div class="tools">
+    <button class="btn btn-primary" id="go" type="button"><svg class="i"><use href="#i-play"/></svg>حلّل الدفعة</button>
+    <button class="btn btn-line" id="print" type="button" disabled><svg class="i"><use href="#i-print"/></svg>طباعة</button>
+    <button class="btn btn-line" id="download" type="button" disabled><svg class="i"><use href="#i-down"/></svg>تصدير</button>
+  </div>
+</div>
+
+<div class="seg" role="tablist" aria-label="عرض">
+  <button role="tab" id="t-in" aria-selected="true" aria-controls="p-input" type="button">الدفعة <bdi id="seg-n">20</bdi></button>
+  <button role="tab" id="t-out" aria-selected="false" aria-controls="p-out" type="button">النتائج</button>
+</div>
+
+<main class="split">
+  <section class="pane" id="p-input" aria-labelledby="in-h">
+    <div class="phead">
+      <h2 id="in-h">الآراء</h2>
+      <span class="cnt" id="count" aria-live="polite"></span>
+      <div class="mode" role="group" aria-label="طريقة العرض">
+        <button type="button" id="m-list" aria-pressed="true"><svg class="i"><use href="#i-list"/></svg>قائمة</button>
+        <button type="button" id="m-edit" aria-pressed="false"><svg class="i"><use href="#i-edit"/></svg>تحرير</button>
+      </div>
+    </div>
+    <div class="pane-in">
+      <ol class="rows" id="rows"></ol>
+      <div class="editor" id="editor" hidden>
+        <label class="sr" for="reviews">نص الآراء، رأي في كل سطر</label>
+        <textarea id="reviews" spellcheck="false" placeholder="الصق الآراء هنا، رأي واحد في كل سطر"></textarea>
+        <div class="edfoot">
+          <p id="hint">رأي واحد في كل سطر.</p>
+          <button class="btn btn-ghost" id="sample" type="button"><svg class="i"><use href="#i-undo"/></svg>استرجاع الدفعة</button>
+          <button class="btn btn-ghost" id="clear" type="button"><svg class="i"><use href="#i-trash"/></svg>مسح الكل</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="p-out" data-hide="1" aria-label="النتائج">
+    <div class="out-in">
+      <div class="print-h" id="print-h"></div>
+      <div id="err" class="err" role="alert" hidden>
+        <svg class="i"><use href="#i-alert"/></svg><p id="err-t"></p>
+        <button class="btn" id="retry" type="button">إعادة المحاولة</button>
+      </div>
+
+      <div class="idle" id="idle">
+        <p class="idle-msg" id="idle-msg" aria-live="polite"></p>
+        <div class="sk"><i class="big"></i><i style="width:70%"></i><i style="width:100%"></i><i style="width:45%"></i></div>
+        <div class="sk"><i style="width:30%"></i><i style="width:92%"></i><i style="width:76%"></i><i style="width:84%"></i></div>
+        <div class="sk"><i style="width:26%"></i><i style="width:100%"></i><i style="width:60%"></i></div>
+      </div>
+
+      <div id="out" hidden>
+        <section class="blk" aria-labelledby="k-h">
+          <h2 id="k-h">مؤشر الرضا</h2>
+          <div class="kpi">
+            <div>
+              <div class="score"><b id="score">0</b><span>/ 100</span></div>
+              <div class="score-l" id="score-l"></div>
+            </div>
+            <div>
+              <svg id="field" role="img" aria-label=""></svg>
+              <div class="fieldcap">كل خلية رأي واحد</div>
+            </div>
+          </div>
+          <div class="dist">
+            <svg id="stack" role="img" aria-label="توزيع المشاعر" preserveAspectRatio="none" viewBox="0 0 100 10"></svg>
+            <div class="legend">
+              <div class="lg" style="--c:var(--pos)"><b id="pp"></b><span id="pc"></span></div>
+              <div class="lg" style="--c:var(--neu)"><b id="np"></b><span id="nc"></span></div>
+              <div class="lg" style="--c:var(--neg)"><b id="gp"></b><span id="gc"></span></div>
+            </div>
+            <p class="note" id="mismatch" hidden></p>
+          </div>
+        </section>
+
+        <section class="blk" aria-labelledby="u-h">
+          <h2 id="u-h">حالات عاجلة <bdi id="u-n"></bdi></h2>
+          <table class="utab" id="utab">
+            <thead><tr><th>الرأي</th><th>المشكلة</th><th>الإجراء خلال 24 ساعة</th></tr></thead>
+            <tbody id="urgent"></tbody>
+          </table>
+          <p class="none" id="u-none" hidden>لا توجد حالات عاجلة في هذه الدفعة.</p>
+        </section>
+
+        <section class="blk" aria-labelledby="t-h">
+          <h2 id="t-h">المحاور <bdi id="t-n"></bdi></h2>
+          <div class="themes-grid">
+            <svg id="themes-svg" role="img" aria-label=""></svg>
+            <ul class="quotes" id="quotes"></ul>
+          </div>
+        </section>
+
+        <section class="blk" aria-labelledby="a-h">
+          <h2 id="a-h">إجراءات مقترحة</h2>
+          <ol class="todo" id="actions"></ol>
+        </section>
+
+        <section class="blk" aria-labelledby="r-h">
+          <h2 id="r-h">مسودات الردود <bdi id="r-n"></bdi></h2>
+          <div id="replies"></div>
+        </section>
+        <p class="stamp" id="stamp"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="dock">
+  <button class="btn btn-primary" id="go-m" type="button"><svg class="i"><use href="#i-play"/></svg>حلّل الدفعة</button>
+  <button class="btn btn-line" id="print-m" type="button" aria-label="طباعة" disabled><svg class="i"><use href="#i-print"/></svg></button>
+  <button class="btn btn-line" id="download-m" type="button" aria-label="تصدير" disabled><svg class="i"><use href="#i-down"/></svg></button>
+</div>
+
+<footer class="credit">
+  <span class="rights">جميع الحقوق محفوظة</span>
+  <a href="https://yazeedalharthi.sa/#services">تصميم وتطوير <img src="/assets/yh-mark-on-light.svg" alt="" width="24" height="16"> يزيد الحارثي</a>
+  <a href="https://yazeedalharthi.sa/#services">تبي نسخة لمنشأتك؟ اطلب عرض سعر</a>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var SAMPLE = [
+'السبانيش لاتيه في فرع العليا ولا غلطة، ثابت كل مرة وطعمه موزون',
+'انتظرت 25 دقيقة على كوب V60 والمحل شبه فاضي، والكاشير مشغول بجواله',
+'Best cortado in Riyadh honestly, the beans taste fresh and the barista knows his stuff',
+'كيكة التمر خيال، بس 32 ريال للقطعة كثير شوي',
+'لقيت شعرة في الكرواسان وقلت للموظف وما اهتم، ما راح أرجع لين يتعدل الوضع',
+'الجلسات في فرع الملقا مريحة والإضاءة حلوة للمذاكرة، بس الواي فاي يقطع كل شوي',
+'طلبت توصيل ووصل الآيس لاتيه ذايب الثلج وماسخ، والكوب يسرّب',
+'الموظفة في فرع جدة الروضة ذوق وابتسامتها تفتح النفس، شكرًا لها',
+'Ordered through the app, got charged twice for the same order and nobody answered my email',
+'القهوة عادية، لا سيئة ولا مميزة، والمكان نظيف',
+'دورة المياه في فرع الطائف وسخة والصابون خالص، ما يليق بمقهى بهالمستوى',
+'الآيس دريب الإثيوبي عندكم رهيب، نكهة التوت واضحة',
+'الأسعار صارت غالية مقارنة بالكمية، الكوب الوسط صغير مرة',
+'Nice vibe and good music, but the croissant was stale and cold',
+'الباريستا في الملقا شرح لي الفرق بين المحاصيل بكل صبر، تجربة ممتازة',
+'ولدي شرب الحليب البارد وطلع طعمه حامض، أتوقع منتهي، لازم تشيكون الثلاجة',
+'زحمة الويكند فوق الوصف وما فيه أحد ينظم الطابور',
+'التشيز كيك طري ومو حالي زيادة، أفضل حلى جربته عندكم',
+'ساندويتش الحلوم بالزعتر لذيذ، بس الفطور يخلص بدري قبل الساعة 10',
+'The staff at the Taif branch were rude when I asked to change my order, not coming back'
+].join('\n');
+
+var MAX_INPUT = 5000, TIMEOUT = 30000;
+var COL = {pos:'#3D7A57', neu:'#978F80', neg:'#B4384A', idle:'#D3D7CF'};
+var SENT = {'إيجابي':'#3D7A57','سلبي':'#B4384A','مختلط':'#BF8226'};
+var $ = function(id){ return document.getElementById(id); };
+var ta = $('reviews'), GO = [$('go'), $('go-m')];
+var busy = false, last = null, lastLines = [], lastCounts = null, urgentLines = {};
+var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+var desk = matchMedia('(min-width:980px)');
+
+function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function icon(id){ var s = document.createElementNS(SVGNS, 'svg'); s.setAttribute('class', 'i'); s.setAttribute('aria-hidden', 'true'); var u = document.createElementNS(SVGNS, 'use'); u.setAttribute('href', '#' + id); s.appendChild(u); return s; }
+function bdi(t){ return el('bdi', null, t); }
+var SVGNS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs){ var e = document.createElementNS(SVGNS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+
+function lines(){ return ta.value.split(/\r?\n/).map(function(s){ return s.trim(); }).filter(Boolean); }
+function payload(ls){ return 'عدد الآراء: ' + ls.length + '\nالآراء (كل سطر رأي مستقل):\n' + ls.join('\n'); }
+function fmt(n){ return n.toLocaleString('en'); }
+
+/* ---------- input pane ---------- */
+function renderRows(){
+  var R = $('rows'), ls = lines(); R.textContent = '';
+  if (!ls.length){ var e = el('li', 'empty-list', 'لا توجد آراء. افتح «تحرير» والصق الآراء، رأي واحد في كل سطر.'); e.style.display = 'block'; R.appendChild(e); return; }
+  ls.forEach(function(t, i){
+    var li = el('li'); li.id = 'row-' + (i + 1);
+    var tx = el('span', 'tx'); tx.dir = 'auto'; tx.textContent = t;
+    li.append(el('span', 'n', String(i + 1)), tx);
+    if (urgentLines[i]) { li.classList.add('urg'); tx.appendChild(el('span', 'tag', 'عاجل')); }
+    li.addEventListener('click', function(){ setMode('edit'); });
+    R.appendChild(li);
+  });
+}
+function setMode(m){
+  var edit = m === 'edit';
+  $('editor').hidden = !edit; $('rows').hidden = edit;
+  $('m-edit').setAttribute('aria-pressed', edit); $('m-list').setAttribute('aria-pressed', !edit);
+  if (edit) ta.focus({preventScroll:true}); else renderRows();
+}
+function onInput(){
+  var ls = lines(), len = payload(ls).length, c = $('count');
+  c.textContent = ''; c.append(bdi(String(ls.length)), ' رأي، ', bdi(fmt(len) + ' / ' + fmt(MAX_INPUT)), ' حرف');
+  c.classList.toggle('over', len > MAX_INPUT);
+  $('seg-n').textContent = ls.length;
+  var h = $('hint');
+  if (len > MAX_INPUT) { h.textContent = 'تجاوزت 5,000 حرف. احذف بعض الآراء.'; h.className = 'warn'; }
+  else if (ls.length < 2) { h.textContent = 'أضف رأيين على الأقل.'; h.className = 'warn'; }
+  else { h.textContent = 'رأي واحد في كل سطر.'; h.className = ''; }
+  var dis = busy || len > MAX_INPUT || ls.length < 2;
+  GO.forEach(function(b){ b.disabled = dis; });
+  if (!busy && !last) setIdle();
+}
+function setIdle(){
+  var n = lines().length;
+  $('idle-msg').textContent = busy ? ('جاري تحليل ' + n + ' رأي…') : (n >= 2 ? ('الدفعة فيها ' + n + ' رأي ولم تُحلَّل بعد.') : 'الدفعة فارغة.');
+}
+
+/* ---------- mobile tabs ---------- */
+function tab(which){
+  var out = which === 'out';
+  $('t-in').setAttribute('aria-selected', !out); $('t-out').setAttribute('aria-selected', out);
+  $('p-input').dataset.hide = out ? '1' : '0'; $('p-out').dataset.hide = out ? '0' : '1';
+  if (!desk.matches) scrollTo(0, 0);
+  if (out && last) { drawField(lastLines.length, lastCounts, true); drawThemes(last.themes); }
+}
+
+/* ---------- hex field ---------- */
+function hexPts(cx, cy, r){ var p = []; for (var i = 0; i < 6; i++){ var a = Math.PI/180*(60*i - 90); p.push((cx + r*Math.cos(a)).toFixed(1) + ',' + (cy + r*Math.sin(a)).toFixed(1)); } return p.join(' '); }
+function drawField(n, c, still){
+  var svg = $('field'); svg.textContent = '';
+  var W = svg.parentNode.clientWidth; if (!W) return;
+  var r = n <= 30 ? 12 : n <= 60 ? 9 : 7, gap = 2.5, w = Math.sqrt(3) * r, step = w + gap;
+  var cols = Math.max(1, Math.floor((W - w/2) / step)), rows = Math.ceil(n / cols); cols = Math.ceil(n / rows);
+  var rowH = 1.5 * r + gap, H = Math.ceil((rows - 1) * rowH + 2 * r + 2);
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('height', H);
+  var fills = []; [['pos', c.pos], ['neu', c.neu], ['neg', c.neg]].forEach(function(p){ for (var k = 0; k < p[1]; k++) fills.push(COL[p[0]]); });
+  for (var i = 0; i < n; i++){
+    var row = Math.floor(i / cols), col = i % cols;
+    var poly = svgEl('polygon', {points: hexPts(W - (w/2 + 1) - col*step - (row % 2 ? step/2 : 0), r + 1 + row*rowH, r), fill: (still || reduce) ? (fills[i] || COL.neu) : COL.idle});
+    svg.appendChild(poly);
+    if (!(still || reduce)) (function(p, f, d){ setTimeout(function(){ p.setAttribute('fill', f); }, d); })(poly, fills[i] || COL.neu, 80 + i * 30);
+  }
+  svg.setAttribute('aria-label', c.pos + ' إيجابي، ' + c.neu + ' محايد، ' + c.neg + ' سلبي');
+}
+function normalize(o, n){
+  var raw = [o.positive, o.neutral, o.negative], sum = raw[0] + raw[1] + raw[2];
+  if (!sum) return {pos:0, neu:n, neg:0, sum:0};
+  var ex = raw.map(function(v){ return v * n / sum; }), fl = ex.map(Math.floor), left = n - fl[0] - fl[1] - fl[2];
+  ex.map(function(v, i){ return [v - fl[i], i]; }).sort(function(a, b){ return b[0] - a[0]; }).slice(0, left).forEach(function(x){ fl[x[1]]++; });
+  return {pos:fl[0], neu:fl[1], neg:fl[2], sum:sum};
+}
+
+/* ---------- verbatim check: returns 0-based line index or -1 ---------- */
+function norm(s){
+  return String(s || '').normalize('NFC').replace(/[ً-ٰٟـ]/g, '')
+    .replace(/[“”«»"]/g, '"').replace(/[‘’`]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
+}
+function stripEdges(s){ return s.replace(/^[\s"'.…،,:-]+|[\s"'.…،,:-]+$/g, ''); }
+function findLine(q, ls){
+  var nq = stripEdges(norm(q)); if (nq.length < 2) return -1;
+  for (var i = 0; i < ls.length; i++) if (norm(ls[i]).indexOf(nq) !== -1) return i;
+  return -1;
+}
+function vchip(idx){
+  if (idx < 0) {
+    var s = el('span', 'vf bad'); s.append(icon('i-alert'), 'غير موجود في الدفعة');
+    s.title = 'هذا الاقتباس لا يطابق نص أي رأي في الدفعة. راجعه قبل اعتماده.'; return s;
+  }
+  var b = el('button', 'vf ok'); b.type = 'button'; b.append(icon('i-check'), 'سطر ', bdi(String(idx + 1)));
+  b.title = 'الاقتباس مطابق حرفيًا. اعرض السطر في الدفعة';
+  b.addEventListener('click', function(){ jump(idx); }); return b;
+}
+function jump(idx){
+  setMode('list'); if (!desk.matches) tab('in');
+  var li = $('row-' + (idx + 1)); if (!li) return;
+  li.scrollIntoView({block:'center', behavior: reduce ? 'auto' : 'smooth'});
+  li.classList.add('hit'); setTimeout(function(){ li.classList.remove('hit'); }, 1600);
+}
+
+/* ---------- sanitize ---------- */
+function str(v, max){ return typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, max) : ''; }
+function int(v, lo, hi){ var n = Math.round(Number(v)); return isFinite(n) ? Math.min(hi, Math.max(lo, n)) : lo; }
+function arr(v){ return Array.isArray(v) ? v : []; }
+function sanitize(d){
+  if (!d || typeof d !== 'object') return null;
+  var o = d.overall || {};
+  return {
+    overall: {positive:int(o.positive,0,500), neutral:int(o.neutral,0,500), negative:int(o.negative,0,500)},
+    score: int(d.score, 0, 100),
+    themes: arr(d.themes).map(function(t){ t = t || {}; var s = str(t.sentiment, 10);
+      return {name:str(t.name,40), sentiment: SENT[s] ? s : 'مختلط', mentions:int(t.mentions,0,500), example:str(t.example,220)}; })
+      .filter(function(t){ return t.name; }).sort(function(a, b){ return b.mentions - a.mentions; }).slice(0, 8),
+    urgent: arr(d.urgent).map(function(u){ u = u || {}; return {quote:str(u.quote,260), issue:str(u.issue,160), action:str(u.action,220)}; })
+      .filter(function(u){ return u.quote || u.issue; }).slice(0, 5),
+    top_actions: arr(d.top_actions).map(function(a){ return str(a, 240); }).filter(Boolean).slice(0, 3),
+    reply_drafts: arr(d.reply_drafts).map(function(r){ r = r || {}; return {to:str(r.to,260), reply: typeof r.reply === 'string' ? r.reply.trim().slice(0, 700) : ''}; })
+      .filter(function(r){ return r.reply; }).slice(0, 4)
+  };
+}
+
+/* ---------- render ---------- */
+function pct(v, s){ return s ? Math.round(v * 100 / s) : 0; }
+function band(s){ return s >= 75 ? ['hi', 'رضا مرتفع'] : s >= 55 ? ['mid', 'رضا متوسط'] : ['lo', 'رضا منخفض']; }
+function quoted(t){ var f = document.createDocumentFragment(); var b = bdi(t); f.append('«', b, '»'); return f; }
+
+function drawStack(c, n){
+  var svg = $('stack'); svg.textContent = ''; var x = 100;
+  [[c.pos, COL.pos], [c.neu, COL.neu], [c.neg, COL.neg]].forEach(function(p){ var w = n ? p[0] * 100 / n : 0; if (!w) return; x -= w;
+    svg.appendChild(svgEl('rect', {x:x.toFixed(2), y:0, width:Math.max(0, w - .4).toFixed(2), height:10, fill:p[1]})); });
+}
+function drawThemes(themes){
+  var svg = $('themes-svg'); svg.textContent = '';
+  var W = svg.parentNode.clientWidth; if (!W) return;
+  if (desk.matches && innerWidth >= 1100) W = (W - 28) / 2;
+  if (!themes.length) { svg.setAttribute('height', 0); return; }
+  var rowH = 44, H = themes.length * rowH, max = Math.max.apply(null, themes.map(function(t){ return t.mentions; }).concat([1]));
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('height', H); svg.style.maxWidth = W + 'px';
+  themes.forEach(function(t, i){
+    var y = i * rowH, color = SENT[t.sentiment];
+    var name = svgEl('text', {x:W, y:y + 15, 'text-anchor':'start', direction:'rtl', 'font-size':13.5, 'font-weight':500, fill:'#1E272E', 'font-family':'Readex Pro, sans-serif'}); name.textContent = t.name;
+    var meta = svgEl('text', {x:0, y:y + 15, 'text-anchor':'end', direction:'rtl', 'font-size':12, fill:'#5D6872', 'font-family':'Readex Pro, sans-serif'}); meta.textContent = t.mentions + ' ذكر';
+    var track = svgEl('rect', {x:0, y:y + 22, width:W, height:9, fill:'#E7E9E3'});
+    var bw = Math.max(3, W * t.mentions / max);
+    var bar = svgEl('rect', {x:W - bw, y:y + 22, width:bw, height:9, fill:color});
+    var tt = svgEl('title', {}); tt.textContent = t.name + ': ' + t.mentions + ' ذكر، ' + t.sentiment; bar.appendChild(tt);
+    svg.append(name, meta, track, bar);
+  });
+  svg.setAttribute('aria-label', themes.map(function(t){ return t.name + ' ' + t.mentions + ' ذكر ' + t.sentiment; }).join('، '));
+}
+
+function render(d, ls){
+  var n = ls.length, c = normalize(d.overall, n), s = c.sum || 1; lastCounts = c;
+  $('idle').hidden = true; $('out').hidden = false;
+  $('score').textContent = d.score;
+  var bd = band(d.score); $('score-l').textContent = bd[1] + '، ' + n + ' رأي'; $('score-l').className = 'score-l ' + bd[0];
+  drawField(n, c, false); drawStack(c, n);
+  $('pp').textContent = pct(d.overall.positive, s) + '%'; $('pc').textContent = 'إيجابي، ' + c.pos;
+  $('np').textContent = pct(d.overall.neutral, s) + '%';  $('nc').textContent = 'محايد، ' + c.neu;
+  $('gp').textContent = pct(d.overall.negative, s) + '%'; $('gc').textContent = 'سلبي، ' + c.neg;
+  var mm = $('mismatch');
+  if (c.sum && c.sum !== n) { mm.textContent = 'صُنّف ' + c.sum + ' من ' + n + ' سطر؛ النسب محسوبة على المصنّف.'; mm.hidden = false; } else mm.hidden = true;
+
+  urgentLines = {};
+  var U = $('urgent'); U.textContent = '';
+  $('u-n').textContent = d.urgent.length || '';
+  $('utab').hidden = !d.urgent.length; $('u-none').hidden = !!d.urgent.length;
+  d.urgent.forEach(function(u){
+    var idx = findLine(u.quote, ls); if (idx >= 0) urgentLines[idx] = 1;
+    var tr = el('tr'), q = el('td', 'q');
+    q.append(quoted(u.quote), vchip(idx));
+    var a = el('td', 'iss', u.issue || 'غير محددة'); a.dataset.l = 'المشكلة';
+    var b = el('td', 'act', u.action || 'غير محدد'); b.dataset.l = 'الإجراء';
+    tr.append(q, a, b); U.appendChild(tr);
+  });
+
+  $('t-n').textContent = d.themes.length || '';
+  drawThemes(d.themes);
+  var Q = $('quotes'); Q.textContent = '';
+  d.themes.forEach(function(t){
+    if (!t.example) return;
+    var li = el('li'); li.style.setProperty('--c', SENT[t.sentiment]);
+    li.append(el('div', 't', t.name + '، ' + t.sentiment));
+    var q = el('p', 'q'); q.append(quoted(t.example), vchip(findLine(t.example, ls)));
+    li.appendChild(q); Q.appendChild(li);
+  });
+
+  var A = $('actions'); A.textContent = '';
+  if (!d.top_actions.length) A.appendChild(el('li', null, 'لا توجد إجراءات لهذه الدفعة.'));
+  d.top_actions.forEach(function(a){ A.appendChild(el('li', null, a)); });
+
+  var R = $('replies'); R.textContent = '';
+  $('r-n').textContent = d.reply_drafts.length || '';
+  if (!d.reply_drafts.length) R.appendChild(el('p', 'none', 'لا توجد آراء تحتاج ردًا.'));
+  d.reply_drafts.forEach(function(r){
+    var box = el('article', 'reply'), to = el('p', 'to');
+    to.append('ردًا على ', quoted(r.to), vchip(findLine(r.to, ls)));
+    var body = el('p', 'body', r.reply); body.dir = 'auto';
+    var rf = el('div', 'rf'), b = el('button', 'btn btn-line btn-copy'); b.type = 'button';
+    setCopyLabel(b, 'نسخ الرد');
+    b.addEventListener('click', function(){ copy(r.reply, b, 'نسخ الرد'); });
+    rf.appendChild(b); box.append(to, body, rf); R.appendChild(box);
+  });
+
+  var now = new Date(), hm = now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+  $('stamp').textContent = ''; $('stamp').append('آخر تحليل ', bdi(hm), '، ', bdi(String(n)), ' رأي');
+  var ph = $('print-h'); ph.textContent = ''; ph.append(el('b', null, 'حَرّة، آراء الضيوف: دفعة 8 – 14 نوفمبر'), n + ' رأي، طُبع ' + now.toLocaleDateString('ar-SA-u-nu-latn-ca-gregory', {year:'numeric', month:'long', day:'numeric'}));
+  ['print', 'download', 'print-m', 'download-m'].forEach(function(id){ $(id).disabled = false; });
+  renderRows();
+}
+
+/* ---------- copy / export ---------- */
+function setCopyLabel(b, t){ b.textContent = ''; b.append(icon('i-copy'), t); }
+function copy(text, btn, label){
+  function done(ok){ setCopyLabel(btn, ok ? 'تم النسخ' : 'تعذّر النسخ'); btn.classList.toggle('done', ok); setTimeout(function(){ setCopyLabel(btn, label); btn.classList.remove('done'); }, 1800); }
+  function fallback(){ try { var t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); var ok = document.execCommand('copy'); t.remove(); return ok; } catch (e) { return false; } }
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ done(fallback()); });
+  else done(fallback());
+}
+function summaryText(){
+  if (!last) return '';
+  var d = last, c = lastCounts, s = c.sum || 1, ls = lastLines, out = [];
+  function ref(q){ var i = findLine(q, ls); return i < 0 ? ' [غير موجود في الدفعة]' : ' [سطر ' + (i + 1) + ']'; }
+  out.push('حَرّة، آراء الضيوف: دفعة 8 – 14 نوفمبر', 'تاريخ التصدير: ' + new Date().toLocaleDateString('en-GB'), 'عدد الآراء: ' + ls.length, '');
+  out.push('مؤشر الرضا: ' + d.score + ' / 100 (' + band(d.score)[1] + ')');
+  out.push('إيجابي ' + pct(d.overall.positive, s) + '% (' + c.pos + ')، محايد ' + pct(d.overall.neutral, s) + '% (' + c.neu + ')، سلبي ' + pct(d.overall.negative, s) + '% (' + c.neg + ')', '');
+  out.push('حالات عاجلة:'); if (!d.urgent.length) out.push('- لا توجد');
+  d.urgent.forEach(function(u){ out.push('- «' + u.quote + '»' + ref(u.quote), '  المشكلة: ' + u.issue, '  الإجراء: ' + u.action); }); out.push('');
+  out.push('المحاور:'); d.themes.forEach(function(t){ out.push('- ' + t.name + ': ' + t.mentions + ' ذكر، ' + t.sentiment + (t.example ? '، «' + t.example + '»' + ref(t.example) : '')); }); out.push('');
+  out.push('إجراءات مقترحة:'); d.top_actions.forEach(function(a, i){ out.push((i + 1) + '. ' + a); }); out.push('');
+  if (d.reply_drafts.length){ out.push('مسودات الردود:'); d.reply_drafts.forEach(function(r){ out.push('ردًا على «' + r.to + '»' + ref(r.to), r.reply, ''); }); }
+  return out.join('\n');
+}
+function download(){
+  var blob = new Blob(['﻿' + summaryText()], {type:'text/plain;charset=utf-8'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'harra-reviews-2026-11-08_14.txt';
+  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+/* ---------- request ---------- */
+var MSG = {
+  429:'وصلت حد التحليلات المسموح حاليًا. أعد المحاولة بعد دقائق.',
+  502:'خدمة التحليل لم تستجب. أعد المحاولة بعد لحظات.',
+  503:'خدمة التحليل متوقفة مؤقتًا. أعد المحاولة لاحقًا.',
+  403:'تعذّر إرسال الطلب من هذه الصفحة. حدّث الصفحة ثم أعد المحاولة.',
+  400:'نص الدفعة فارغ أو غير صالح. تأكد أن كل رأي في سطر.',
+  timeout:'تجاوز التحليل 30 ثانية. أعد المحاولة أو قلّل عدد الآراء.',
+  empty:'وصلت نتيجة التحليل ناقصة. أعد المحاولة.',
+  net:'تعذّر الاتصال بالخدمة. تحقق من الاتصال ثم أعد المحاولة.'
+};
+MSG[415] = MSG[403];
+
+function setBusy(on){
+  busy = on; ta.readOnly = on;
+  $('idle').classList.toggle('loading', on);
+  GO.forEach(function(b){ b.lastChild.textContent = on ? 'جاري التحليل…' : 'حلّل الدفعة'; b.setAttribute('aria-busy', on); });
+  onInput(); setIdle();
+}
+function showErr(key){ $('err-t').textContent = MSG[key] || MSG[502]; $('err').hidden = false; }
+
+async function analyze(){
+  var ls = lines(); if (busy || ls.length < 2) return;
+  var text = payload(ls); if (text.length > MAX_INPUT) return;
+  $('err').hidden = true; last = null; urgentLines = {};
+  $('out').hidden = true; $('idle').hidden = false;
+  ['print', 'download', 'print-m', 'download-m'].forEach(function(id){ $(id).disabled = true; });
+  if (!desk.matches) tab('out');
+  setBusy(true);
+  var ctrl = new AbortController(), tm = setTimeout(function(){ ctrl.abort(); }, TIMEOUT);
+  try {
+    var r = await fetch('/api/demo', {method:'POST', headers:{'content-type':'application/json'}, signal: ctrl.signal,
+      body: JSON.stringify({demo:'reviews', messages:[{role:'user', text:text}]})});
+    if (!r.ok) { showErr(MSG[r.status] ? r.status : 502); return; }
+    var j = await r.json().catch(function(){ return null; });
+    var d = sanitize(j && j.data);
+    if (!d || (!d.themes.length && !(d.overall.positive + d.overall.neutral + d.overall.negative))) { showErr('empty'); return; }
+    last = d; lastLines = ls;
+    setBusy(false);
+    render(d, ls);
+  } catch (e) {
+    showErr(e && e.name === 'AbortError' ? 'timeout' : 'net');
+  } finally {
+    clearTimeout(tm);
+    if (busy) setBusy(false);
+  }
+}
+
+GO.forEach(function(b){ b.addEventListener('click', analyze); });
+$('retry').addEventListener('click', analyze);
+$('m-list').addEventListener('click', function(){ setMode('list'); });
+$('m-edit').addEventListener('click', function(){ setMode('edit'); });
+$('t-in').addEventListener('click', function(){ tab('in'); });
+$('t-out').addEventListener('click', function(){ tab('out'); });
+function resetOut(){ if (busy) return; last = null; urgentLines = {}; $('out').hidden = true; $('idle').hidden = false; $('err').hidden = true;
+  ['print', 'download', 'print-m', 'download-m'].forEach(function(id){ $(id).disabled = true; }); }
+$('sample').addEventListener('click', function(){ ta.value = SAMPLE; resetOut(); onInput(); });
+$('clear').addEventListener('click', function(){ ta.value = ''; resetOut(); onInput(); ta.focus(); });
+ta.addEventListener('input', function(){ if (last) resetOut(); onInput(); });
+ta.addEventListener('keydown', function(e){ if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') analyze(); });
+['print', 'print-m'].forEach(function(id){ $(id).addEventListener('click', function(){ window.print(); }); });
+['download', 'download-m'].forEach(function(id){ $(id).addEventListener('click', download); });
+
+var rt; addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ if (last) { drawField(lastLines.length, lastCounts, true); drawThemes(last.themes); } }, 150); });
+
+ta.value = SAMPLE;
+onInput(); renderRows();
+})();
+</script>
+</body>
+</html>

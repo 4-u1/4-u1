@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3F4EF">
+<title>الأثل سكن | بوابة السكان وطلبات الصيانة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&family=Changa:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#F3F4EF; --white:#FFFFFF; --ink:#1D2620; --ink-2:#4A564E; --ink-3:#77837B;
+  --rule:#D9DED5; --rule-2:#E8EBE4; --athel:#2E4A3B; --athel-2:#3F6150; --tint:#E6ECE5;
+  --accent:#C8901A; --accent-ink:#7A5506;
+  --red:#A92F1D; --red-bg:#F6E4DF; --amber:#8C6200; --amber-bg:#F5ECD6; --calm:#3A6450; --calm-bg:#E2ECE5; --blue:#2F4A6B; --blue-bg:#E4EAF2;
+  --display:'Changa',system-ui,sans-serif; --body:'Almarai',system-ui,sans-serif;
+  --pad:16px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+svg.i{inline-size:18px;block-size:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.25}
+
+/* ---------- app bar ---------- */
+.bar{position:sticky;inset-block-start:0;z-index:5;background:rgba(243,244,239,.94);backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);border-block-end:1px solid var(--rule);padding-block-start:env(safe-area-inset-top)}
+.bar-in{max-inline-size:1200px;margin-inline:auto;display:flex;align-items:center;gap:12px;padding:10px var(--pad);padding-inline:max(var(--pad),env(safe-area-inset-right)) max(var(--pad),env(safe-area-inset-left))}
+.logo{display:flex;align-items:center;gap:8px;color:var(--athel);text-decoration:none}
+.logo svg{inline-size:34px;block-size:34px}
+.logo .wm{font-family:var(--display);font-weight:700;font-size:21px;line-height:1;letter-spacing:0}
+.logo .wm small{display:block;font-weight:500;font-size:11px;color:var(--ink-3);margin-block-start:3px}
+.switch{margin-inline-start:auto;display:flex;background:var(--rule-2);border-radius:8px;padding:3px}
+.switch button{border:0;background:transparent;padding:7px 12px;border-radius:6px;font-family:var(--display);font-size:14px;font-weight:500;color:var(--ink-2);display:flex;align-items:center;gap:6px;min-block-size:36px}
+.switch button[aria-selected="true"]{background:var(--white);color:var(--ink);box-shadow:0 1px 2px rgba(29,38,32,.12)}
+.switch .n{font-size:11px;background:var(--accent);color:#fff;border-radius:9px;padding:0 6px;line-height:18px;min-inline-size:18px;text-align:center}
+.switch .n:empty{display:none}
+
+main{flex:1;inline-size:100%}
+.wrap{max-inline-size:1200px;margin-inline:auto;padding-inline:max(var(--pad),env(safe-area-inset-right)) max(var(--pad),env(safe-area-inset-left))}
+
+/* ---------- resident: header with line drawing ---------- */
+.home{position:relative;background:var(--white);border-block-end:1px solid var(--rule);overflow:hidden}
+.home .wrap{position:relative;display:flex;flex-direction:column;justify-content:flex-start;min-block-size:190px;padding-block:18px 0}
+.home-art{position:absolute;inset-inline:0;inset-block-end:0;block-size:104px;inline-size:100%;color:var(--athel)}
+.greet{position:relative;z-index:1}
+.greet h1{font-size:26px;font-weight:600}
+.greet p{margin:2px 0 0;color:var(--ink-2);font-size:14px}
+@media (min-width:900px){.home .wrap{min-block-size:230px;padding-block-start:28px}.home-art{block-size:120px}.greet h1{font-size:32px}}
+
+.res{display:grid;gap:28px;padding-block:22px 36px}
+@media (min-width:900px){.res{grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:48px;padding-block:32px 48px}}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-block-end:12px}
+.sec-h h2{font-size:19px;font-weight:600}
+.sec-h span{font-size:13px;color:var(--ink-3)}
+
+.compose{background:var(--white);border:1px solid var(--rule);border-radius:10px}
+.compose textarea{display:block;inline-size:100%;min-block-size:118px;resize:vertical;border:0;border-radius:10px 10px 0 0;background:transparent;padding:14px 16px;line-height:1.75;font-size:16px}
+.compose textarea:focus{outline:none}
+.compose:focus-within{border-color:var(--athel-2);box-shadow:0 0 0 3px var(--tint)}
+.compose-foot{display:flex;flex-wrap:wrap;align-items:center;gap:10px;border-block-start:1px solid var(--rule-2);padding:10px 12px}
+.loc{display:flex;align-items:center;gap:6px;color:var(--ink-2);flex:1 1 200px;min-inline-size:0}
+.loc select{flex:1;min-inline-size:0;border:0;background:transparent;font-size:14px;padding:8px 2px;min-block-size:40px;color:var(--ink)}
+.count{font-size:12px;color:var(--ink-3)}
+.send{border:0;border-radius:8px;background:var(--athel);color:#fff;font-family:var(--display);font-weight:600;font-size:16px;padding:0 20px;min-block-size:44px;display:inline-flex;align-items:center;gap:8px}
+.send:hover{background:#243D30}.send:active{transform:translateY(1px)}
+.send:disabled{opacity:.6;cursor:progress}
+
+.common{margin-block-start:22px}
+.common h3{font-size:14px;font-weight:600;color:var(--ink-2);margin-block-end:4px}
+.common ul{list-style:none;margin:0;padding:0}
+.common li+li{border-block-start:1px solid var(--rule-2)}
+.common button{display:flex;align-items:center;gap:12px;inline-size:100%;border:0;background:transparent;text-align:start;padding:12px 2px;font-size:15px;color:var(--ink)}
+.common button:hover{color:var(--athel)}
+.common button .ic{inline-size:34px;block-size:34px;border-radius:8px;background:var(--tint);color:var(--athel);display:grid;place-items:center;flex:none}
+.common button .tx{flex:1}
+.common button .go{color:var(--ink-3)}
+
+/* ---------- ticket receipt (signature element) ---------- */
+#slipArea:empty{display:none}
+#slipArea{margin-block-end:22px}
+.slip{position:relative;background:var(--white);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.slip-top{display:flex;align-items:center;gap:10px;background:var(--athel);color:#fff;padding:12px 16px}
+.slip-top .ok{inline-size:28px;block-size:28px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center}
+.slip-top b{font-family:var(--display);font-weight:600;font-size:16px}
+.slip-top span{margin-inline-start:auto;font-size:13px;opacity:.8}
+.slip-body{position:relative;padding:16px 16px 6px}
+.slip-no{font-size:13px;color:var(--ink-3)}
+.slip-no bdi{font-family:var(--display);font-weight:600;color:var(--ink);font-size:15px}
+.slip h3{font-size:21px;font-weight:600;margin:6px 0 14px;padding-inline-end:104px}
+.stamp{position:absolute;inset-inline-end:16px;inset-block-start:16px;transform:rotate(-8deg);border:2.5px solid currentColor;border-radius:4px;padding:4px 11px 5px;font-family:var(--display);font-weight:700;font-size:23px;line-height:1;text-align:center;background:var(--white)}
+.stamp small{display:block;font-size:10px;font-weight:500;margin-block-start:3px}
+.p-عاجل{color:var(--red)}.p-عالي{color:var(--amber)}.p-عادي{color:var(--calm)}
+@media (prefers-reduced-motion:no-preference){.stamp.in{animation:thud .4s cubic-bezier(.2,1.6,.4,1) both}@keyframes thud{0%{transform:rotate(-8deg) scale(1.8);opacity:0}100%{transform:rotate(-8deg) scale(1);opacity:1}}}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:0 0 14px}
+.facts div{min-inline-size:0}
+.facts dt{font-size:12px;color:var(--ink-3)}
+.facts dd{margin:0;font-weight:700;font-size:14px;display:flex;align-items:center;gap:5px}
+.policy{display:flex;gap:8px;align-items:flex-start;background:var(--red-bg);color:#6B1C10;padding:9px 11px;font-size:13px;border-radius:6px;margin-block-end:14px}
+.track{display:flex;margin:4px 0 16px;list-style:none;padding:0}
+.track li{flex:1;position:relative;font-size:12px;color:var(--ink-3);padding-block-start:16px}
+.track li::before{content:"";position:absolute;inset-block-start:4px;inset-inline:0;block-size:2px;background:var(--rule)}
+.track li::after{content:"";position:absolute;inset-block-start:0;inset-inline-start:0;inline-size:10px;block-size:10px;border-radius:50%;background:var(--white);border:2px solid var(--rule)}
+.track li.on{color:var(--ink);font-weight:700}
+.track li.on::before{background:var(--athel)}
+.track li.on::after{background:var(--athel);border-color:var(--athel)}
+.blk{border-block-start:1px solid var(--rule-2);padding-block:12px}
+.blk h4{font-family:var(--display);font-weight:600;font-size:14px;margin:0 0 6px}
+.steps{margin:0;padding-inline-start:18px;font-size:14px}
+.steps li{margin-block-end:4px}
+.steps li::marker{color:var(--athel);font-family:var(--display);font-weight:600}
+.msg{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.msg .av{inline-size:30px;block-size:30px;border-radius:50%;background:var(--tint);color:var(--athel);display:grid;place-items:center;flex:none}
+.msg p{margin:0;background:var(--ground);border-radius:4px 12px 12px 12px;padding:9px 12px}
+.msg small{display:block;font-size:12px;color:var(--ink-3);margin-block-end:3px}
+.slip-acts{display:flex;gap:8px;padding:12px 16px 16px;border-block-start:1px solid var(--rule-2)}
+.btn{border:1px solid var(--rule);background:var(--white);color:var(--ink);border-radius:8px;padding:0 14px;font-family:var(--display);font-weight:500;font-size:14px;min-block-size:40px}
+.btn:hover{border-color:var(--athel-2);color:var(--athel)}
+.btn.pri{background:var(--athel);border-color:var(--athel);color:#fff}
+.btn.pri:hover{background:#243D30;color:#fff}
+
+.skel{padding:16px}
+.skel p{margin:0 0 14px;font-family:var(--display);color:var(--ink-2);font-size:14px}
+.sk{block-size:12px;border-radius:3px;background:var(--rule-2);margin-block-end:10px;position:relative;overflow:hidden}
+.sk.t{block-size:20px;inline-size:60%}.sk.s{inline-size:40%}
+@media (prefers-reduced-motion:no-preference){.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:sweep 1.2s linear infinite}@keyframes sweep{from{transform:translateX(100%)}to{transform:translateX(-100%)}}}
+.err{background:var(--white);border:1px solid var(--rule);border-inline-start:3px solid var(--accent);border-radius:8px;padding:14px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.err p{margin:0;flex:1 1 220px;font-size:14px}
+
+/* side column */
+aside .sec-h{margin-block-end:4px}
+.mine{list-style:none;margin:0 0 28px;padding:0}
+.mine li+li{border-block-start:1px solid var(--rule-2)}
+.mine button{display:grid;grid-template-columns:1fr auto;gap:2px 10px;inline-size:100%;border:0;background:transparent;text-align:start;padding:12px 0}
+.mine button:hover .t{color:var(--athel)}
+.mine .t{font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mine .s{font-size:12px;color:var(--ink-3)}
+.mine .st{grid-row:1/3;grid-column:2;align-self:center}
+.empty{color:var(--ink-3);font-size:14px;padding:12px 0}
+.st{font-family:var(--display);font-size:12px;font-weight:500;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.st-new{background:var(--blue-bg);color:var(--blue)}.st-doing{background:var(--amber-bg);color:var(--amber)}.st-done{background:var(--calm-bg);color:var(--calm)}
+.office{border-block-start:2px solid var(--ink);padding-block-start:12px;font-size:14px}
+.office h2{font-size:16px;font-weight:600;margin-block-end:8px}
+.office dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.office dt{color:var(--ink-3)}
+.office dd{margin:0}
+
+/* ---------- supervisor console ---------- */
+.con{padding-block:20px 40px}
+.con-h{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin-block-end:18px}
+.con-h h1{font-size:26px;font-weight:600}
+.con-h p{margin:2px 0 0;color:var(--ink-3);font-size:13px}
+.con-h .acts{margin-inline-start:auto;display:flex;gap:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid var(--rule);margin-block-end:16px}
+@media (min-width:700px){.stats{grid-template-columns:repeat(5,1fr)}}
+.stat{padding:12px 0;padding-inline-end:12px}
+.stat+.stat{border-inline-start:1px solid var(--rule-2);padding-inline-start:14px}
+@media (max-width:699px){.stat:nth-child(4){border-inline-start:0;padding-inline-start:0}.stat:nth-child(n+4){border-block-start:1px solid var(--rule-2)}}
+.stat b{display:block;font-family:var(--display);font-size:30px;font-weight:500;line-height:1.1}
+.stat span{font-size:12px;color:var(--ink-3)}
+.stat.hot b{color:var(--red)}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-block-end:10px}
+.tools .q{grid-column:1/-1;position:relative}
+.tools .q svg{position:absolute;inset-inline-start:11px;inset-block-start:13px;color:var(--ink-3)}
+.tools input,.tools select{inline-size:100%;border:1px solid var(--rule);border-radius:8px;background:var(--white);padding:9px 11px;font-size:15px;min-block-size:44px}
+.tools .q input{padding-inline-start:36px}
+.tools input:focus,.tools select:focus{border-color:var(--athel-2);outline:none;box-shadow:0 0 0 3px var(--tint)}
+@media (min-width:860px){.tools{grid-template-columns:2fr 1fr 1fr}.tools .q{grid-column:auto}}
+.rules{font-size:13px;color:var(--ink-2);margin-block-end:16px}
+.rules summary{cursor:pointer;font-family:var(--display);font-weight:500;color:var(--athel);font-size:14px;display:inline-flex;align-items:center;gap:6px;min-block-size:32px}
+.rules ul{margin:6px 0 0;padding-inline-start:18px;max-inline-size:72ch}
+.rules li{margin-block-end:4px}
+.rules .off{color:var(--ink-3)}
+.coltabs{display:flex;gap:4px;margin-block-end:12px;border-block-end:1px solid var(--rule)}
+.coltabs button{flex:1;border:0;background:transparent;padding:10px 4px;font-family:var(--display);font-size:14px;color:var(--ink-3);border-block-end:2px solid transparent;margin-block-end:-1px}
+.coltabs button[aria-pressed="true"]{color:var(--ink);font-weight:600;border-block-end-color:var(--athel)}
+.board{display:grid;gap:18px}
+@media (max-width:859px){.col-h{display:none}}
+@media (min-width:860px){.coltabs{display:none}.board{grid-template-columns:repeat(3,minmax(0,1fr))}.col[data-hide]{display:flex!important}}
+.col{display:flex;flex-direction:column;min-block-size:220px;border-radius:8px;transition:background .15s}
+.col[data-hide]{display:none}
+.col.over{background:var(--tint)}
+.col-h{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600;font-size:15px;padding-block:0 8px;border-block-end:2px solid var(--ink);margin-block-end:10px}
+.col-h .dot{inline-size:8px;block-size:8px;border-radius:50%}
+.col-h .c{margin-inline-start:auto;font-weight:500;color:var(--ink-3);font-size:13px}
+.cards{display:flex;flex-direction:column;gap:10px;flex:1}
+.col .none{font-size:13px;color:var(--ink-3);padding:18px 4px;border:1px dashed var(--rule);border-radius:8px;text-align:center}
+.card{position:relative;background:var(--white);border:1px solid var(--rule-2);border-radius:8px;padding:12px 14px 12px;padding-inline-start:16px;overflow:hidden}
+.card::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;inline-size:3px;background:var(--calm)}
+.card.pr-عاجل::before{background:var(--red)}.card.pr-عالي::before{background:var(--accent)}
+.card.fresh{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.card[draggable="true"]{cursor:grab}
+.card[draggable="true"]:hover{border-color:var(--rule)}
+.card.dragging{opacity:.4}
+.c-top{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3)}
+.c-top bdi{font-family:var(--display);font-weight:600;color:var(--ink-2)}
+.c-top .pri{margin-inline-start:auto;font-family:var(--display);font-weight:600;font-size:12px;padding:1px 8px;border-radius:4px}
+.pri.p-عاجل{background:var(--red-bg)}.pri.p-عالي{background:var(--amber-bg)}.pri.p-عادي{background:var(--calm-bg)}
+.c-title{font-size:16px;font-weight:600;margin:4px 0 4px}
+.c-meta{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:12.5px;color:var(--ink-2)}
+.c-meta span{display:inline-flex;align-items:center;gap:4px}
+.c-meta svg.i{inline-size:14px;block-size:14px}
+.c-rule{display:inline-flex;align-items:center;gap:4px;margin-block-start:7px;font-size:12px;color:var(--red);font-weight:700}
+.c-rule svg.i{inline-size:14px;block-size:14px}
+.sla{margin-block-start:9px;font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.sla .tr{flex:1;block-size:4px;background:var(--rule-2);border-radius:2px;overflow:hidden}
+.sla .fill{display:block;block-size:100%;background:var(--calm)}
+.sla.warn .fill{background:var(--accent)}.sla.late .fill{background:var(--red)}
+.sla.late{color:var(--red);font-weight:700}
+.c-more{margin-block-start:8px;font-size:13px}
+.c-more summary{cursor:pointer;color:var(--athel);font-family:var(--display);font-size:13px;min-block-size:28px;display:inline-flex;align-items:center}
+.c-more p{margin:6px 0}
+.c-more .q{color:var(--ink-2);border-inline-start:2px solid var(--rule);padding-inline-start:8px}
+.c-more ul{margin:4px 0;padding-inline-start:18px}
+.c-more h5{font-family:var(--display);font-weight:600;font-size:13px;margin:8px 0 2px}
+.c-acts{display:flex;gap:6px;margin-block-start:10px}
+.c-acts button{flex:1;border:1px solid var(--rule);background:var(--white);border-radius:6px;padding:0 8px;font-family:var(--display);font-size:13px;min-block-size:36px}
+.c-acts button:hover{border-color:var(--athel-2)}
+.c-acts button.fw{background:var(--athel);border-color:var(--athel);color:#fff}
+.c-acts button.fw:hover{background:#243D30}
+.reset{display:block;margin:18px auto 0;border:0;background:transparent;color:var(--ink-3);font-size:13px;text-decoration:underline;text-underline-offset:3px;min-block-size:36px}
+
+.toast{position:fixed;inset-inline:16px;inset-block-end:max(16px,env(safe-area-inset-bottom));max-inline-size:420px;margin-inline:auto;background:var(--ink);color:#F3F4EF;padding:12px 16px;border-radius:8px;font-size:14px;z-index:9;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.toast,.col{transition:none}}
+
+footer{background:var(--white);border-block-start:1px solid var(--rule);padding-block:16px max(16px,env(safe-area-inset-bottom));font-size:13px;color:var(--ink-3)}
+.foot-in{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
+.foot-in .cr{margin-inline-end:auto}
+footer a{color:var(--ink-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+footer a:hover{color:var(--ink);text-decoration:underline}
+footer img{block-size:16px;inline-size:auto}
+footer .quote{color:var(--athel);font-weight:700}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-ac" viewBox="0 0 24 24"><path d="M12 3v18M4.5 7.5l15 9M19.5 7.5l-15 9M9.5 4.5 12 6.5l2.5-2M9.5 19.5l2.5-2 2.5 2"/></symbol>
+    <symbol id="i-el" viewBox="0 0 24 24"><path d="M13 2.5 5.5 13H11l-1 8.5L17.5 11H12z"/></symbol>
+    <symbol id="i-pl" viewBox="0 0 24 24"><path d="M12 3c3 4.5 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 3-6.5 6-11z"/></symbol>
+    <symbol id="i-ca" viewBox="0 0 24 24"><path d="M6 21V3h11v18M4 21h16M14 12h.5"/></symbol>
+    <symbol id="i-cl" viewBox="0 0 24 24"><path d="M15 3l-4 9M6 12h11l-1.2 9H7.2zM10 16v2.5M13 16v2.5"/></symbol>
+    <symbol id="i-ot" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5l3 3 5.8-5.8a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.6-.4-.4-2.6z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15.5 5.2a3 3 0 0 1 0 5.6M17.5 14.8c1.7.6 2.7 2.2 3 4.7"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.2-7.5 9.5-4.3-1.3-7.5-4.9-7.5-9.5V6zM12 8.5v4.5M12 16v.2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M20 4 3.5 11l6.5 2.5L12.5 20zM10 13.5 20 4"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M14.5 6l-6 6 6 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-desk" viewBox="0 0 24 24"><path d="M4 18v-5a8 8 0 0 1 16 0v5M2.5 18h19M12 5V3"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="logo" href="#" aria-label="الأثل سكن">
+      <svg viewBox="0 0 40 40" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 36V12l2.5-3.5L10 12l2.5-3.5L15 12l2.5-3.5L20 12l2.5-3.5L25 12l2.5-3.5L30 12l2.5-3.5L35 12v24z"/>
+        <path d="M20 33V17M20 20.5c-2.8 0-5 1.6-6.4 4.4M20 20.5c2.8 0 5 1.6 6.4 4.4M20 25.5c-2.2 0-3.9 1.2-5 3.2M20 25.5c2.2 0 3.9 1.2 5 3.2M20 17c-1.8.2-3.2 1.4-4 3.2M20 17c1.8.2 3.2 1.4 4 3.2" stroke="#C8901A"/>
+        <path d="M5 36h30"/>
+      </svg>
+      <span class="wm">الأثل<small>سكن</small></span>
+    </a>
+    <div class="switch" role="tablist" aria-label="الحساب">
+      <button role="tab" id="tab-req" aria-controls="view-req" aria-selected="true">ساكن</button>
+      <button role="tab" id="tab-sup" aria-controls="view-sup" aria-selected="false" tabindex="-1">الإشراف <span class="n" id="newBadge"></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ======== resident portal ======== -->
+  <section id="view-req" role="tabpanel" aria-labelledby="tab-req">
+    <div class="home">
+      <svg class="home-art" viewBox="0 0 1200 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <defs>
+          <g id="villa">
+            <path d="M0 150V80l5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7V150"/>
+            <path d="M50 150v-26a10 10 0 0 1 20 0v26M60 114v36"/>
+            <rect x="16" y="96" width="20" height="24"/><path d="M16 104h20M16 112h20M26 96v24"/>
+            <rect x="84" y="96" width="20" height="24"/><path d="M84 104h20M84 112h20M94 96v24"/>
+          </g>
+          <g id="villa2">
+            <path d="M0 150V50l5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-7 5 7V150"/>
+            <path d="M0 98h90"/>
+            <rect x="14" y="62" width="18" height="24"/><path d="M14 70h18M14 78h18M23 62v24"/>
+            <rect x="58" y="62" width="18" height="24"/><path d="M58 70h18M58 78h18M67 62v24"/>
+            <path d="M32 150v-24a13 13 0 0 1 26 0v24"/>
+          </g>
+          <g id="tree">
+            <path d="M0 150v-46M0 104c-12 0-22 7-28 19M0 104c12 0 22 7 28 19M0 116c-9 0-16 5-21 13M0 116c9 0 16 5 21 13M0 96c-7 1-13 6-16 13M0 96c7 1 13 6 16 13M0 90c-4 1-7 4-9 9M0 90c4 1 7 4 9 9"/>
+          </g>
+        </defs>
+        <path d="M0 150h1200" />
+        <use href="#villa" x="40"/><use href="#tree" x="200"/><use href="#villa2" x="250"/>
+        <use href="#villa" x="380"/><use href="#tree" x="540"/><use href="#tree" x="590"/>
+        <use href="#villa2" x="640"/><use href="#villa" x="770"/><use href="#tree" x="930"/><use href="#villa2" x="980"/><use href="#tree" x="1110"/>
+        <rect x="808" y="96" width="20" height="24" fill="#C8901A" fill-opacity=".22" stroke="#C8901A"/>
+      </svg>
+      <div class="wrap">
+        <div class="greet">
+          <h1 id="greet">مرحبًا، سلطان</h1>
+          <p>فيلا 12، الحي الشرقي</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap res">
+      <div>
+        <div id="slipArea" aria-live="polite"></div>
+        <div class="sec-h"><h2>طلب صيانة جديد</h2><span id="count">0/500</span></div>
+        <form class="compose" id="reqForm" novalidate>
+          <label class="sr" for="reqText">وصف العطل</label>
+          <textarea id="reqText" maxlength="500" placeholder="وش العطل؟ اكتبه مثل ما تقوله للفني"></textarea>
+          <div class="compose-foot">
+            <label class="loc"><svg class="i"><use href="#i-pin"/></svg><span class="sr">الموقع</span>
+              <select id="reqLoc">
+                <option value="فيلا 12">فيلا 12 (منزلي)</option>
+                <option>النادي الرياضي</option><option>المسبح</option><option>المصلى</option>
+                <option>البوابة الرئيسية</option><option>مواقف السيارات</option><option>الحديقة</option>
+                <option value="">موقع آخر (أذكره في الوصف)</option>
+              </select>
+            </label>
+            <button class="send" id="sendBtn" type="submit"><svg class="i"><use href="#i-send"/></svg><span>أرسل الطلب</span></button>
+          </div>
+        </form>
+        <div class="common">
+          <h3>أعطال شائعة</h3>
+          <ul id="commonList"></ul>
+        </div>
+      </div>
+
+      <aside>
+        <div class="sec-h"><h2>طلباتي</h2></div>
+        <ul class="mine" id="mineList"></ul>
+        <div class="office">
+          <h2>مكتب الصيانة</h2>
+          <dl>
+            <dt>الطوارئ</dt><dd>على مدار الساعة</dd>
+            <dt>الأعمال الاعتيادية</dt><dd><bdi>7:00</bdi> ص إلى <bdi>10:00</bdi> م</dd>
+            <dt>الموقع</dt><dd>مبنى الخدمات، بجوار البوابة الرئيسية</dd>
+          </dl>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ======== supervisor console ======== -->
+  <section id="view-sup" role="tabpanel" aria-labelledby="tab-sup" hidden>
+    <div class="wrap con">
+      <div class="con-h">
+        <div><h1>طلبات الصيانة</h1><p id="supDate"></p></div>
+        <div class="acts"><button class="btn" id="exportBtn" type="button"><svg class="i" style="vertical-align:-4px"><use href="#i-down"/></svg> تصدير CSV</button></div>
+      </div>
+      <div class="stats" id="kpis"></div>
+      <div class="tools">
+        <div class="q"><label class="sr" for="fq">بحث</label><svg class="i"><use href="#i-search"/></svg><input type="search" id="fq" placeholder="بحث بالرقم أو العنوان أو الموقع"></div>
+        <div><label class="sr" for="fcat">التصنيف</label><select id="fcat"><option value="">كل التصنيفات</option></select></div>
+        <div><label class="sr" for="fpri">الأولوية</label><select id="fpri"><option value="">كل الأولويات</option><option>عاجل</option><option>عالي</option><option>عادي</option></select></div>
+      </div>
+      <details class="rules">
+        <summary><svg class="i"><use href="#i-shield"/></svg>سياسة التصعيد ومهلة الاستجابة</summary>
+        <ul id="rulesList"></ul>
+      </details>
+      <div class="coltabs" role="group" aria-label="الحالة">
+        <button type="button" data-col="new" aria-pressed="true">جديد</button>
+        <button type="button" data-col="doing" aria-pressed="false">قيد التنفيذ</button>
+        <button type="button" data-col="done" aria-pressed="false">مكتمل</button>
+      </div>
+      <div class="board" id="board"></div>
+      <button class="reset" id="resetBtn" type="button">استعادة اللوحة الافتراضية</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <span class="cr">الأثل سكن. جميع الحقوق محفوظة.</span>
+    <a href="https://yazeedalharthi.sa/#services">تصميم وتطوير <img src="/assets/yh-mark-on-light.svg" alt="" width="24" height="16"> يزيد الحارثي</a>
+    <a class="quote" href="https://yazeedalharthi.sa/#services">تبي نسخة لمنشأتك؟ اطلب عرض سعر</a>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+'use strict';
+var KEY='athl-maint-v2';
+var CATS=['تكييف','كهرباء','سباكة','نجارة','نظافة','أخرى'];
+var PRIS=['عاجل','عالي','عادي'];
+var RANK={'عادي':0,'عالي':1,'عاجل':2};
+var CAP={'عاجل':4,'عالي':24,'عادي':72};
+var TEAMS={'تكييف':'فريق التكييف والتبريد','كهرباء':'فريق الكهرباء','سباكة':'فريق السباكة','نجارة':'فريق النجارة والأبواب','نظافة':'فريق النظافة','أخرى':'فريق الصيانة العامة'};
+var TEAM_LIST=Object.keys(TEAMS).map(function(k){return TEAMS[k];});
+var ICON={'تكييف':'i-ac','كهرباء':'i-el','سباكة':'i-pl','نجارة':'i-ca','نظافة':'i-cl','أخرى':'i-ot'};
+var STATUS={'new':'جديد','doing':'قيد التنفيذ','done':'مكتمل'};
+var ORDER=['new','doing','done'];
+var SUMMER=[4,5,6,7,8]; // May–Sep (0-indexed months)
+var H=3600000;
+var COMMON=[
+  ['تكييف','المكيف في غرفة النوم يقطّر موية من أمس'],
+  ['كهرباء','فيه ريحة دخان من فيش المطبخ وطفى النور مرتين'],
+  ['سباكة','السيفون في الحمام الصغير يسرّب ويصب طول الليل'],
+  ['نجارة','باب غرفة الأطفال ما يتسكر، المفصلة شكلها طايحة']
+];
+
+/* ---------- code-enforced rules (the model never decides these) ---------- */
+function norm(s){return String(s||'').replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه');}
+var RULES=[
+  {id:'elec',name:'سلامة كهربائية',desc:'دخان، شرر، رائحة احتراق، تماس أو تسريب كهرباء: عاجل خلال ساعتين.',sla:2,
+   test:function(t){return /دخان|شرار|شرر|احتراق|شياط|حريق|يحترق|تماس|ماس كهرب|تسريب كهرب|صعق|سلك (مكشوف|عاري)/.test(t);}},
+  {id:'gas',name:'رائحة غاز',desc:'أي رائحة أو تسريب غاز: عاجل خلال ساعة.',sla:1,
+   test:function(t){return /غاز/.test(t)&&/(ريح|رائح|تسريب|يسرب|يهرب)/.test(t);}},
+  {id:'lift',name:'شخص عالق',desc:'مصعد مع شخص عالق أو محتجز: عاجل خلال ساعة.',sla:1,
+   test:function(t){return /(مصعد|اسانسير)/.test(t)&&/(عالق|علق|محتجز|محبوس|انحبس|حابس)/.test(t);}},
+  {id:'flood',name:'تسريب مياه جسيم',desc:'طفح، غرق، انفجار ماسورة أو تدفق قوي: عاجل خلال 3 ساعات.',sla:3,
+   test:function(t){return /طفح|تغرق|غرق|فيضان|انفجر(ت)? (ال)?(ماسور|بايب)|تتدفق|بركه موي/.test(t);}},
+  {id:'summer',name:'تكييف في الصيف',desc:'أعطال التكييف من مايو إلى سبتمبر: عاجل خلال 4 ساعات.',sla:4,
+   test:function(t,cat,now){return cat==='تكييف'&&SUMMER.indexOf(now.getMonth())!==-1;}}
+];
+function applyRules(text,cat,pri,sla,now){
+  var t=norm(text), hit=[];
+  RULES.forEach(function(r){if(r.test(t,cat,now))hit.push(r);});
+  var finalPri=pri, finalSla=Math.min(Math.max(1,Math.round(sla)||CAP[pri]),CAP[pri]);
+  if(hit.length){
+    finalPri='عاجل';
+    var m=Math.min.apply(null,hit.map(function(r){return r.sla;}));
+    finalSla=Math.min(finalSla,m,CAP['عاجل']);
+  }
+  return {priority:finalPri,sla:finalSla,rules:hit.map(function(r){return r.id;}),raised:hit.length>0&&finalPri!==pri};
+}
+function ruleName(id){for(var i=0;i<RULES.length;i++)if(RULES[i].id===id)return RULES[i].name;return '';}
+
+/* ---------- storage ---------- */
+function seed(){
+  var now=Date.now();
+  function s(n,ago,status,cat,pri,title,loc,text,steps,reply,rules,sla,startedAgo,doneAgo,mine){
+    return {n:n,createdAt:now-ago*H,status:status,category:cat,priority:pri,title:title,location:loc,team:TEAMS[cat],sla:sla||CAP[pri],text:text,steps:steps,reply:reply,rules:rules||[],src:'seed',mine:!!mine,
+      startedAt:startedAgo!=null?now-startedAgo*H:null,doneAt:doneAgo!=null?now-doneAgo*H:null};
+  }
+  return [
+    s(2031,50,'done','نظافة','عادي','تنظيف سجاد المصلى','المصلى','ودنا ينظفون سجاد المصلى قبل الجمعة، فيه بقع واضحة',['أبلغ إمام المصلى بموعد التنظيف'],'تم استلام طلبك وتحويله لفريق النظافة.',[],72,40,30),
+    s(2032,30,'done','تكييف','عادي','صوت عالٍ من المكيف ليلًا','فيلا 12، المجلس','المكيف في المجلس يطلع صوت عالي بالليل ونومنا صار صعب',['خفّف سرعة المروحة مؤقتًا','تأكد ما فيه شي ملامس للوحدة'],'وصلنا طلبك، وبيتواصل معك فريق التكييف.',[],72,26,20,true),
+    s(2033,20,'doing','نجارة','عادي','مفصلة باب المطبخ مفكوكة','فيلا 7','باب المطبخ ما يتسكر زين، المفصلة طايحة',['لا تشد الباب بقوة','اترك الباب مفتوح لين يوصل الفني'],'تم استلام طلبك وتحويله لفريق النجارة والأبواب.',[],72,6,null),
+    s(2034,3,'doing','كهرباء','عاجل','رائحة دخان من لوحة الكهرباء','النادي الرياضي','ريحة دخان طالعة من لوحة الكهرباء اللي جنب غرفة الملابس',['أخلِ المكان القريب من اللوحة','لا تلمس اللوحة وانتظر الفني'],'وصل طلبك وتحوّل فورًا لفريق الكهرباء، ابتعد عن اللوحة لين يوصلون.',['elec'],2,2.5,null),
+    s(2035,9,'doing','أخرى','عالي','البوابة الإلكترونية لا تفتح','البوابة الرئيسية','البوابة الرئيسية تعلّق ولا تفتح للسيارات إلا بعد كم محاولة',['افتح البوابة يدويًا من غرفة الحارس عند الحاجة'],'تم استلام طلبك وتحويله لفريق الصيانة العامة.',[],24,4,null),
+    s(2036,6,'new','سباكة','عاجل','طفح بالوعة المواقف','مواقف السيارات','فيه طفح في بالوعة المواقف بعد غسيل السيارات والموية واصلة للممر',['أبعد السيارات عن منطقة الطفح','أوقف غسيل السيارات مؤقتًا'],'وصلنا طلبك وتحوّل لفريق السباكة كأولوية.',['flood'],3,null,null),
+    s(2037,14,'new','سباكة','عالي','تسريب تحت مغسلة المطبخ','فيلا 4','تسريب تحت المغسلة في المطبخ والخشب بدأ ينتفخ',['سكّر محبس الموية تحت المغسلة','حط سطل أو منشفة تحت التسريب'],'تم استلام طلبك وتحويله لفريق السباكة.',[],24,null,null),
+    s(2038,26,'new','كهرباء','عادي','إنارة ممر الحديقة طافية','الحديقة','ثلاث لمبات في ممر الحديقة طافية من يومين',['استخدم الممر الجانبي ليلًا'],'وصلنا طلبك وبيتابعه فريق الكهرباء.',[],72,null,null),
+    s(2039,2,'new','نظافة','عادي','أوراق متراكمة في المسبح','المسبح','المسبح فيه أوراق كثير والريحة مو حلوة',['تجنب السباحة لين يتم التنظيف'],'تم استلام طلبك وتحويله لفريق النظافة.',[],72,null,null)
+  ];
+}
+var mem=null;
+function validTicket(t){return t&&typeof t.n==='number'&&ORDER.indexOf(t.status)!==-1&&CATS.indexOf(t.category)!==-1&&PRIS.indexOf(t.priority)!==-1;}
+function load(){
+  try{var raw=localStorage.getItem(KEY);if(raw){var d=JSON.parse(raw);if(Array.isArray(d)){d=d.filter(validTicket);if(d.length)return d;}}}catch(e){}
+  return seed();
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){}}
+mem=load();save();
+
+/* ---------- helpers ---------- */
+function $(id){return document.getElementById(id);}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+function str(v,max){v=(typeof v==='string'?v:'').replace(/\s+/g,' ').trim();return max&&v.length>max?v.slice(0,max-1)+'…':v;}
+function hrs(h){h=Math.abs(h);if(h<1)return Math.max(1,Math.round(h*60))+' د';if(h<48)return (Math.round(h*10)/10).toString().replace(/\.0$/,'')+' س';return Math.round(h/24)+' يوم';}
+function ago(ts){var h=(Date.now()-ts)/H;return h<1/60?'الآن':'قبل '+hrs(h);}
+var SVGNS='http://www.w3.org/2000/svg';
+function icon(id){var s=document.createElementNS(SVGNS,'svg');s.setAttribute('class','i');s.setAttribute('aria-hidden','true');var u=document.createElementNS(SVGNS,'use');u.setAttribute('href','#'+id);s.appendChild(u);return s;}
+function bdi(t){return el('bdi',null,t);}
+var toastT;
+function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on');},2600);}
+function nextN(){return mem.reduce(function(m,t){return Math.max(m,t.n);},2030)+1;}
+function slaState(t){
+  var due=t.createdAt+t.sla*H;
+  if(t.status==='done'){var took=((t.doneAt||Date.now())-t.createdAt)/H;return {cls:took>t.sla?'late':'',pct:100,label:took>t.sla?'أُنجز بعد المهلة ('+hrs(took)+')':'أُنجز خلال '+hrs(took)};}
+  var left=(due-Date.now())/H, pct=Math.min(100,Math.max(0,100*(1-left/t.sla)));
+  if(left<0)return {cls:'late',pct:100,label:'متأخر '+hrs(-left)+' عن المهلة'};
+  return {cls:pct>70?'warn':'',pct:pct,label:'باقي '+hrs(left)+' من '+hrs(t.sla)};
+}
+function fmtDate(d,opts){try{return d.toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',Object.assign({timeZone:'Asia/Riyadh'},opts));}catch(e){return d.toDateString();}}
+function fmtTime(d){try{return d.toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit',timeZone:'Asia/Riyadh'});}catch(e){return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');}}
+
+/* greeting by Riyadh hour */
+(function(){var h;try{h=Number(new Intl.DateTimeFormat('en-US',{hour:'numeric',hour12:false,timeZone:'Asia/Riyadh'}).format(new Date()));}catch(e){h=new Date().getHours();}
+  $('greet').textContent=(h>=4&&h<12?'صباح الخير':'مساء الخير')+'، سلطان';})();
+
+/* ---------- tabs ---------- */
+var tabs=[$('tab-req'),$('tab-sup')];
+function show(which){
+  tabs.forEach(function(b){var on=b.id==='tab-'+which;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;});
+  $('view-req').hidden=which!=='req';$('view-sup').hidden=which!=='sup';
+  if(which==='sup')renderBoard();else renderMine();
+  window.scrollTo(0,0);
+}
+tabs.forEach(function(b,i){
+  b.addEventListener('click',function(){show(i?'sup':'req');});
+  b.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();var o=tabs[1-i];o.focus();show(i?'req':'sup');}});
+});
+function updateBadge(){var n=mem.filter(function(t){return t.status==='new';}).length;$('newBadge').textContent=n?String(n):'';}
+
+/* ---------- resident ---------- */
+var ta=$('reqText'),busy=false,lastReq=null;
+function setCount(){$('count').textContent=ta.value.length+'/500';}
+ta.addEventListener('input',setCount);
+COMMON.forEach(function(c){
+  var li=el('li'),b=el('button');b.type='button';
+  var ic=el('span','ic');ic.appendChild(icon(ICON[c[0]]));b.appendChild(ic);b.appendChild(el('span','tx',c[1]));var g=el('span','go');g.appendChild(icon('i-chev'));b.appendChild(g);
+  b.addEventListener('click',function(){ta.value=c[1];$('reqLoc').value='فيلا 12';setCount();submit();});
+  li.appendChild(b);$('commonList').appendChild(li);
+});
+$('reqForm').addEventListener('submit',function(e){e.preventDefault();submit();});
+
+function slipArea(){var a=$('slipArea');a.textContent='';return a;}
+function reveal(){var a=$('slipArea');var r=a.getBoundingClientRect();if(r.top<60||r.top>innerHeight-120)window.scrollTo({top:window.scrollY+r.top-72,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
+function showLoading(){
+  var a=slipArea(),w=el('div','slip skel');w.setAttribute('aria-busy','true');
+  w.appendChild(el('p',null,'جاري تسجيل الطلب…'));
+  ['sk t','sk','sk','sk s'].forEach(function(c){w.appendChild(el('div',c));});
+  a.appendChild(w);reveal();
+}
+function showError(msg){
+  var a=slipArea(),w=el('div','err');w.setAttribute('role','alert');w.appendChild(el('p',null,msg));
+  var b=el('button','btn','إعادة الإرسال');b.type='button';b.addEventListener('click',function(){if(lastReq){ta.value=lastReq.text;$('reqLoc').value=lastReq.loc;setCount();submit();}});
+  w.appendChild(b);a.appendChild(w);
+}
+function submit(){
+  if(busy)return;
+  var text=ta.value.trim(),loc=$('reqLoc').value;
+  if(text.length<4){toast('اكتب وصف العطل أولًا.');ta.focus();return;}
+  lastReq={text:text,loc:loc};busy=true;$('sendBtn').disabled=true;$('sendBtn').lastChild.textContent='جاري الإرسال';
+  showLoading();
+  var ctrl=new AbortController(),tm=setTimeout(function(){ctrl.abort();},30000);
+  var msg='الموقع المختار: '+(loc||'غير محدد')+'\nنص البلاغ: '+text;
+  fetch('/api/demo',{method:'POST',headers:{'content-type':'application/json'},signal:ctrl.signal,body:JSON.stringify({demo:'system',messages:[{role:'user',text:msg}]})})
+  .then(function(r){return r.json().catch(function(){return {};}).then(function(j){return {status:r.status,j:j};});})
+  .then(function(res){
+    if(res.status===429)return showError('أرسلت طلبات كثيرة خلال دقائق. انتظر قليلًا ثم أعد الإرسال.');
+    if(res.status===503)return showError('استقبال الطلبات متوقف مؤقتًا. أعد المحاولة بعد قليل، وللطوارئ راجع مكتب الصيانة.');
+    if(res.status!==200)return showError('لم يُسجَّل الطلب. نصّك محفوظ في الخانة، أعد الإرسال.');
+    var d=res.j&&res.j.data;
+    if(!d||typeof d!=='object')return showError('لم يكتمل تسجيل الطلب. نصّك محفوظ في الخانة، أعد الإرسال.');
+    var t=buildTicket(d,text,loc);
+    mem.unshift(t);save();updateBadge();renderSlip(t);renderMine();ta.value='';setCount();
+  })
+  .catch(function(e){showError(e&&e.name==='AbortError'?'تأخر الرد أكثر من 30 ثانية. تحقق من الاتصال وأعد الإرسال.':'انقطع الاتصال قبل وصول الطلب. تحقق من الإنترنت وأعد الإرسال.');})
+  .then(function(){clearTimeout(tm);busy=false;$('sendBtn').disabled=false;$('sendBtn').lastChild.textContent='أرسل الطلب';});
+}
+function buildTicket(d,text,loc){
+  var cat=CATS.indexOf(d.category)!==-1?d.category:'أخرى';
+  var pri=PRIS.indexOf(d.priority)!==-1?d.priority:'عادي';
+  var team=TEAM_LIST.indexOf(d.suggested_team)!==-1?d.suggested_team:TEAMS[cat];
+  var steps=Array.isArray(d.first_steps)?d.first_steps.map(function(s){return str(s,140);}).filter(Boolean).slice(0,4):[];
+  var mloc=str(d.location,48);
+  var location=loc?(mloc&&mloc.indexOf(loc)!==-1?mloc:loc+(mloc&&mloc!==loc?'، '+mloc:'')):mloc;
+  var title=str(d.title,60)||str(text,48);
+  var r=applyRules(text+' '+title,cat,pri,Number(d.sla_hours),new Date());
+  return {n:nextN(),createdAt:Date.now(),status:'new',category:cat,priority:r.priority,modelPriority:pri,raised:r.raised,title:title,location:str(location,60),team:team,sla:r.sla,
+    text:str(text,500),steps:steps,reply:str(d.reply_to_requester,240),rules:r.rules,src:'live',mine:true,startedAt:null,doneAt:null,fresh:true};
+}
+function renderSlip(t,old){
+  var a=slipArea(),s=el('article','slip');s.setAttribute('aria-label','طلب رقم '+t.n);
+  var top=el('div','slip-top'),ok=el('span','ok');ok.appendChild(icon('i-check'));top.appendChild(ok);
+  top.appendChild(el('b',null,old?'تفاصيل الطلب':'تم استلام طلبك'));var tm=el('span');tm.appendChild(bdi(fmtTime(new Date(t.createdAt))));top.appendChild(tm);s.appendChild(top);
+  var body=el('div','slip-body'),no=el('div','slip-no','رقم الطلب ');no.appendChild(bdi('#'+t.n));body.appendChild(no);
+  var st=el('div','stamp'+(old?'':' in')+' p-'+t.priority,t.priority);st.appendChild(el('small',null,'خلال '+hrs(t.sla)));body.appendChild(st);
+  body.appendChild(el('h3',null,t.title));
+  if(t.rules&&t.rules.length){var pb=el('div','policy');pb.appendChild(icon('i-shield'));pb.appendChild(el('span',null,'صُنّف عاجلًا وفق سياسة السلامة في المجمّع: '+t.rules.map(ruleName).join('، ')+'.'));body.appendChild(pb);}
+  var dl=el('dl','facts');
+  [['التصنيف',t.category,ICON[t.category]],['الموقع',t.location||'غير محدد','i-pin'],['الفريق المسؤول',t.team,'i-team'],['مهلة الاستجابة','خلال '+hrs(t.sla),'i-clock']].forEach(function(p){
+    var w=el('div');w.appendChild(el('dt',null,p[0]));var dd=el('dd');dd.appendChild(icon(p[2]));dd.appendChild(el('span',null,p[1]));w.appendChild(dd);dl.appendChild(w);});
+  body.appendChild(dl);
+  var tr=el('ol','track'),idx=ORDER.indexOf(t.status);['استُلم','قيد التنفيذ','مكتمل'].forEach(function(x,i){tr.appendChild(el('li',i<=idx?'on':'',x));});tr.setAttribute('aria-label','حالة الطلب: '+STATUS[t.status]);body.appendChild(tr);
+  if(t.steps&&t.steps.length){var b1=el('div','blk');b1.appendChild(el('h4',null,'إلى أن يصل الفني'));var ol=el('ol','steps');t.steps.forEach(function(x){ol.appendChild(el('li',null,x));});b1.appendChild(ol);body.appendChild(b1);}
+  if(t.reply){var b2=el('div','blk'),m=el('div','msg'),av=el('span','av');av.appendChild(icon('i-desk'));m.appendChild(av);var p=el('div');p.appendChild(el('small',null,'مكتب الصيانة'));p.appendChild(el('p',null,t.reply));m.appendChild(p);b2.appendChild(m);body.appendChild(b2);}
+  s.appendChild(body);
+  var f=el('div','slip-acts'),c=el('button','btn','إغلاق');c.type='button';c.addEventListener('click',function(){slipArea();ta.focus();});f.appendChild(c);s.appendChild(f);
+  a.appendChild(s);
+}
+function renderMine(){
+  var ul=$('mineList');ul.textContent='';
+  var mine=mem.filter(function(t){return t.mine;}).sort(function(x,y){return y.createdAt-x.createdAt;}).slice(0,6);
+  if(!mine.length){ul.appendChild(el('li','empty','لا توجد طلبات بعد.'));return;}
+  mine.forEach(function(t){var li=el('li'),b=el('button');b.type='button';
+    b.appendChild(el('span','t',t.title));var s=el('span','s');s.appendChild(bdi('#'+t.n));s.appendChild(document.createTextNode('، '+ago(t.createdAt)));b.appendChild(s);
+    b.appendChild(el('span','st st-'+t.status,STATUS[t.status]));
+    b.addEventListener('click',function(){renderSlip(t,true);reveal();});li.appendChild(b);ul.appendChild(li);});
+}
+
+/* ---------- supervisor ---------- */
+var colShown='new',dragN=null;
+CATS.forEach(function(c){$('fcat').appendChild(el('option',null,c));});
+['fq','fcat','fpri'].forEach(function(id){$(id).addEventListener('input',renderBoard);});
+document.querySelectorAll('.coltabs button').forEach(function(b){b.addEventListener('click',function(){setCol(b.dataset.col);});});
+function setCol(c){colShown=c;document.querySelectorAll('.coltabs button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.col===c);});document.querySelectorAll('.col').forEach(function(x){if(x.dataset.col===c)x.removeAttribute('data-hide');else x.setAttribute('data-hide','');});}
+function renderRules(){
+  var ul=$('rulesList');ul.textContent='';var m=new Date().getMonth();
+  RULES.forEach(function(r){var li=el('li');li.appendChild(el('b',null,r.name+': '));li.appendChild(document.createTextNode(r.desc));
+    if(r.id==='summer'){var on=SUMMER.indexOf(m)!==-1;li.appendChild(document.createTextNode(on?' مفعّلة الآن.':' غير مفعّلة هذا الشهر.'));if(!on)li.className='off';}ul.appendChild(li);});
+  var li=el('li');li.appendChild(el('b',null,'سقف المهلة: '));li.appendChild(document.createTextNode('عاجل 4 ساعات، عالي 24 ساعة، عادي 72 ساعة. أي مهلة أطول تُقصّ إلى السقف.'));ul.appendChild(li);
+}
+function filtered(){
+  var q=norm($('fq').value.trim()),c=$('fcat').value,p=$('fpri').value;
+  return mem.filter(function(t){
+    if(c&&t.category!==c)return false;if(p&&t.priority!==p)return false;
+    if(q&&norm(t.title+' '+t.location+' '+t.n+' '+t.text+' '+t.team).indexOf(q)===-1)return false;return true;});
+}
+function renderKpis(){
+  var k=$('kpis');k.textContent='';
+  var open=mem.filter(function(t){return t.status!=='done';});
+  var late=open.filter(function(t){return Date.now()>t.createdAt+t.sla*H;}).length;
+  var urgent=open.filter(function(t){return t.priority==='عاجل';}).length;
+  function c(s){return mem.filter(function(t){return t.status===s;}).length;}
+  [['جديد',c('new')],['قيد التنفيذ',c('doing')],['مكتمل',c('done')],['عاجل مفتوح',urgent,urgent>0],['متجاوز المهلة',late,late>0]]
+  .forEach(function(x){var d=el('div','stat'+(x[2]?' hot':''));d.appendChild(el('b',null,String(x[1])));d.appendChild(el('span',null,x[0]));k.appendChild(d);});
+  $('supDate').textContent=fmtDate(new Date(),{weekday:'long',day:'numeric',month:'long'})+'، آخر تحديث '+fmtTime(new Date());
+}
+function move(n,status){
+  var t=mem.find(function(x){return x.n===n;});if(!t||t.status===status)return;
+  t.status=status;if(status==='doing'&&!t.startedAt)t.startedAt=Date.now();if(status==='done')t.doneAt=Date.now();if(status!=='done')t.doneAt=null;if(status==='new')t.startedAt=null;
+  t.fresh=false;save();updateBadge();renderBoard();toast('الطلب #'+n+' صار «'+STATUS[status]+'»');
+}
+var DOT={'new':'var(--blue)','doing':'var(--accent)','done':'var(--calm)'};
+function card(t){
+  var c=el('article','card pr-'+t.priority+(t.fresh?' fresh':''));c.dataset.n=t.n;
+  if(matchMedia('(pointer:fine)').matches){c.draggable=true;
+    c.addEventListener('dragstart',function(e){dragN=t.n;c.classList.add('dragging');try{e.dataTransfer.setData('text/plain',String(t.n));e.dataTransfer.effectAllowed='move';}catch(x){}});
+    c.addEventListener('dragend',function(){c.classList.remove('dragging');dragN=null;});}
+  var top=el('div','c-top');top.appendChild(bdi('#'+t.n));top.appendChild(el('span',null,ago(t.createdAt)));top.appendChild(el('span','pri p-'+t.priority,t.priority));c.appendChild(top);
+  c.appendChild(el('h3','c-title',t.title));
+  var meta=el('div','c-meta');
+  [[ICON[t.category],t.category],['i-pin',t.location],['i-team',t.team]].forEach(function(x){if(!x[1])return;var s=el('span');s.appendChild(icon(x[0]));s.appendChild(el('span',null,x[1]));meta.appendChild(s);});
+  c.appendChild(meta);
+  if(t.rules&&t.rules.length){var rb=el('div','c-rule');rb.appendChild(icon('i-shield'));rb.appendChild(el('span',null,'تصعيد تلقائي: '+t.rules.map(ruleName).join('، ')));c.appendChild(rb);}
+  var s=slaState(t),sl=el('div','sla '+s.cls),tr=el('span','tr'),fi=el('span','fill');fi.style.inlineSize=s.pct+'%';tr.appendChild(fi);sl.appendChild(el('span',null,s.label));sl.appendChild(tr);c.appendChild(sl);
+  var more=el('details','c-more');more.appendChild(el('summary',null,'نص الطلب والخطوات'));more.appendChild(el('p','q',t.text));
+  if(t.steps&&t.steps.length){more.appendChild(el('h5',null,'خطوات أُرسلت للساكن'));var ul=el('ul');t.steps.forEach(function(x){ul.appendChild(el('li',null,x));});more.appendChild(ul);}
+  if(t.raised)more.appendChild(el('p',null,'تقدير الفرز «'+t.modelPriority+'»، صُعّد إلى «عاجل» بسياسة السلامة.'));
+  c.appendChild(more);
+  var acts=el('div','c-acts'),i=ORDER.indexOf(t.status);
+  if(i>0){var b=el('button',null,i===2?'إعادة فتح':'إرجاع إلى جديد');b.type='button';b.addEventListener('click',function(){move(t.n,ORDER[i-1]);});acts.appendChild(b);}
+  if(i<2){var f=el('button','fw',i===0?'بدء التنفيذ':'تم الإنجاز');f.type='button';f.addEventListener('click',function(){move(t.n,ORDER[i+1]);});acts.appendChild(f);}
+  c.appendChild(acts);return c;
+}
+function renderBoard(){
+  renderKpis();renderRules();var b=$('board');b.textContent='';var list=filtered();
+  ORDER.forEach(function(st){
+    var col=el('section','col');col.dataset.col=st;if(st!==colShown)col.setAttribute('data-hide','');col.setAttribute('aria-label',STATUS[st]);
+    var items=list.filter(function(t){return t.status===st;}).sort(function(x,y){return st==='done'?(y.doneAt||0)-(x.doneAt||0):(RANK[y.priority]-RANK[x.priority])||(y.createdAt-x.createdAt);});
+    var h=el('div','col-h'),dot=el('span','dot');dot.style.background=DOT[st];h.appendChild(dot);h.appendChild(el('span',null,STATUS[st]));h.appendChild(el('span','c',String(items.length)));col.appendChild(h);
+    var cs=el('div','cards');items.forEach(function(t){cs.appendChild(card(t));});if(!items.length)cs.appendChild(el('div','none',list.length===mem.length?'لا توجد طلبات هنا.':'لا شيء يطابق البحث.'));col.appendChild(cs);
+    col.addEventListener('dragover',function(e){if(dragN==null)return;e.preventDefault();col.classList.add('over');});
+    col.addEventListener('dragleave',function(e){if(!col.contains(e.relatedTarget))col.classList.remove('over');});
+    col.addEventListener('drop',function(e){e.preventDefault();col.classList.remove('over');if(dragN!=null)move(dragN,st);});
+    b.appendChild(col);
+    var tb=document.querySelector('.coltabs [data-col="'+st+'"]');if(tb)tb.textContent=STATUS[st]+' '+items.length;
+  });
+}
+$('exportBtn').addEventListener('click',function(){
+  function cell(v){v=String(v==null?'':v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"';}
+  var rows=[['رقم الطلب','تاريخ الإنشاء','العنوان','التصنيف','الأولوية','الموقع','الفريق','مهلة الاستجابة (ساعة)','الحالة','حالة المهلة','تصعيد تلقائي','نص الطلب']];
+  filtered().forEach(function(t){var d=new Date(t.createdAt);rows.push([t.n,d.toISOString().slice(0,16).replace('T',' '),t.title,t.category,t.priority,t.location,t.team,t.sla,STATUS[t.status],slaState(t).label,(t.rules||[]).map(ruleName).join('، '),t.text]);});
+  var csv='﻿'+rows.map(function(r){return r.map(cell).join(',');}).join('\r\n');
+  try{var url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));var a=document.createElement('a');a.href=url;a.download='athl-maintenance-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},4000);toast('صُدّر '+(rows.length-1)+' طلب');}catch(e){toast('تعذّر التصدير على هذا المتصفح.');}
+});
+$('resetBtn').addEventListener('click',function(){if(!confirm('استعادة اللوحة الافتراضية؟ ستُحذف الطلبات المضافة.'))return;mem=seed();save();updateBadge();renderBoard();renderMine();slipArea();toast('استُعيدت اللوحة الافتراضية');});
+
+setInterval(function(){if(!$('view-sup').hidden)renderKpis();},60000);
+updateBadge();renderMine();
+})();
+</script>
+</body>
+</html>
