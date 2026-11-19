@@ -653,7 +653,7 @@ class Component extends DCLogic {
       const href = 'mailto:yazed.501k@gmail.com?subject=' + encodeURIComponent('رسالة من ' + name + ' عبر موقعك') + '&body=' + encodeURIComponent(msg + '\n\n— ' + name + ' (' + mail + ')');
       try { const a = document.createElement('a'); a.href = href; a.target = '_top'; document.body.appendChild(a); a.click(); a.remove(); } catch (e) {}
     };
-    Promise.all(files.map(read)).then((data) => fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email: mail, message: msg, company: hp, files: data }) }))
+    Promise.all(files.map(read)).then((data) => fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email: mail, message: msg, company: hp, t: Math.round(performance.now()), files: data }) }))
       .then((r) => r.json().catch(() => ({})).then((j) => ({ status: r.status, j })))
       .then(({ status, j }) => {
         if (status === 200 && j.ok) {
