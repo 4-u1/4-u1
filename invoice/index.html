@@ -86,16 +86,17 @@ ul.t{margin:0;padding-inline-start:18px;color:#C9CED6}ul.t li{margin:2px 0}
  tr,.bank,.party,.tot{break-inside:avoid}
 }
 
-.badge{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid}
+.badge{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid}
 .badge.un{color:#E9B949;border-color:rgba(233,185,73,.5);background:rgba(233,185,73,.08)}.badge.pd{color:#7FD3A1;border-color:rgba(127,211,161,.5);background:rgba(127,211,161,.08)}
 .vat{margin-top:8px;font-size:11px;color:var(--pm)}
 .bar{position:sticky;top:0;z-index:5;display:flex;gap:10px;justify-content:center;padding:12px;background:rgba(10,11,13,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.bar .btn{min-width:160px}
+.bar .btn{min-width:160px}.bar[hidden]{display:none}
 .view .app{grid-template-columns:1fr}.view .panel{display:none}
 .lst{margin-top:10px;display:grid;gap:8px}.lst div{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:13px}
 .lst a{color:var(--blue)}.lst small{color:var(--mut)}.lst button{font:inherit;font-size:12px;border-radius:999px;border:1px solid #2A303A;background:none;color:var(--ink);padding:4px 10px;cursor:pointer}
 .msg{margin-top:10px;font-size:13px;min-height:20px}.msg.ok{color:#7FD3A1}.msg.err{color:#FF8A80}
 #login{display:none}.locked #login{display:block}.locked .needkey{display:none}
+@media (max-width:980px){.paper .meta{grid-template-columns:repeat(3,1fr)}.paper .meta div{padding:10px 10px}.paper .v{font-size:12px}.hd{flex-wrap:wrap}.brand .en{font-size:10.5px}}
 @media print{.bar{display:none}}
 </style>
 </head>
@@ -103,9 +104,9 @@ ul.t{margin:0;padding-inline-start:18px;color:#C9CED6}ul.t li{margin:2px 0}
 <div class="bar" id="vbar" hidden><button class="btn go" id="vpdf" type="button" style="margin:0;width:auto">تنزيل الفاتورة PDF</button></div>
 <div class="app">
 <aside class="panel">
-<h1>الفواتير</h1>
+<h1>YH · الفواتير</h1>
 <p class="sub">تصدر الفاتورة برقم متسلسل ما يتكرر، وتنحفظ، وتنرسل للعميل على إيميله.</p>
-<div id="login"><label for="akey">مفتاح الدخول (INVOICE_ADMIN_KEY)</label><input id="akey" type="password" class="ltr" autocomplete="current-password"><button class="btn go" id="alogin" type="button">دخول</button><div class="msg" id="lmsg"></div></div>
+<div id="login"><label for="akey">مفتاح الدخول</label><input id="akey" type="password" class="ltr" autocomplete="current-password"><button class="btn go" id="alogin" type="button">دخول</button><div class="msg" id="lmsg"></div></div>
 <div class="needkey">
 <details id="cfgBox"><summary>بياناتي والحساب البنكي</summary>
 <label for="bankName">اسم البنك</label><input id="bankName" data-c value="مصرف الراجحي">
