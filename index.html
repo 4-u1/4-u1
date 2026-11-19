@@ -457,9 +457,20 @@ class Component extends DCLogic {
     if (!best) return { text: 'ما عندي معلومة موثقة عن هذا السؤال، وما أبي أخمّن. جرّب تسألني عن مشاريع يزيد أو مهاراته أو إنجازاته.', src: '' };
     return { text: best.a, src: best.s };
   }
-  speak(text) {
+  unlockAudio() {
     try {
-      const S = window.speechSynthesis; if (!S) return;
+      if (!this._au) { this._au = new Audio(); this._au.preload = 'auto'; }
+      if (!this._auOk) { this._au.src = 'data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//NwwAAAAAAAAAAAAEluZm8AAAAPAAAABgAAAykAWlpaWlpaWlpaWlpaWlpaWnt7e3t7e3t7e3t7e3t7e3t7nJycnJycnJycnJycnJycnL29vb29vb29vb29vb29vb293t7e3t7e3t7e3t7e3t7e3t7/////////////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQEUQAAAAAAAAMpso/G6AAAAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NCxKMAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NAxKQAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/80LEowAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU='; const p = this._au.play(); if (p && p.then) p.then(() => { this._auOk = true; }).catch(() => {}); }
+    } catch (e) {}
+  }
+  stopVoice() {
+    try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {}
+    try { if (this._au) { this._au.pause(); } } catch (e) {}
+    if (this._tts) { try { this._tts.abort(); } catch (e) {} this._tts = null; }
+  }
+  speakDevice(text) {
+    try {
+      const S = window.speechSynthesis; if (!S) { this.setState({ speaking: false, phase: 'idle' }); return; }
       S.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = this.state.lang === 'en' ? 'en-US' : 'ar-SA'; u.rate = 1;
@@ -468,6 +479,33 @@ class Component extends DCLogic {
       u.onend = () => this.setState({ speaking: false, phase: 'idle' });
       S.speak(u);
     } catch (e) {}
+  }
+  async speak(text) {
+    this.stopVoice();
+    if (this._noTTS) return this.speakDevice(text);
+    const ctrl = new AbortController(); this._tts = ctrl;
+    const tm = setTimeout(() => ctrl.abort(), 15000);
+    try {
+      const r = await fetch('/api/tts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text }), signal: ctrl.signal });
+      clearTimeout(tm);
+      if (r.status === 503) this._noTTS = true;
+      if (!r.ok) throw new Error('tts');
+      const blob = await r.blob();
+      if (this._tts !== ctrl) return;
+      if (!this._au) this._au = new Audio();
+      const au = this._au;
+      if (this._auUrl) URL.revokeObjectURL(this._auUrl);
+      this._auUrl = URL.createObjectURL(blob);
+      au.src = this._auUrl;
+      au.onplay = () => this.setState({ speaking: true });
+      au.onended = () => this.setState({ speaking: false, phase: 'idle' });
+      au.onerror = () => this.setState({ speaking: false, phase: 'idle' });
+      await au.play();
+    } catch (e) {
+      clearTimeout(tm);
+      if (e && e.name === 'AbortError' && this._tts !== ctrl) return;
+      this.speakDevice(text);
+    }
   }
 
   startWave() {
@@ -537,8 +575,9 @@ class Component extends DCLogic {
   }
   async ask(q, fromVoice) {
     q = (q || '').trim(); if (!q || this.state.thinking) return;
+    this.unlockAudio();
     clearInterval(this._ty); clearTimeout(this._tt);
-    try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {}
+    this.stopVoice();
     const hist = this.state.msgs.filter((m) => !m.typing && m.text).slice(-8).map((m) => ({ role: m.who === 'user' ? 'user' : 'assistant', text: m.text }));
     this.setState({ msgs: this.state.msgs.concat([{ who: 'user', text: q, src: '' }]), thinking: true, phase: 'think', lastText: q, vstatus: 'يفكر…' });
     this.scrollDown();
@@ -562,10 +601,11 @@ class Component extends DCLogic {
   }
   sendTyped() { const el = document.getElementById('ai-in'); if (!el) return; const q = el.value; el.value = ''; this.ask(q, false); }
   toggleMic() {
+    this.unlockAudio();
     if (this.state.listening) { try { this.rec && this.rec.stop(); } catch (e) {} this.stopLevel(); this.setState({ listening: false, vstatus: 'اضغط المايك واسأل بصوتك' }); return; }
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { this.setState({ vstatus: 'متصفحك ما يدعم الصوت، اختر سؤال من تحت' }); return; }
-    try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {}
+    this.stopVoice();
     const rec = new SR(); this.rec = rec;
     rec.lang = this.state.lang === 'en' ? 'en-US' : 'ar-SA'; rec.interimResults = false; rec.maxAlternatives = 1;
     rec.onresult = (e) => { const q = e.results[0][0].transcript; this.setState({ listening: false }); this.ask(q, true); };
