@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>عرض سعر · يزيد حمد الحارثي</title>
+<title>YH · عروض الأسعار</title>
 <link rel="icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -291,7 +291,7 @@ function render(){
  const f=[val('phone'),val('mail')];if(val('fl'))f.push('Freelance No. '+val('fl'));if(val('vatOn')&&val('vatNo'))f.push('VAT '+val('vatNo'));set('oFoot',f.filter(Boolean).join('   ·   '));
  {let h='',n=1,open=false;val('legal').split('\n').map(x=>x.trim()).filter(Boolean).forEach(l=>{if(l.startsWith('##')){if(open)h+='</ol>';h+='<h5>'+esc(l.replace(/^#+\s*/,''))+'</h5><ol start="'+n+'">';open=true}else{if(!open){h+='<ol start="'+n+'">';open=true}h+='<li>'+esc(l)+'</li>';n++}});if(open)h+='</ol>';$('oLegal').innerHTML=h;$('doc2').style.display=h?'':'none'}
  set('oNo2',val('qNo'));$('oFoot2').textContent=$('oFoot').textContent;
- document.title='عرض سعر '+val('qNo')+(val('cName')?' · '+val('cName'):'');
+ document.title='YH · عرض سعر '+val('qNo');
 }
 let st;document.addEventListener('input',(e)=>{const t=e.target;if(t.dataset.i!==undefined){items[+t.dataset.i][t.dataset.f]=t.value}
  save();render();if(t.hasAttribute('data-c')){$('saved').textContent='تم الحفظ في جهازك';clearTimeout(st);st=setTimeout(()=>$('saved').textContent='',1500)}});
