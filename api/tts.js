@@ -49,12 +49,13 @@ async function handler(req, res) {
       headers: { 'xi-api-key': key, 'content-type': 'application/json', accept: 'audio/mpeg' },
       body: JSON.stringify({ text, model_id: model, voice_settings: { stability: 0.5, similarity_boost: 0.8 } })
     });
-    if (!r.ok) return res.status(502).json({ error: 'tts_failed', status: r.status });
+    if (!r.ok) { console.error('elevenlabs', r.status, (await r.text()).slice(0, 300)); return res.status(502).json({ error: 'tts_failed', status: r.status }); }
     const buf = Buffer.from(await r.arrayBuffer());
     res.setHeader('content-type', 'audio/mpeg');
     res.setHeader('cache-control', 'no-store');
     return res.status(200).send(buf);
   } catch (e) {
+    console.error('elevenlabs fetch', e && e.message);
     return res.status(502).json({ error: 'tts_failed' });
   }
 }
