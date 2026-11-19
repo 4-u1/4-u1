@@ -102,25 +102,48 @@ function clean(messages) {
   return out;
 }
 
-async function callGemini(msgs) {
-  const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+async function geminiOnce(model, msgs) {
   // thinking tokens count toward maxOutputTokens, so leave room for them
   const gen = { maxOutputTokens: 2048, temperature: 0.3 };
   if (/^gemini-2\.5/.test(model)) gen.thinkingConfig = { thinkingBudget: 0 };
-  else if (/^gemini-3/.test(model)) gen.thinkingConfig = { thinkingLevel: 'low' }; // 3.8 Flash: low|medium|high, no 'minimal'
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM }] },
-      contents: msgs.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.text }] })),
-      generationConfig: gen
-    })
-  });
-  if (!r.ok) throw new Error('gemini ' + r.status + ' ' + (await r.text()).slice(0, 300));
-  const j = await r.json();
-  const parts = (((j.candidates || [])[0] || {}).content || {}).parts || [];
-  return parts.filter((p) => !p.thought).map((p) => p.text || '').join('').trim();
+  else if (/^gemini-3\.8/.test(model)) gen.thinkingConfig = { thinkingLevel: 'low' }; // 3.8 Flash: low|medium|high, no 'minimal'
+  else if (/^gemini-3/.test(model)) gen.thinkingConfig = { thinkingLevel: 'minimal' };
+  const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 9000);
+  try {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': process.env.GEMINI_API_KEY },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM }] },
+        contents: msgs.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.text }] })),
+        generationConfig: gen
+      })
+    });
+    if (!r.ok) { const e = new Error('gemini ' + model + ' ' + r.status + ' ' + (await r.text()).slice(0, 300)); e.status = r.status; throw e; }
+    const j = await r.json();
+    const parts = (((j.candidates || [])[0] || {}).content || {}).parts || [];
+    return parts.filter((p) => !p.thought).map((p) => p.text || '').join('').trim();
+  } finally { clearTimeout(tm); }
+}
+
+// Primary model, one quick retry on overload, then lighter fallback models.
+async function callGemini(msgs) {
+  const chain = [process.env.GEMINI_MODEL || 'gemini-3.8-flash']
+    .concat((process.env.GEMINI_FALLBACKS || 'gemini-3.5-flash-lite,gemini-3.6-flash').split(',').map((x) => x.trim()).filter(Boolean));
+  let last;
+  for (let k = 0; k < chain.length; k++) {
+    const tries = k === 0 ? 2 : 1;
+    for (let t = 0; t < tries; t++) {
+      try { const out = await geminiOnce(chain[k], msgs); if (out) return out; }
+      catch (e) {
+        last = e; console.error(String(e.message || e));
+        if (e.status === 401 || e.status === 403 || e.status === 400) throw e; // bad key or request: fallbacks won't help
+        if (t + 1 < tries) await new Promise((r) => setTimeout(r, 700));
+      }
+    }
+  }
+  throw last || new Error('gemini empty');
 }
 
 async function callClaude(msgs) {
