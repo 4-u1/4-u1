@@ -86,6 +86,8 @@ module.exports.config = { api: { bodyParser: { sizeLimit: '4.5mb' } } };
 
 // Branded notification email (table layout + inline styles for Gmail/Outlook/Apple Mail)
 const ASSET = 'https://yazeedalharthi.sa/assets/email';
+// Gmail iOS dark mode inverts text colours; these wrappers undo it (styles apply only inside Gmail).
+const G = (h) => `<div class="gs"><div class="gd">${h}</div></div>`;
 function renderEmail({ name, email, message, files }) {
   const now = new Intl.DateTimeFormat('ar-u-nu-latn-ca-gregory', { timeZone: 'Asia/Riyadh', dateStyle: 'long', timeStyle: 'short' }).format(new Date());
   const replyHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('رد من يزيد حمد الحارثي')}`;
@@ -94,34 +96,34 @@ function renderEmail({ name, email, message, files }) {
     ['🏆', 'رقم Guinness', '14,075 مشارك'],
     ['🛡️', '100%', 'حماية مِجهر'],
     ['⚡', '32 من 32', 'HackerRank']
-  ].map(([i, t, d], n) => `${n === 2 ? '</tr><tr><td colspan="2" height="8" style="height:8px;font-size:0;line-height:0">&nbsp;</td></tr><tr>' : ''}<td width="50%" valign="top" style="padding:0 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#10141A;border:1px solid #1F252E;border-radius:14px"><tr><td height="96" valign="middle" style="height:96px;padding:12px 8px;text-align:center;font-family:Tahoma,Arial,sans-serif">
-<div style="font-size:20px;line-height:1">${i}</div><div style="margin-top:8px;font-size:14px;font-weight:bold;color:#F2F4F7;white-space:nowrap">${t}</div><div style="margin-top:3px;font-size:12px;color:#7E8895;line-height:1.5">${d}</div></td></tr></table></td>`).join('');
+  ].map(([i, t, d], n) => `${n === 2 ? '</tr><tr><td colspan="2" height="8" style="height:8px;font-size:0;line-height:0">&nbsp;</td></tr><tr>' : ''}<td width="50%" valign="top" style="padding:0 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#10141A;background-image:linear-gradient(#10141A,#10141A);border:1px solid #1F252E;border-radius:14px"><tr><td height="96" valign="middle" style="height:96px;padding:12px 8px;text-align:center;font-family:Tahoma,Arial,sans-serif">
+<div style="font-size:20px;line-height:1">${i}</div>${G(`<div style="margin-top:8px;font-size:14px;font-weight:bold;color:#F2F4F7;white-space:nowrap">${t}</div><div style="margin-top:3px;font-size:12px;color:#7E8895;line-height:1.5">${d}</div>`)}</td></tr></table></td>`).join('');
   const fileRows = files.length ? `<tr><td style="padding:18px 28px 0;font-family:Tahoma,Arial,sans-serif">
-<div style="font-size:12px;color:#7E8895;margin-bottom:8px">المرفقات (${files.length})</div>
-${files.map((f) => `<div style="display:inline-block;margin:0 0 6px 6px;padding:7px 12px;border-radius:10px;background:#10141A;border:1px solid #1F252E;color:#CFE9F7;font-size:13px">📎 ${esc(f)}</div>`).join('')}</td></tr>` : '';
-  return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"></head>
-<body style="margin:0;padding:0;background:#05070A">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#05070A" style="background:#05070A"><tr><td align="center" style="padding:24px 12px">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" dir="rtl" style="width:100%;max-width:600px;background:#07090C;border:1px solid #1A1F27;border-radius:22px;overflow:hidden">
+${G(`<div style="font-size:12px;color:#7E8895;margin-bottom:8px">المرفقات (${files.length})</div>`)}
+${files.map((f) => `<div style="display:inline-block;margin:0 0 6px 6px;padding:7px 12px;border-radius:10px;background-color:#10141A;background-image:linear-gradient(#10141A,#10141A);border:1px solid #1F252E;color:#CFE9F7;font-size:13px">${G(`📎 ${esc(f)}`)}</div>`).join('')}</td></tr>` : '';
+  return `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><style>u + .body .gs{background:#000;mix-blend-mode:screen}u + .body .gd{background:#000;mix-blend-mode:difference}</style></head>
+<body class="body" style="margin:0;padding:0;background-color:#05070A;background-image:linear-gradient(#05070A,#05070A)">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#05070A" style="background-color:#05070A;background-image:linear-gradient(#05070A,#05070A)"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" dir="rtl" style="width:100%;max-width:600px;background-color:#07090C;background-image:linear-gradient(#07090C,#07090C);border:1px solid #1A1F27;border-radius:22px;overflow:hidden">
 <tr><td style="padding:0"><img src="${ASSET}/yh-header-v2.jpg" width="600" alt="YH" style="display:block;width:100%;height:auto;border:0"></td></tr>
 <tr><td style="padding:6px 28px 0;font-family:Tahoma,Arial,sans-serif;text-align:right">
-<div style="font-size:12.5px;color:#E9B949;letter-spacing:.3px">رسالة جديدة من موقعك</div>
+${G(`<div style="font-size:12.5px;color:#E9B949;letter-spacing:.3px">رسالة جديدة من موقعك</div>
 <div style="margin-top:6px;font-size:24px;font-weight:bold;color:#FFFFFF;line-height:1.5">${esc(name)}</div>
 <div style="margin-top:2px;font-size:14px"><a href="mailto:${esc(email)}" style="color:#4FB8E8;text-decoration:none">${esc(email)}</a></div>
-<div style="margin-top:2px;font-size:12px;color:#5A6472">${now}</div>
+<div style="margin-top:2px;font-size:12px;color:#5A6472">${now}</div>`)}
 </td></tr>
-<tr><td style="padding:18px 28px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0E1217;border:1px solid #1F252E;border-right:3px solid #4FB8E8;border-radius:14px"><tr><td style="padding:18px 20px;font-family:Tahoma,Arial,sans-serif;font-size:15.5px;line-height:1.95;color:#DCE2E9;white-space:pre-wrap;text-align:right">${esc(message)}</td></tr></table></td></tr>
+<tr><td style="padding:18px 28px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0E1217;background-image:linear-gradient(#0E1217,#0E1217);border:1px solid #1F252E;border-right:3px solid #4FB8E8;border-radius:14px"><tr><td style="padding:18px 20px;font-family:Tahoma,Arial,sans-serif;font-size:15.5px;line-height:1.95;color:#DCE2E9;white-space:pre-wrap;text-align:right">${G(esc(message))}</td></tr></table></td></tr>
 ${fileRows}
-<tr><td align="center" style="padding:24px 28px 6px"><a href="${replyHref}" style="display:inline-block;padding:13px 34px;border-radius:12px;background:#4FB8E8;color:#06121C;font-family:Tahoma,Arial,sans-serif;font-size:15px;font-weight:bold;text-decoration:none">رد على ${esc(name)}</a></td></tr>
+<tr><td align="center" style="padding:24px 28px 6px"><a href="${replyHref}" style="display:inline-block;padding:13px 34px;border-radius:12px;background-color:#1F86C2;background-image:linear-gradient(#1F86C2,#1F86C2);color:#FFFFFF;font-family:Tahoma,Arial,sans-serif;font-size:15px;font-weight:bold;text-decoration:none">${G(`رد على ${esc(name)}`)}</a></td></tr>
 <tr><td style="padding:26px 16px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed"><tr>${ach}</tr></table></td></tr>
 <tr><td align="center" style="padding:30px 28px 8px">
 <img src="${ASSET}/emblem.png" width="44" height="44" alt="" style="display:block;border:0;margin:0 auto">
-<div style="margin-top:8px;font-family:Tahoma,Arial,sans-serif;font-size:17px;font-weight:bold;color:#E9B949">همّة حتى القمّة</div>
+${G('<div style="margin-top:8px;font-family:Tahoma,Arial,sans-serif;font-size:17px;font-weight:bold;color:#E9B949">همّة حتى القمّة</div>')}
 </td></tr>
 <tr><td align="center" style="padding:14px 28px 26px;border-top:1px solid #151A21;font-family:Tahoma,Arial,sans-serif">
-<div style="font-size:13px;color:#AEB7C2"><b style="color:#F2F4F7">يزيد حمد الحارثي</b> · مهندس حلول ذكاء اصطناعي</div>
+${G(`<div style="font-size:13px;color:#AEB7C2"><b style="color:#F2F4F7">يزيد حمد الحارثي</b> · مهندس حلول ذكاء اصطناعي</div>
 <div style="margin-top:6px;font-size:12.5px"><a href="https://yazeedalharthi.sa" style="color:#4FB8E8;text-decoration:none">yazeedalharthi.sa</a></div>
-<div style="margin-top:10px;font-size:11px;color:#4A5361">وصلتك هذي الرسالة من نموذج التواصل في موقعك. زر «رد» يرد على المرسل مباشرة. © 2026</div>
+<div style="margin-top:10px;font-size:11px;color:#4A5361">وصلتك هذي الرسالة من نموذج التواصل في موقعك. زر «رد» يرد على المرسل مباشرة. © 2026</div>`)}
 </td></tr>
 </table></td></tr></table></body></html>`;
 }
