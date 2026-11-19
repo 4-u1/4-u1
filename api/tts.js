@@ -45,8 +45,8 @@ async function handler(req, res) {
   // Arabic replies use the Arabic voice, everything else the English voice (voice ids are not secrets)
   const arabic = /[\u0600-\u06FF]/.test(text);
   const voice = arabic
-    ? (process.env.ELEVENLABS_VOICE_ID_AR || '2aVe3IK7dgUBaUTdfarw')
-    : (process.env.ELEVENLABS_VOICE_ID_EN || 'Gv42yFG3G6CHLsU5y8g6');
+    ? (process.env.ELEVENLABS_VOICE_ID_AR || 'EXAVITQu4vr4xnSDxMaL')
+    : (process.env.ELEVENLABS_VOICE_ID_EN || 'Xb7hH8MSUJpSbSDYk0k2');
   const model = process.env.ELEVENLABS_MODEL || 'eleven_multilingual_v2';
   try {
     const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voice)}?output_format=mp3_44100_128`, {
