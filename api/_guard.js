@@ -99,12 +99,42 @@ async function limit(key, max, windowMs) {
 // returns true once the caller should answer 429 instead of 401. With a Vercel
 // KV / Upstash store configured the caps are global (distributed-proof); without
 // it they fall back to per-instance in-memory counters.
+// one-time email alert to the owner when the block first trips in a window
+async function sendAdminAlert(ip) {
+  const key = process.env.RESEND_API_KEY; if (!key) return;
+  const to = process.env.CONTACT_TO || 'yazed.501k@gmail.com';
+  const from = process.env.CONTACT_FROM || 'موقع يزيد الحارثي <onboarding@resend.dev>';
+  const when = new Intl.DateTimeFormat('ar-u-nu-latn-ca-gregory', { timeZone: 'Asia/Riyadh', dateStyle: 'long', timeStyle: 'short' }).format(new Date());
+  const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 4000);
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST', signal: ctrl.signal,
+      headers: { Authorization: 'Bearer ' + key, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        from, to: [to], subject: '⚠️ محاولات دخول فاشلة متكررة للوحة التحكم',
+        text: 'تم رصد محاولات دخول فاشلة متكررة إلى لوحة التحكم /admin، وفُعّل الحظر المؤقت تلقائيًا.\n\n'
+            + 'عنوان الـ IP: ' + ip + '\nالوقت: ' + when + '\n\n'
+            + 'إذا كنت أنت، تجاهل الرسالة. وإلا يُنصح بتغيير INVOICE_ADMIN_KEY من Vercel.'
+      })
+    });
+  } catch (e) { /* ignore */ } finally { clearTimeout(tm); }
+}
+
 async function adminFail(req) {
   const ip = clientIp(req);
-  const win = 10 * 60 * 1000;
-  const perIp = await limit('adminfail:' + ip, 8, win);   // 8 wrong tries / 10 min / IP
-  const global = await limit('adminfail:all', 100, win);  // 100 wrong tries / 10 min total
-  return perIp || global;
+  const win = 10 * 60 * 1000, hour = 60 * 60 * 1000;
+  // escalating lockout: a short burst cools down for 10 min; a sustained
+  // campaign trips the hourly tier and stays locked for up to an hour.
+  const t1 = await limit('adminfail:' + ip, 8, win);     // 8 wrong / 10 min / IP
+  const t2 = await limit('adminfailH:' + ip, 20, hour);  // 20 wrong / 60 min / IP
+  const g1 = await limit('adminfail:all', 100, win);     // 100 wrong / 10 min total
+  const g2 = await limit('adminfailH:all', 500, hour);   // 500 wrong / 60 min total
+  const blocked = t1 || t2 || g1 || g2;
+  if (blocked) {
+    const firstInWindow = !(await limit('adminalert', 1, 30 * 60 * 1000)); // at most 1 email / 30 min
+    if (firstInWindow) await sendAdminAlert(ip);
+  }
+  return blocked;
 }
 
 module.exports = { reject, allowedOrigin, isJson, clientIp, limit, adminFail };
