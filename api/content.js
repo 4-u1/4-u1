@@ -10,7 +10,7 @@
 // The public site loads the GET result and applies it on top of the built-in
 // content, so nothing here can break the site when it is empty or unreachable.
 const crypto = require('crypto');
-const { reject } = require('./_guard');
+const { reject, adminFail } = require('./_guard');
 
 const KEY = 'content/overrides.json';
 const sha = (s) => crypto.createHash('sha256').update(String(s)).digest();
@@ -78,7 +78,11 @@ module.exports = async (req, res) => {
   if (reject(req, res)) return;
   if (!process.env.BLOB_READ_WRITE_TOKEN) { res.statusCode = 503; return res.json({ error: 'storage_not_configured' }); }
   if (!process.env.INVOICE_ADMIN_KEY) { res.statusCode = 503; return res.json({ error: 'admin_key_not_configured' }); }
-  if (!isAdmin(req)) { res.statusCode = 401; return res.json({ error: 'unauthorized' }); }
+  if (!isAdmin(req)) {
+    const blocked = await adminFail(req);
+    res.statusCode = blocked ? 429 : 401;
+    return res.json({ error: blocked ? 'too_many_attempts' : 'unauthorized' });
+  }
 
   let b = req.body; if (typeof b === 'string') { try { b = JSON.parse(b); } catch (e) { b = null; } }
   if (!b || typeof b !== 'object') { res.statusCode = 400; return res.json({ error: 'bad_request' }); }

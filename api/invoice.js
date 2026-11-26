@@ -3,7 +3,7 @@
 // Admin actions need the INVOICE_ADMIN_KEY env var; clients read one invoice
 // with its id + random token.
 const crypto = require('crypto');
-const { reject } = require('./_guard');
+const { reject, adminFail } = require('./_guard');
 
 const PREFIX = 'invoices/';
 const ID_RE = /^INV-\d{4}-\d{4}$/;
@@ -135,7 +135,11 @@ module.exports = async (req, res) => {
     if (req.method !== 'POST') { res.statusCode = 405; return res.json({ error: 'method' }); }
     if (reject(req, res)) return;
     if (!process.env.INVOICE_ADMIN_KEY) { res.statusCode = 503; return res.json({ error: 'admin_key_not_configured' }); }
-    if (!isAdmin(req)) { res.statusCode = 401; return res.json({ error: 'unauthorized' }); }
+    if (!isAdmin(req)) {
+      const blocked = await adminFail(req);
+      res.statusCode = blocked ? 429 : 401;
+      return res.json({ error: blocked ? 'too_many_attempts' : 'unauthorized' });
+    }
     let b = req.body; if (typeof b === 'string') { try { b = JSON.parse(b); } catch (e) { b = null; } }
     if (!b || typeof b !== 'object') { res.statusCode = 400; return res.json({ error: 'bad_request' }); }
 

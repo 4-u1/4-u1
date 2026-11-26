@@ -93,4 +93,18 @@ async function limit(key, max, windowMs) {
   return memLimit(key, max, windowMs);
 }
 
-module.exports = { reject, allowedOrigin, isJson, clientIp, limit };
+// Brute-force gate for admin-key endpoints. Call this ONLY after the key check
+// has already FAILED (so a legitimate admin with the right key is never counted
+// and never throttled). It records the failed attempt per IP and globally and
+// returns true once the caller should answer 429 instead of 401. With a Vercel
+// KV / Upstash store configured the caps are global (distributed-proof); without
+// it they fall back to per-instance in-memory counters.
+async function adminFail(req) {
+  const ip = clientIp(req);
+  const win = 10 * 60 * 1000;
+  const perIp = await limit('adminfail:' + ip, 8, win);   // 8 wrong tries / 10 min / IP
+  const global = await limit('adminfail:all', 100, win);  // 100 wrong tries / 10 min total
+  return perIp || global;
+}
+
+module.exports = { reject, allowedOrigin, isJson, clientIp, limit, adminFail };

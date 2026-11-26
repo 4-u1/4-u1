@@ -234,7 +234,7 @@ const esc=(t)=>String(t==null?'':t).replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&l
 const fmt=(n)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2});
 const skey={get(){try{return sessionStorage.getItem('yhi-key')||''}catch(e){return ''}},set(v){try{sessionStorage.setItem('yhi-key',v)}catch(e){}},clear(){try{sessionStorage.removeItem('yhi-key')}catch(e){}}};
 let KEY=skey.get();
-const ERR={unauthorized:'مفتاح الدخول غير صحيح.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط (Vercel Blob).',forbidden_origin:'افتح الصفحة من yazeedalharthi.sa.',bad_image:'صيغة الصورة غير مدعومة.',too_large:'الصورة كبيرة (الحد 4MB).'};
+const ERR={unauthorized:'مفتاح الدخول غير صحيح.',too_many_attempts:'محاولات كثيرة متتالية. انتظر ١٠ دقائق ثم حاول مرة ثانية.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط (Vercel Blob).',forbidden_origin:'افتح الصفحة من yazeedalharthi.sa.',bad_image:'صيغة الصورة غير مدعومة.',too_large:'الصورة كبيرة (الحد 4MB).'};
 const LOCK_ERR={not_configured:1,storage_not_configured:1,admin_key_not_configured:1};
 
 /* ---------- networking ---------- */
