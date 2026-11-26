@@ -7,101 +7,226 @@
 <title>YH · لوحة التحكم</title>
 <link rel="icon" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07090D;--card:#101318;--ink:#F4F5F7;--mut:#8B93A1;--blue:#4FB8E8;--gold:#E9B949;--grn:#7FD3A1;--red:#FF8A80;--line:#1E2530}
+:root{
+ --bg:#07090D;--panel:#0C1016;--card:#101520;--card2:#0B0E13;--ink:#F4F5F7;--mut:#8B93A1;--dim:#5A6472;
+ --blue:#4FB8E8;--blue2:#17719F;--gold:#E9B949;--grn:#5FD39B;--amber:#E9B949;--red:#FF7A7A;--line:#1B2230;
+}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(120% 70% at 100% 0%,rgba(79,184,232,.06),transparent 55%),var(--bg);color:var(--ink);font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
-a{color:var(--blue)}
-.wrap{max-width:1040px;margin:0 auto;padding:28px 18px 80px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-.logo{font-family:Inter;font-weight:700;font-size:22px;letter-spacing:-.02em}.logo b{color:var(--gold)}
-.top .sub{color:var(--mut);font-size:13.5px;margin-top:2px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:999px;border:0;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
-.go{color:#06121C;background:linear-gradient(180deg,#6CC6EE,#4FB8E8);box-shadow:0 12px 28px -14px rgba(79,184,232,.8)}
-.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
-.sm{min-height:36px;padding:0 14px;font-size:13px}
-input{width:100%;font:inherit;font-size:14.5px;color:var(--ink);background:#0B0D11;border:1px solid #2A303A;border-radius:11px;padding:11px 13px}
-input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+button{font:inherit;cursor:pointer}
+input,textarea,select{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--card2);border:1px solid #28303E;border-radius:10px;padding:10px 12px}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:transparent}
+textarea{min-height:92px;resize:vertical;line-height:1.9}
 .ltr{direction:ltr;text-align:left}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin-bottom:18px}
-.card h2{margin:0 0 14px;font-size:16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.stat{background:#0B0E13;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-.stat .k{color:var(--mut);font-size:12.5px}.stat .v{font-size:24px;font-weight:700;margin-top:4px;font-family:Inter}
-.stat .v.gold{color:var(--gold)}.stat .v.grn{color:var(--grn)}
-.pills{display:flex;flex-wrap:wrap;gap:8px}
-.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;font-size:13px;border:1px solid var(--line);background:#0B0E13}
-.dot{width:8px;height:8px;border-radius:50%;background:#3A424E}.pill.on .dot{background:var(--grn)}.pill.off .dot{background:var(--red)}
-.pill.off{color:var(--mut)}
+.mono{font-family:'JetBrains Mono',monospace}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 18px;border-radius:999px;border:0;font-weight:600}
+.go{color:#06121C;background:linear-gradient(180deg,#6CC6EE,#4FB8E8);box-shadow:0 10px 24px -14px rgba(79,184,232,.8)}
+.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.ghost:hover{border-color:#2C3647}
+.sm{min-height:34px;padding:0 13px;font-size:13px;border-radius:9px}
+.danger{color:var(--red);border:1px solid rgba(255,122,122,.35);background:none}
+.muted{color:var(--mut)}.dim{color:var(--dim)}
+
+/* ---- login ---- */
+.login{max-width:400px;margin:13vh auto 0;padding:0 18px}
+.brandmark{font-family:Inter;font-weight:700;font-size:26px;letter-spacing:-.02em}.brandmark b{color:var(--gold)}
+#login[hidden]{display:none}
+
+/* ---- shell ---- */
+#app[hidden]{display:none}
+.shell{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.side{background:linear-gradient(180deg,#0A0E14,#080B10);border-inline-end:1px solid var(--line);padding:22px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
+.side .bm{padding:4px 10px 16px}
+.side .who{font-size:12px;color:var(--dim);padding:0 10px 10px}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:start;background:none;border:0;color:var(--mut);padding:11px 12px;border-radius:11px;font-weight:600}
+.nav button .ic{width:18px;height:18px;flex:0 0 18px;opacity:.85}
+.nav button:hover{background:#0F1520;color:var(--ink)}
+.nav button.on{background:linear-gradient(180deg,rgba(79,184,232,.16),rgba(79,184,232,.06));color:#CDE9F8;box-shadow:inset 0 0 0 1px rgba(79,184,232,.25)}
+.side .foot{margin-top:auto;display:flex;flex-direction:column;gap:7px;padding-top:12px;border-top:1px solid var(--line)}
+.main{padding:26px 30px 70px;max-width:1100px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.head h1{margin:0;font-size:22px}.head .sub{color:var(--mut);font-size:13.5px;margin-top:3px}
+.view{display:none}.view.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:16px}
+.card h2{margin:0 0 4px;font-size:15px}.card .ch{color:var(--mut);font-size:12.5px;margin:0 0 14px}
+.grid{display:grid;gap:12px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:14px 16px}
+.stat .k{color:var(--mut);font-size:12.5px}.stat .v{font-size:26px;font-weight:700;margin-top:3px;font-family:Inter}
+.v.grn{color:var(--grn)}.v.amber{color:var(--amber)}.v.red{color:var(--red)}.v.blue{color:var(--blue)}
+
+/* ---- health rows ---- */
+.hgroup{margin-bottom:18px}
+.hgroup>.gt{font-size:12px;color:var(--dim);letter-spacing:.06em;margin:0 2px 8px;text-transform:uppercase;font-family:Inter}
+.hrow{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--card2);margin-bottom:8px}
+.dot{width:11px;height:11px;border-radius:50%;background:#394251;position:relative;flex:0 0 11px}
+.dot.up{background:var(--grn);box-shadow:0 0 0 4px rgba(95,211,155,.14)}
+.dot.slow{background:var(--amber);box-shadow:0 0 0 4px rgba(233,185,73,.14)}
+.dot.locked{background:#9AA3AF;box-shadow:0 0 0 4px rgba(154,163,175,.12)}
+.dot.down{background:var(--red);box-shadow:0 0 0 4px rgba(255,122,122,.16)}
+.dot.run{background:var(--blue);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(79,184,232,.5)}50%{box-shadow:0 0 0 6px rgba(79,184,232,0)}}
+.hname{font-weight:600}.hname small{display:block;color:var(--dim);font-weight:400;font-size:12px}
+.hstate{font-size:12.5px;font-weight:600;white-space:nowrap}
+.hstate.up{color:var(--grn)}.hstate.slow{color:var(--amber)}.hstate.locked{color:#B9C0CC}.hstate.down{color:var(--red)}.hstate.run{color:var(--blue)}
+.hms{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);min-width:52px;text-align:left}
+
+/* ---- content editor ---- */
+.field{margin-bottom:16px}.field label{display:block;font-size:13px;color:var(--mut);margin-bottom:6px}
+.entry{display:grid;grid-template-columns:1.4fr 1.4fr .8fr .8fr auto auto;gap:7px;margin-bottom:8px;align-items:center}
+.entry .x{background:none;border:1px solid #2A303A;color:var(--mut);border-radius:9px;min-height:38px}
+.entry .gd{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:var(--mut);border:1px solid #2A303A;border-radius:9px;min-height:38px;user-select:none}
+.entry .gd.on{color:var(--gold);border-color:rgba(233,185,73,.5)}
+.add{background:none;border:1px dashed #36404D;color:var(--blue);width:100%;min-height:40px;border-radius:11px;margin-top:4px}
+.heroprev{display:flex;align-items:center;gap:14px;margin-top:8px}
+.heroprev img{width:74px;height:74px;border-radius:14px;object-fit:cover;border:1px solid var(--line);background:#0B0E13}
+.msg{font-size:13px;min-height:20px;margin-top:10px}.msg.ok{color:var(--grn)}.msg.err{color:var(--red)}
+.note{font-size:12px;color:var(--dim);margin-top:8px}
+.savebar{position:sticky;bottom:0;background:linear-gradient(180deg,transparent,var(--bg) 40%);padding:14px 0 2px;display:flex;gap:10px;align-items:center}
+
+/* invoices */
 .lst{display:grid;gap:9px}
-.row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:#0B0E13}
-.row small{color:var(--mut)}
-.badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid}
-.badge.un{color:var(--gold);border-color:rgba(233,185,73,.5)}.badge.pd{color:var(--grn);border-color:rgba(127,211,161,.5)}
-.actions{display:flex;gap:10px;flex-wrap:wrap}
-.msg{font-size:13px;min-height:20px;margin-top:8px}.msg.ok{color:var(--grn)}.msg.err{color:var(--red)}
-.login{max-width:380px;margin:12vh auto 0}
-#app[hidden],#login[hidden]{display:none}
-.muted{color:var(--mut);font-size:13px}
-.note{color:var(--mut);font-size:12.5px;margin-top:10px}
-@media(max-width:560px){.wrap{padding:20px 14px 60px}}
+.irow{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card2)}
+.badge{font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid}
+.badge.un{color:var(--gold);border-color:rgba(233,185,73,.5)}.badge.pd{color:var(--grn);border-color:rgba(95,211,155,.5)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;font-size:13px;border:1px solid var(--line);background:var(--card2)}
+
+@media(max-width:820px){
+ .shell{grid-template-columns:1fr}
+ .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px}
+ .side .bm,.side .who{display:none}.side .foot{flex-direction:row;border:0;margin:0;padding:0}
+ .nav{flex-direction:row;flex-wrap:wrap}.nav button{padding:8px 11px}
+ .main{padding:18px 16px 60px}
+ .entry{grid-template-columns:1fr 1fr;}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <!-- login -->
-  <section id="login" class="login">
-    <div class="card">
-      <div class="logo">Y<b>H</b> · لوحة التحكم</div>
-      <p class="sub muted" style="margin:6px 0 16px">أدخل مفتاح الدخول للوصول إلى لوحتك.</p>
-      <label for="akey" class="muted" style="display:block;margin-bottom:6px">مفتاح الدخول</label>
-      <input id="akey" type="password" class="ltr" autocomplete="current-password" placeholder="INVOICE_ADMIN_KEY">
-      <button id="alogin" class="btn go" type="button" style="width:100%;margin-top:14px">دخول</button>
-      <div id="lmsg" class="msg"></div>
-      <p class="note">المفتاح يُحفظ في هذه الجلسة فقط (sessionStorage) ويُمسح بإغلاق التبويب.</p>
+<!-- ============ LOGIN ============ -->
+<section id="login" class="login">
+  <div class="card" style="padding:26px 24px">
+    <div class="brandmark">Y<b>H</b> · لوحة التحكم</div>
+    <p class="muted" style="margin:8px 0 18px;font-size:13.5px">أدخل مفتاح الدخول للوصول إلى لوحتك.</p>
+    <label class="muted" style="font-size:13px;display:block;margin-bottom:6px" for="akey">مفتاح الدخول</label>
+    <input id="akey" type="password" class="ltr" autocomplete="current-password" placeholder="INVOICE_ADMIN_KEY">
+    <button id="alogin" class="btn go" style="width:100%;margin-top:14px">دخول</button>
+    <div id="lmsg" class="msg"></div>
+    <p class="note">يُحفظ في هذه الجلسة فقط (sessionStorage) ويُمسح بإغلاق التبويب.</p>
+  </div>
+</section>
+
+<!-- ============ APP ============ -->
+<main id="app" hidden>
+<div class="shell">
+  <aside class="side">
+    <div class="bm"><span class="brandmark" style="font-size:22px">Y<b>H</b></span></div>
+    <div class="who">يزيد حمد الحارثي · إدارة الموقع</div>
+    <nav class="nav" id="nav">
+      <button data-v="overview" class="on"><span class="ic">◎</span> نظرة عامة</button>
+      <button data-v="health"><span class="ic">◉</span> الفحوصات المباشرة</button>
+      <button data-v="content"><span class="ic">✎</span> المحتوى</button>
+      <button data-v="invoices"><span class="ic">▤</span> الفواتير</button>
+      <button data-v="services"><span class="ic">⚙</span> الخدمات</button>
+    </nav>
+    <div class="foot">
+      <a class="btn ghost sm" href="https://yazeedalharthi.sa" target="_blank" rel="noopener">عرض الموقع ↗</a>
+      <button id="logout" class="btn ghost sm">خروج</button>
     </div>
-  </section>
+  </aside>
 
-  <!-- dashboard -->
-  <main id="app" hidden>
-    <div class="top">
-      <div>
-        <div class="logo">Y<b>H</b> · لوحة التحكم</div>
-        <div class="sub">يزيد حمد الحارثي · إدارة الموقع</div>
+  <section class="main">
+    <!-- OVERVIEW -->
+    <div class="view on" data-view="overview">
+      <div class="head"><div><h1>نظرة عامة</h1><div class="sub">حالة الموقع وكل أجزائه في لمحة.</div></div>
+        <button id="ovRun" class="btn ghost sm">إعادة الفحص</button></div>
+      <div class="card"><h2>حالة الأجزاء</h2><p class="ch">فحص مباشر لكل جزء في الموقع.</p>
+        <div class="grid g4" id="ovStats"><div class="muted">يفحص…</div></div>
       </div>
-      <div class="actions">
-        <a class="btn ghost sm" href="https://yazeedalharthi.sa" target="_blank" rel="noopener">عرض الموقع</a>
-        <button id="logout" class="btn ghost sm" type="button">خروج</button>
+      <div class="card"><h2>الفواتير</h2><p class="ch">ملخص سريع.</p>
+        <div class="grid g4" id="ovInv"><div class="muted">يحمّل…</div></div>
       </div>
     </div>
 
-    <section class="card">
-      <h2>نظرة عامة على الفواتير</h2>
-      <div id="stats" class="grid"><div class="muted">جاري التحميل…</div></div>
-    </section>
+    <!-- HEALTH -->
+    <div class="view" data-view="health">
+      <div class="head"><div><h1>الفحوصات المباشرة</h1><div class="sub">فحص فعلي لكل جزء — يكتمل في أقل من ثانية. <span id="hWhen" class="dim"></span></div></div>
+        <button id="hRun" class="btn go sm">فحص الآن</button></div>
+      <div class="card" style="padding:16px 18px">
+        <div class="grid g4" id="hSummary" style="margin-bottom:16px"></div>
+        <div id="hGroups"></div>
+        <p class="note">شغّال = يستجيب بشكل سليم · بطيء = يستجيب لكن متأخر · مقفل = غير مُعدّ (ينقص مفتاح/تخزين) · متوقف = لا يستجيب. الفحص لا يستهلك رصيد الذكاء الاصطناعي.</p>
+      </div>
+    </div>
 
-    <section class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
-        <h2 style="margin:0">أحدث الفواتير</h2>
-        <div class="actions">
-          <a class="btn go sm" href="https://invoice.yazeedalharthi.sa" target="_blank" rel="noopener">+ فاتورة جديدة</a>
-          <button id="refresh" class="btn ghost sm" type="button">تحديث</button>
+    <!-- CONTENT -->
+    <div class="view" data-view="content">
+      <div class="head"><div><h1>المحتوى</h1><div class="sub">عدّل النبذة والصورة، وأضف دورات أو إنجازات. تظهر على الموقع مباشرة.</div></div></div>
+
+      <div class="card"><h2>النبذة</h2><p class="ch">فقرة التعريف في قسم «من أنا».</p>
+        <div class="field"><label for="bio">النبذة (عربي)</label><textarea id="bio" placeholder="اكتب نبذتك…"></textarea></div>
+        <div class="field"><label for="bioEn">النبذة (إنجليزي · اختياري)</label><textarea id="bioEn" class="ltr" placeholder="English bio (optional)…"></textarea></div>
+      </div>
+
+      <div class="card"><h2>الصورة الشخصية</h2><p class="ch">صورة البطاقة في الواجهة.</p>
+        <div class="heroprev"><img id="heroImgPrev" alt="" src="/assets/photo.webp">
+          <div style="flex:1">
+            <input id="heroImg" class="ltr" placeholder="/assets/photo.webp أو رابط https://…">
+            <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+              <label class="btn ghost sm" style="margin:0"><input id="heroFile" type="file" accept="image/*" hidden>رفع صورة</label>
+              <button id="heroReset" class="btn ghost sm" type="button">الافتراضية</button>
+              <span id="heroUpMsg" class="note" style="margin:0"></span>
+            </div>
+          </div>
         </div>
       </div>
-      <div id="lst" class="lst"><div class="muted">جاري التحميل…</div></div>
-      <div id="imsg" class="msg"></div>
-    </section>
 
-    <section class="card">
-      <h2>حالة الخدمات</h2>
-      <div id="pills" class="pills"><div class="muted">جاري التحميل…</div></div>
-      <p class="note">أخضر = مُعدّ في Vercel، رمادي = غير مُعدّ. لا تُعرض أي مفاتيح، فقط إن كانت موجودة.</p>
-    </section>
-  </main>
+      <div class="card"><h2>الدورات والشهادات</h2><p class="ch">تُضاف أعلى قائمة «المؤهلات».</p>
+        <div id="progList"></div>
+        <button class="add" id="progAdd" type="button">+ أضف دورة / شهادة</button>
+      </div>
 
+      <div class="card"><h2>الإنجازات والخبرة</h2><p class="ch">تُضاف أعلى تبويب «الإنجازات».</p>
+        <div id="achList"></div>
+        <button class="add" id="achAdd" type="button">+ أضف إنجازًا</button>
+      </div>
+
+      <div class="savebar">
+        <button id="save" class="btn go">حفظ ونشر</button>
+        <button id="reload" class="btn ghost">تجاهل التغييرات</button>
+        <span id="cmsg" class="msg" style="margin:0"></span>
+      </div>
+    </div>
+
+    <!-- INVOICES -->
+    <div class="view" data-view="invoices">
+      <div class="head"><div><h1>الفواتير</h1><div class="sub">الملخص وأحدث الفواتير.</div></div>
+        <div style="display:flex;gap:9px"><a class="btn go sm" href="https://invoice.yazeedalharthi.sa" target="_blank" rel="noopener">+ فاتورة جديدة</a><button id="invRun" class="btn ghost sm">تحديث</button></div></div>
+      <div class="card"><div class="grid g4" id="invStats"><div class="muted">يحمّل…</div></div></div>
+      <div class="card"><h2>أحدث الفواتير</h2><div class="lst" id="invList"><div class="muted">يحمّل…</div></div><div id="invMsg" class="msg"></div></div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="view" data-view="services">
+      <div class="head"><div><h1>الخدمات والتكاملات</h1><div class="sub">ما هو مُعدّ في Vercel. لا تُعرض أي مفاتيح.</div></div>
+        <button id="svcRun" class="btn ghost sm">تحديث</button></div>
+      <div class="card"><div class="pills" id="svcPills"><div class="muted">يحمّل…</div></div>
+        <p class="note">أخضر = مُعدّ · رمادي = غير مُعدّ. اضبط المتغيّرات في Vercel ← Settings ← Environment Variables.</p>
+      </div>
+    </div>
+  </section>
 </div>
+</main>
+
 <script>
 (function(){
 const $=(id)=>document.getElementById(id);
@@ -109,61 +234,203 @@ const esc=(t)=>String(t==null?'':t).replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&l
 const fmt=(n)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2});
 const skey={get(){try{return sessionStorage.getItem('yhi-key')||''}catch(e){return ''}},set(v){try{sessionStorage.setItem('yhi-key',v)}catch(e){}},clear(){try{sessionStorage.removeItem('yhi-key')}catch(e){}}};
 let KEY=skey.get();
-const ERR={unauthorized:'مفتاح الدخول غير صحيح.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط.',forbidden_origin:'افتح الصفحة من yazeedalharthi.sa.'};
+const ERR={unauthorized:'مفتاح الدخول غير صحيح.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط (Vercel Blob).',forbidden_origin:'افتح الصفحة من yazeedalharthi.sa.',bad_image:'صيغة الصورة غير مدعومة.',too_large:'الصورة كبيرة (الحد 4MB).'};
+const LOCK_ERR={not_configured:1,storage_not_configured:1,admin_key_not_configured:1};
 
-function msg(id,t,ok){const e=$(id);e.textContent=t||'';e.className='msg '+(ok?'ok':'err')}
-async function get(path){return fetch(path,{headers:{'x-admin-key':KEY}})}
-async function post(body){return fetch('/api/invoice',{method:'POST',headers:{'content-type':'application/json','x-admin-key':KEY},body:JSON.stringify(body)})}
+/* ---------- networking ---------- */
+function adminHeaders(extra){return Object.assign({'x-admin-key':KEY},extra||{})}
+async function timed(fn,ms){const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),ms||1500);const t0=performance.now();
+ try{const r=await fn(ctrl.signal);return {ok:true,res:r,ms:Math.round(performance.now()-t0)}}
+ catch(e){return {ok:false,ms:Math.round(performance.now()-t0),aborted:e.name==='AbortError'}}
+ finally{clearTimeout(t)}}
 
-async function loadStatus(){
- try{
-  const r=await get('/api/admin');if(!r.ok)return;const j=await r.json();const I=j.integrations||{};
-  const L={gemini:'Gemini (محادثة)',anthropic:'Claude (احتياطي)',resend:'Resend (الإيميل)',elevenlabs:'ElevenLabs (الصوت)',blob:'التخزين (الفواتير)',invoiceFrom:'نطاق مرسِل مُعتمد',rateLimitStore:'عدّاد موزّع (KV)'};
-  $('pills').innerHTML=Object.keys(L).map(k=>`<span class="pill ${I[k]?'on':'off'}"><span class="dot"></span>${esc(L[k])}</span>`).join('');
- }catch(e){$('pills').innerHTML='<div class="muted">تعذّر جلب الحالة.</div>'}
+// GET ping: any HTTP response = up; 503 = locked; no response = down
+async function ping(url){
+ const r=await timed((sig)=>fetch(url,{signal:sig,cache:'no-store'}),1500);
+ if(!r.ok)return {s:'down',ms:r.ms,note:r.aborted?'تجاوز المهلة':'لا يستجيب'};
+ const res=r.res;let body=null;try{if((res.headers.get('content-type')||'').includes('json'))body=await res.clone().json()}catch(e){}
+ if(res.status===503||(body&&LOCK_ERR[body.error]))return {s:'locked',ms:r.ms,note:body&&body.error?body.error:'غير مُعدّ'};
+ const slow=r.ms>1200;return {s:slow?'slow':'up',ms:r.ms,note:slow?'بطيء':'HTTP '+res.status};
 }
+// POST probe: text/plain triggers the guard's 415 before any model call (no credit cost)
+async function probe(url){
+ const r=await timed((sig)=>fetch(url,{method:'POST',signal:sig,headers:{'content-type':'text/plain'},body:'ping'}),1500);
+ if(!r.ok)return {s:'down',ms:r.ms,note:r.aborted?'تجاوز المهلة':'لا يستجيب'};
+ const res=r.res;let body=null;try{body=await res.clone().json()}catch(e){}
+ if(res.status===503||(body&&LOCK_ERR[body.error]))return {s:'locked',ms:r.ms,note:body&&body.error?body.error:'غير مُعدّ'};
+ const slow=r.ms>1200;return {s:slow?'slow':'up',ms:r.ms,note:slow?'بطيء':'يستجيب'};
+}
+let INTEGRATIONS=null;
+async function adminPing(){
+ const r=await timed((sig)=>fetch('/api/admin',{signal:sig,headers:adminHeaders(),cache:'no-store'}),1500);
+ if(!r.ok)return {s:'down',ms:r.ms,note:r.aborted?'تجاوز المهلة':'لا يستجيب'};
+ const res=r.res;let body=null;try{body=await res.clone().json()}catch(e){}
+ if(res.status===503)return {s:'locked',ms:r.ms,note:(body&&body.error)||'غير مُعدّ'};
+ if(res.status===401)return {s:'locked',ms:r.ms,note:'مفتاح غير مقبول'};
+ if(body&&body.integrations)INTEGRATIONS=body.integrations;
+ const slow=r.ms>1200;return {s:slow?'slow':'up',ms:r.ms,note:slow?'بطيء':'يعمل'};
+}
+
+/* ---------- health checks ---------- */
+const CHECKS=[
+ {group:'الواجهة',name:'الصفحة الرئيسية',sub:'/',run:()=>ping('/')},
+ {group:'الواجهة',name:'صفحة الفواتير',sub:'/invoice/',run:()=>ping('/invoice/')},
+ {group:'الواجهة',name:'صفحات التجارب',sub:'/demo/rag/',run:()=>ping('/demo/rag/')},
+ {group:'الذكاء الاصطناعي',name:'المحادثة',sub:'/api/chat',run:()=>probe('/api/chat')},
+ {group:'الذكاء الاصطناعي',name:'التجارب الحيّة',sub:'/api/demo',run:()=>probe('/api/demo')},
+ {group:'الذكاء الاصطناعي',name:'الصوت (TTS)',sub:'/api/tts',run:()=>probe('/api/tts')},
+ {group:'التواصل والبيانات',name:'نموذج التواصل',sub:'/api/contact',run:()=>probe('/api/contact')},
+ {group:'التواصل والبيانات',name:'مخزن الفواتير',sub:'/api/invoice',run:()=>ping('/api/invoice?id=INV-0000-0000&t=x')},
+ {group:'التواصل والبيانات',name:'مخزن المحتوى',sub:'/api/content',run:()=>ping('/api/content')},
+ {group:'التواصل والبيانات',name:'لوحة الحالة',sub:'/api/admin',run:()=>adminPing()},
+];
+const STATE_LABEL={up:'شغّال',slow:'بطيء',locked:'مقفل',down:'متوقف',run:'يفحص…'};
+let RESULTS={};
+function drawHealth(){
+ const groups={};CHECKS.forEach((c,i)=>{(groups[c.group]=groups[c.group]||[]).push(i)});
+ $('hGroups').innerHTML=Object.keys(groups).map((g)=>`<div class="hgroup"><div class="gt">${esc(g)}</div>${groups[g].map((i)=>{
+  const r=RESULTS[i]||{s:'run'};const st=r.s;
+  return `<div class="hrow"><span class="dot ${st}"></span><div class="hname">${esc(CHECKS[i].name)}<small class="mono">${esc(CHECKS[i].sub)}</small></div><span class="hstate ${st}">${STATE_LABEL[st]||st}${r.note&&st!=='up'&&st!=='run'?' · '+esc(r.note):''}</span><span class="hms">${r.ms!=null?r.ms+'ms':''}</span></div>`;
+ }).join('')}</div>`).join('');
+ // summaries
+ const cnt={up:0,slow:0,locked:0,down:0};CHECKS.forEach((c,i)=>{const s=(RESULTS[i]||{}).s;if(cnt[s]!=null)cnt[s]++});
+ const sum=`<div class="stat"><div class="k">شغّال</div><div class="v grn">${cnt.up}</div></div>
+  <div class="stat"><div class="k">بطيء</div><div class="v amber">${cnt.slow}</div></div>
+  <div class="stat"><div class="k">مقفل</div><div class="v">${cnt.locked}</div></div>
+  <div class="stat"><div class="k">متوقف</div><div class="v red">${cnt.down}</div></div>`;
+ $('hSummary').innerHTML=sum;
+ $('ovStats').innerHTML=sum;
+}
+async function runHealth(){
+ RESULTS={};drawHealth();$('hWhen').textContent='';
+ const t0=performance.now();
+ await Promise.all(CHECKS.map(async(c,i)=>{try{RESULTS[i]=await c.run()}catch(e){RESULTS[i]={s:'down'}}drawHealth()}));
+ const took=Math.round(performance.now()-t0);
+ $('hWhen').textContent='· آخر فحص '+new Date().toLocaleTimeString('ar-SA')+' ('+took+'ms)';
+ drawServices();
+}
+
+/* ---------- services ---------- */
+function drawServices(){
+ const L={gemini:'Gemini (المحادثة)',anthropic:'Claude (احتياطي)',resend:'Resend (الإيميل)',elevenlabs:'ElevenLabs (الصوت)',blob:'التخزين (الفواتير/المحتوى)',invoiceFrom:'نطاق مرسِل مُعتمد',rateLimitStore:'عدّاد موزّع (KV)'};
+ const I=INTEGRATIONS||{};
+ $('svcPills').innerHTML=Object.keys(L).map((k)=>`<span class="pill"><span class="dot ${I[k]?'up':'locked'}"></span>${esc(L[k])}</span>`).join('');
+}
+
+/* ---------- invoices ---------- */
 async function loadInvoices(){
  try{
-  const r=await get('/api/invoice?list=1');if(!r.ok){if(r.status===401){lock();}return;}
+  const r=await fetch('/api/invoice?list=1',{headers:adminHeaders(),cache:'no-store'});
+  if(r.status===401){lock();return}
+  if(!r.ok){$('invList').innerHTML='<div class="muted">تعذّر الجلب.</div>';return}
   const j=await r.json();const rows=j.invoices||[];
   const paid=rows.filter(x=>x.status==='paid'),unpaid=rows.filter(x=>x.status!=='paid');
   const sum=(a)=>a.reduce((s,x)=>s+Number(x.total||0),0);
-  $('stats').innerHTML=[
-   ['إجمالي الفواتير',rows.length,''],
-   ['مدفوعة',paid.length,'grn'],
-   ['غير مدفوعة',unpaid.length,'gold'],
-   ['محصّل (ريال)',fmt(sum(paid)),'grn'],
-   ['معلّق (ريال)',fmt(sum(unpaid)),'gold']
-  ].map(([k,v,c])=>`<div class="stat"><div class="k">${esc(k)}</div><div class="v ${c}">${esc(v)}</div></div>`).join('');
-  $('lst').innerHTML=rows.length?rows.map(i=>`<div class="row"><span><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.id)}</a> · ${esc(i.client)}<br><small>${esc(i.date)} · ${fmt(i.total)} ريال</small></span><span style="display:flex;gap:8px;align-items:center">${i.status==='paid'?'<span class="badge pd">مدفوعة ✓</span>':`<span class="badge un">غير مدفوعة</span><button class="btn ghost sm" type="button" data-paid="${esc(i.id)}">تم الدفع</button>`}</span></div>`).join(''):'<div class="muted">ما فيه فواتير بعد.</div>';
- }catch(e){$('lst').innerHTML='<div class="muted">تعذّر جلب الفواتير.</div>'}
+  const tiles=`<div class="stat"><div class="k">الإجمالي</div><div class="v">${rows.length}</div></div>
+   <div class="stat"><div class="k">مدفوعة</div><div class="v grn">${paid.length}</div></div>
+   <div class="stat"><div class="k">غير مدفوعة</div><div class="v amber">${unpaid.length}</div></div>
+   <div class="stat"><div class="k">محصّل · ريال</div><div class="v grn">${fmt(sum(paid))}</div></div>
+   <div class="stat"><div class="k">معلّق · ريال</div><div class="v amber">${fmt(sum(unpaid))}</div></div>`;
+  $('invStats').innerHTML=tiles;$('ovInv').innerHTML=tiles;
+  $('invList').innerHTML=rows.length?rows.map(i=>`<div class="irow"><span><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.id)}</a> · ${esc(i.client)}<br><small class="dim">${esc(i.date)} · ${fmt(i.total)} ريال</small></span><span style="display:flex;gap:8px;align-items:center">${i.status==='paid'?'<span class="badge pd">مدفوعة ✓</span>':`<span class="badge un">غير مدفوعة</span><button class="btn ghost sm" data-paid="${esc(i.id)}">تم الدفع</button>`}</span></div>`).join(''):'<div class="muted">ما فيه فواتير بعد.</div>';
+ }catch(e){$('invList').innerHTML='<div class="muted">تعذّر الجلب.</div>'}
 }
-function refreshAll(){loadInvoices();loadStatus()}
 
-function unlock(){$('login').hidden=true;$('app').hidden=false;refreshAll()}
+/* ---------- content editor ---------- */
+let C={bio:'',bioEn:'',heroImg:'',prog:[],ach:[]};
+function entryRow(list,e,i){
+ return `<div class="entry" data-list="${list}" data-i="${i}">
+  <input data-f="title" value="${esc(e.title)}" placeholder="العنوان">
+  <input data-f="org" value="${esc(e.org)}" placeholder="الجهة">
+  <input data-f="date" value="${esc(e.date)}" placeholder="التاريخ">
+  <input data-f="cid" class="ltr" value="${esc(e.cid)}" placeholder="رقم (اختياري)">
+  <button type="button" class="gd ${e.gold?'on':''}" data-gold title="تمييز ذهبي">★</button>
+  <button type="button" class="x" data-del title="حذف">×</button></div>`;
+}
+function drawEntries(){
+ $('progList').innerHTML=C.prog.map((e,i)=>entryRow('prog',e,i)).join('')||'<div class="note">لا توجد إضافات.</div>';
+ $('achList').innerHTML=C.ach.map((e,i)=>entryRow('ach',e,i)).join('')||'<div class="note">لا توجد إضافات.</div>';
+}
+function fillContent(){
+ $('bio').value=C.bio||'';$('bioEn').value=C.bioEn||'';
+ $('heroImg').value=C.heroImg||'';$('heroImgPrev').src=C.heroImg||'/assets/photo.webp';
+ drawEntries();
+}
+async function loadContent(){
+ try{const r=await fetch('/api/content',{cache:'no-store'});const j=r.ok?await r.json():{};
+  C={bio:j.bio||'',bioEn:j.bioEn||'',heroImg:j.heroImg||'',prog:Array.isArray(j.prog)?j.prog:[],ach:Array.isArray(j.ach)?j.ach:[]};
+ }catch(e){C={bio:'',bioEn:'',heroImg:'',prog:[],ach:[]}}
+ fillContent();
+}
+function collect(){
+ C.bio=$('bio').value;C.bioEn=$('bioEn').value;C.heroImg=$('heroImg').value.trim();
+}
+async function saveContent(){
+ collect();const btn=$('save');btn.disabled=true;$('cmsg').textContent='جاري الحفظ…';$('cmsg').className='msg';
+ try{
+  const r=await fetch('/api/content',{method:'POST',headers:adminHeaders({'content-type':'application/json'}),body:JSON.stringify({action:'save',content:C})});
+  const j=await r.json().catch(()=>({}));
+  if(r.ok){C=Object.assign({bio:'',bioEn:'',heroImg:'',prog:[],ach:[]},j.content||{});fillContent();$('cmsg').textContent='تم الحفظ والنشر ✓ — يظهر على الموقع خلال ثوانٍ.';$('cmsg').className='msg ok'}
+  else{$('cmsg').textContent=ERR[j.error]||'صار خطأ أثناء الحفظ.';$('cmsg').className='msg err'}
+ }catch(e){$('cmsg').textContent='تعذّر الاتصال.';$('cmsg').className='msg err'}
+ btn.disabled=false;
+}
+
+/* ---------- events ---------- */
+document.addEventListener('input',(e)=>{
+ const row=e.target.closest('.entry');
+ if(row){const l=row.dataset.list,i=+row.dataset.i,f=e.target.dataset.f;if(f)C[l][i][f]=e.target.value}
+});
+document.addEventListener('click',async(e)=>{
+ const row=e.target.closest('.entry');
+ if(row){const l=row.dataset.list,i=+row.dataset.i;
+  if(e.target.closest('[data-del]')){C[l].splice(i,1);drawEntries();return}
+  if(e.target.closest('[data-gold]')){C[l][i].gold=!C[l][i].gold;drawEntries();return}}
+ const pb=e.target.closest('[data-paid]');
+ if(pb){if(!confirm('تأكيد أن العميل دفع '+pb.dataset.paid+'؟ بينرسل له إيصال.'))return;pb.disabled=true;
+  const r=await fetch('/api/invoice',{method:'POST',headers:adminHeaders({'content-type':'application/json'}),body:JSON.stringify({action:'paid',id:pb.dataset.paid})});
+  if(r.ok){$('invMsg').textContent='تم تعليم '+pb.dataset.paid+' كمدفوعة.';$('invMsg').className='msg ok';loadInvoices()}
+  else{pb.disabled=false;$('invMsg').textContent='صار خطأ.';$('invMsg').className='msg err'}}
+});
+$('progAdd').onclick=()=>{C.prog.unshift({title:'',org:'',date:'',cid:'',gold:false});drawEntries()};
+$('achAdd').onclick=()=>{C.ach.unshift({title:'',org:'',date:'',cid:'',gold:true});drawEntries()};
+$('heroImg').addEventListener('input',()=>{$('heroImgPrev').src=$('heroImg').value.trim()||'/assets/photo.webp'});
+$('heroReset').onclick=()=>{$('heroImg').value='';$('heroImgPrev').src='/assets/photo.webp'};
+$('heroFile').addEventListener('change',async(e)=>{
+ const f=e.target.files&&e.target.files[0];if(!f)return;
+ if(f.size>4*1024*1024){$('heroUpMsg').textContent='الصورة كبيرة (الحد 4MB).';return}
+ $('heroUpMsg').textContent='يرفع…';
+ const dataUrl=await new Promise((res)=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f)});
+ try{const r=await fetch('/api/content',{method:'POST',headers:adminHeaders({'content-type':'application/json'}),body:JSON.stringify({action:'uploadImage',name:f.name,dataUrl})});
+  const j=await r.json().catch(()=>({}));
+  if(r.ok&&j.url){$('heroImg').value=j.url;$('heroImgPrev').src=j.url;$('heroUpMsg').textContent='تم الرفع ✓ — اضغط «حفظ ونشر».'}
+  else $('heroUpMsg').textContent=ERR[j.error]||'تعذّر الرفع.';
+ }catch(err){$('heroUpMsg').textContent='تعذّر الاتصال.'}
+ e.target.value='';
+});
+$('save').onclick=saveContent;
+$('reload').onclick=loadContent;
+$('hRun').onclick=runHealth;$('ovRun').onclick=runHealth;$('svcRun').onclick=runHealth;$('invRun').onclick=loadInvoices;
+
+/* ---------- nav ---------- */
+$('nav').addEventListener('click',(e)=>{const b=e.target.closest('[data-v]');if(!b)return;
+ [...document.querySelectorAll('#nav button')].forEach(x=>x.classList.toggle('on',x===b));
+ [...document.querySelectorAll('.view')].forEach(v=>v.classList.toggle('on',v.dataset.view===b.dataset.v));
+});
+
+/* ---------- auth / boot ---------- */
+function msg(id,t,ok){const e=$(id);e.textContent=t||'';e.className='msg '+(ok?'ok':'err')}
+function unlock(){$('login').hidden=true;$('app').hidden=false;runHealth();loadInvoices();loadContent()}
 function lock(){$('app').hidden=true;$('login').hidden=false;KEY='';skey.clear()}
-
 async function tryLogin(k){
- KEY=k;const r=await post({action:'check'});
+ KEY=k;let r;try{r=await fetch('/api/invoice',{method:'POST',headers:adminHeaders({'content-type':'application/json'}),body:JSON.stringify({action:'check'})})}catch(e){msg('lmsg','تعذّر الاتصال.',false);KEY='';return false}
  if(r.ok){skey.set(KEY);unlock();return true}
  let j={};try{j=await r.json()}catch(e){}
  msg('lmsg',ERR[j.error]||'ما قدرت أتحقق من المفتاح.',false);KEY='';return false;
 }
-
 $('alogin').onclick=()=>tryLogin($('akey').value.trim());
 $('akey').addEventListener('keydown',(e)=>{if(e.key==='Enter')tryLogin($('akey').value.trim())});
 $('logout').onclick=lock;
-$('refresh').onclick=refreshAll;
-document.addEventListener('click',async(e)=>{
- const b=e.target.closest('[data-paid]');if(!b)return;
- if(!confirm('تأكيد أن العميل دفع الفاتورة '+b.dataset.paid+'؟ بينرسل له إيصال.'))return;
- b.disabled=true;msg('imsg','جاري التحديث…',true);
- const r=await post({action:'paid',id:b.dataset.paid});let j={};try{j=await r.json()}catch(e2){}
- if(r.ok){msg('imsg','تم تعليم '+b.dataset.paid+' كمدفوعة.',true);refreshAll()}
- else{b.disabled=false;msg('imsg',ERR[j.error]||'صار خطأ، جرّب مرة ثانية.',false)}
-});
-
-// auto-enter if a key is already in this session
 if(KEY)tryLogin(KEY);else $('akey').focus();
 })();
 </script>
