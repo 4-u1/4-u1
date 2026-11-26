@@ -1219,5 +1219,28 @@ class Component extends DCLogic {
 
 window.__boot(Component);
 </script>
+<style id="polish-2026-11">
+/* زر الرجوع للأعلى: أصغر وأهدأ، ويظهر بعد التمرير فقط */
+.totop{width:44px!important;height:44px!important;border-radius:14px!important;box-shadow:0 8px 22px rgba(79,184,232,.22)!important;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+.totop.is-on{opacity:.9;transform:none;pointer-events:auto}
+.totop.is-on:hover{opacity:1}
+/* مساحة ضغط 45px لأزرار المجالات في مخطط المشاريع */
+.nn.dom::before{content:"";position:absolute;inset:-8px;border-radius:50%}
+/* عناوين متوازنة بدون كلمة يتيمة في آخر سطر */
+h1,h2,h3{text-wrap:balance}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
+</style>
+<script>
+(function(){
+  function sync(){
+    var b=document.querySelector('.totop');
+    if(b) b.classList.toggle('is-on', window.scrollY>600);
+  }
+  window.addEventListener('scroll',sync,{passive:true});
+  window.addEventListener('load',sync);
+  document.addEventListener('DOMContentLoaded',sync);
+  setTimeout(sync,1500);
+})();
+</script>
 </body>
 </html>

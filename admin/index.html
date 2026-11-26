@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>YH · لوحة التحكم</title>
+<link rel="icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090D;--card:#101318;--ink:#F4F5F7;--mut:#8B93A1;--blue:#4FB8E8;--gold:#E9B949;--grn:#7FD3A1;--red:#FF8A80;--line:#1E2530}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(120% 70% at 100% 0%,rgba(79,184,232,.06),transparent 55%),var(--bg);color:var(--ink);font-family:'IBM Plex Sans Arabic','Inter',system-ui,sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+a{color:var(--blue)}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 18px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.logo{font-family:Inter;font-weight:700;font-size:22px;letter-spacing:-.02em}.logo b{color:var(--gold)}
+.top .sub{color:var(--mut);font-size:13.5px;margin-top:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:999px;border:0;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.go{color:#06121C;background:linear-gradient(180deg,#6CC6EE,#4FB8E8);box-shadow:0 12px 28px -14px rgba(79,184,232,.8)}
+.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.sm{min-height:36px;padding:0 14px;font-size:13px}
+input{width:100%;font:inherit;font-size:14.5px;color:var(--ink);background:#0B0D11;border:1px solid #2A303A;border-radius:11px;padding:11px 13px}
+input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:transparent}
+.ltr{direction:ltr;text-align:left}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin-bottom:18px}
+.card h2{margin:0 0 14px;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:#0B0E13;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.stat .k{color:var(--mut);font-size:12.5px}.stat .v{font-size:24px;font-weight:700;margin-top:4px;font-family:Inter}
+.stat .v.gold{color:var(--gold)}.stat .v.grn{color:var(--grn)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;font-size:13px;border:1px solid var(--line);background:#0B0E13}
+.dot{width:8px;height:8px;border-radius:50%;background:#3A424E}.pill.on .dot{background:var(--grn)}.pill.off .dot{background:var(--red)}
+.pill.off{color:var(--mut)}
+.lst{display:grid;gap:9px}
+.row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:#0B0E13}
+.row small{color:var(--mut)}
+.badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid}
+.badge.un{color:var(--gold);border-color:rgba(233,185,73,.5)}.badge.pd{color:var(--grn);border-color:rgba(127,211,161,.5)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.msg{font-size:13px;min-height:20px;margin-top:8px}.msg.ok{color:var(--grn)}.msg.err{color:var(--red)}
+.login{max-width:380px;margin:12vh auto 0}
+#app[hidden],#login[hidden]{display:none}
+.muted{color:var(--mut);font-size:13px}
+.note{color:var(--mut);font-size:12.5px;margin-top:10px}
+@media(max-width:560px){.wrap{padding:20px 14px 60px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- login -->
+  <section id="login" class="login">
+    <div class="card">
+      <div class="logo">Y<b>H</b> · لوحة التحكم</div>
+      <p class="sub muted" style="margin:6px 0 16px">أدخل مفتاح الدخول للوصول إلى لوحتك.</p>
+      <label for="akey" class="muted" style="display:block;margin-bottom:6px">مفتاح الدخول</label>
+      <input id="akey" type="password" class="ltr" autocomplete="current-password" placeholder="INVOICE_ADMIN_KEY">
+      <button id="alogin" class="btn go" type="button" style="width:100%;margin-top:14px">دخول</button>
+      <div id="lmsg" class="msg"></div>
+      <p class="note">المفتاح يُحفظ في هذه الجلسة فقط (sessionStorage) ويُمسح بإغلاق التبويب.</p>
+    </div>
+  </section>
+
+  <!-- dashboard -->
+  <main id="app" hidden>
+    <div class="top">
+      <div>
+        <div class="logo">Y<b>H</b> · لوحة التحكم</div>
+        <div class="sub">يزيد حمد الحارثي · إدارة الموقع</div>
+      </div>
+      <div class="actions">
+        <a class="btn ghost sm" href="https://yazeedalharthi.sa" target="_blank" rel="noopener">عرض الموقع</a>
+        <button id="logout" class="btn ghost sm" type="button">خروج</button>
+      </div>
+    </div>
+
+    <section class="card">
+      <h2>نظرة عامة على الفواتير</h2>
+      <div id="stats" class="grid"><div class="muted">جاري التحميل…</div></div>
+    </section>
+
+    <section class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <h2 style="margin:0">أحدث الفواتير</h2>
+        <div class="actions">
+          <a class="btn go sm" href="https://invoice.yazeedalharthi.sa" target="_blank" rel="noopener">+ فاتورة جديدة</a>
+          <button id="refresh" class="btn ghost sm" type="button">تحديث</button>
+        </div>
+      </div>
+      <div id="lst" class="lst"><div class="muted">جاري التحميل…</div></div>
+      <div id="imsg" class="msg"></div>
+    </section>
+
+    <section class="card">
+      <h2>حالة الخدمات</h2>
+      <div id="pills" class="pills"><div class="muted">جاري التحميل…</div></div>
+      <p class="note">أخضر = مُعدّ في Vercel، رمادي = غير مُعدّ. لا تُعرض أي مفاتيح، فقط إن كانت موجودة.</p>
+    </section>
+  </main>
+
+</div>
+<script>
+(function(){
+const $=(id)=>document.getElementById(id);
+const esc=(t)=>String(t==null?'':t).replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=(n)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2});
+const skey={get(){try{return sessionStorage.getItem('yhi-key')||''}catch(e){return ''}},set(v){try{sessionStorage.setItem('yhi-key',v)}catch(e){}},clear(){try{sessionStorage.removeItem('yhi-key')}catch(e){}}};
+let KEY=skey.get();
+const ERR={unauthorized:'مفتاح الدخول غير صحيح.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط.',forbidden_origin:'افتح الصفحة من yazeedalharthi.sa.'};
+
+function msg(id,t,ok){const e=$(id);e.textContent=t||'';e.className='msg '+(ok?'ok':'err')}
+async function get(path){return fetch(path,{headers:{'x-admin-key':KEY}})}
+async function post(body){return fetch('/api/invoice',{method:'POST',headers:{'content-type':'application/json','x-admin-key':KEY},body:JSON.stringify(body)})}
+
+async function loadStatus(){
+ try{
+  const r=await get('/api/admin');if(!r.ok)return;const j=await r.json();const I=j.integrations||{};
+  const L={gemini:'Gemini (محادثة)',anthropic:'Claude (احتياطي)',resend:'Resend (الإيميل)',elevenlabs:'ElevenLabs (الصوت)',blob:'التخزين (الفواتير)',invoiceFrom:'نطاق مرسِل مُعتمد',rateLimitStore:'عدّاد موزّع (KV)'};
+  $('pills').innerHTML=Object.keys(L).map(k=>`<span class="pill ${I[k]?'on':'off'}"><span class="dot"></span>${esc(L[k])}</span>`).join('');
+ }catch(e){$('pills').innerHTML='<div class="muted">تعذّر جلب الحالة.</div>'}
+}
+async function loadInvoices(){
+ try{
+  const r=await get('/api/invoice?list=1');if(!r.ok){if(r.status===401){lock();}return;}
+  const j=await r.json();const rows=j.invoices||[];
+  const paid=rows.filter(x=>x.status==='paid'),unpaid=rows.filter(x=>x.status!=='paid');
+  const sum=(a)=>a.reduce((s,x)=>s+Number(x.total||0),0);
+  $('stats').innerHTML=[
+   ['إجمالي الفواتير',rows.length,''],
+   ['مدفوعة',paid.length,'grn'],
+   ['غير مدفوعة',unpaid.length,'gold'],
+   ['محصّل (ريال)',fmt(sum(paid)),'grn'],
+   ['معلّق (ريال)',fmt(sum(unpaid)),'gold']
+  ].map(([k,v,c])=>`<div class="stat"><div class="k">${esc(k)}</div><div class="v ${c}">${esc(v)}</div></div>`).join('');
+  $('lst').innerHTML=rows.length?rows.map(i=>`<div class="row"><span><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.id)}</a> · ${esc(i.client)}<br><small>${esc(i.date)} · ${fmt(i.total)} ريال</small></span><span style="display:flex;gap:8px;align-items:center">${i.status==='paid'?'<span class="badge pd">مدفوعة ✓</span>':`<span class="badge un">غير مدفوعة</span><button class="btn ghost sm" type="button" data-paid="${esc(i.id)}">تم الدفع</button>`}</span></div>`).join(''):'<div class="muted">ما فيه فواتير بعد.</div>';
+ }catch(e){$('lst').innerHTML='<div class="muted">تعذّر جلب الفواتير.</div>'}
+}
+function refreshAll(){loadInvoices();loadStatus()}
+
+function unlock(){$('login').hidden=true;$('app').hidden=false;refreshAll()}
+function lock(){$('app').hidden=true;$('login').hidden=false;KEY='';skey.clear()}
+
+async function tryLogin(k){
+ KEY=k;const r=await post({action:'check'});
+ if(r.ok){skey.set(KEY);unlock();return true}
+ let j={};try{j=await r.json()}catch(e){}
+ msg('lmsg',ERR[j.error]||'ما قدرت أتحقق من المفتاح.',false);KEY='';return false;
+}
+
+$('alogin').onclick=()=>tryLogin($('akey').value.trim());
+$('akey').addEventListener('keydown',(e)=>{if(e.key==='Enter')tryLogin($('akey').value.trim())});
+$('logout').onclick=lock;
+$('refresh').onclick=refreshAll;
+document.addEventListener('click',async(e)=>{
+ const b=e.target.closest('[data-paid]');if(!b)return;
+ if(!confirm('تأكيد أن العميل دفع الفاتورة '+b.dataset.paid+'؟ بينرسل له إيصال.'))return;
+ b.disabled=true;msg('imsg','جاري التحديث…',true);
+ const r=await post({action:'paid',id:b.dataset.paid});let j={};try{j=await r.json()}catch(e2){}
+ if(r.ok){msg('imsg','تم تعليم '+b.dataset.paid+' كمدفوعة.',true);refreshAll()}
+ else{b.disabled=false;msg('imsg',ERR[j.error]||'صار خطأ، جرّب مرة ثانية.',false)}
+});
+
+// auto-enter if a key is already in this session
+if(KEY)tryLogin(KEY);else $('akey').focus();
+})();
+</script>
+</body>
+</html>

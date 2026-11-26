@@ -216,6 +216,9 @@ function qrSvg(text,dark){const M=qrEncode(text),N=M.length,q=4;let d='';M.forEa
 (function(){
 const $=(id)=>document.getElementById(id);
 const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+// admin key lives only in sessionStorage: cleared when the tab closes, and not
+// readable by a persistent-XSS payload the way localStorage would be.
+const skey={get(){try{return sessionStorage.getItem('yhi-key')||''}catch(e){return ''}},set(v){try{sessionStorage.setItem('yhi-key',v)}catch(e){}}};
 const fmt=(n)=>(Math.round(n*100)/100).toLocaleString('en-US',{maximumFractionDigits:2});
 const esc=(t)=>String(t).replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dAr=(s)=>{if(!s)return '';const d=new Date(s+'T12:00:00');return d.toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{year:'numeric',month:'long',day:'numeric'})};
@@ -223,7 +226,7 @@ const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Riyadh'}).format
 const set=(id,t,ph)=>{const e=$(id);e.textContent=t||ph||'';e.classList.toggle('empty',!t&&!!ph)};
 const cfgIds=[...document.querySelectorAll('[data-c]')].map(e=>e.id),qIds=[...document.querySelectorAll('[data-q]')].map(e=>e.id);
 const val=(id)=>{const e=$(id);return e.type==='checkbox'?e.checked:e.value};
-let items=[{d:'',q:1,p:''}],KEY=store.get('yhi-key','');
+let items=[{d:'',q:1,p:''}],KEY=skey.get();
 const TERMS=['يُرجى السداد قبل تاريخ الاستحقاق بالتحويل إلى الحساب المذكور.','اكتب رقم الفاتورة في وصف التحويل.','تنطبق الشروط والأحكام الواردة في عرض السعر المرتبط بهذه الفاتورة.'];
 
 function paint(inv){
@@ -271,7 +274,7 @@ async function admin(){
   const pb=e.target.closest('[data-paid]');if(pb&&confirm('تأكيد إن العميل دفع الفاتورة '+pb.dataset.paid+'؟ بينرسل له إيصال.')){pb.disabled=true;const r=await api({action:'paid',id:pb.dataset.paid});if(r.ok)loadList();else{pb.disabled=false;alert(ERR[r.j.error]||'صار خطأ، جرّب مرة ثانية.')}}});
  $('addItem').onclick=()=>{items.push({d:'',q:1,p:''});drawItems();save()};
  const unlock=async()=>{const r=await api({action:'check'});if(r.ok){document.body.classList.remove('locked');loadList();return true}document.body.classList.add('locked');if(KEY)msg('lmsg',ERR[r.j.error]||'ما قدرت أتحقق من المفتاح.',false);return false};
- $('alogin').onclick=async()=>{KEY=$('akey').value.trim();if(await unlock())store.set('yhi-key',KEY)};
+ $('alogin').onclick=async()=>{KEY=$('akey').value.trim();if(await unlock())skey.set(KEY)};
  if(!KEY)document.body.classList.add('locked');else unlock();
  $('issue').onclick=async()=>{const dr=draft();const b=$('issue');
   if(!confirm(`تصدر فاتورة بمبلغ ${fmt(dr.totals.total)} ريال لـ ${dr.client.name||'—'}${$('sendIt').checked&&dr.client.email?' وترسلها على '+dr.client.email:''}؟ الرقم ما يتكرر ولا يُلغى.`))return;
