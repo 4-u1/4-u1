@@ -3,21 +3,11 @@
 // Docs: POST https://api.elevenlabs.io/v1/text-to-speech/{voice_id}?output_format=mp3_44100_128
 //       header xi-api-key, body { text, model_id }
 
-const { reject } = require('./_guard');
+const { reject, clientIp, limit } = require('./_guard');
 
 const MAX_CHARS = 420;          // caps credit use per reply
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 12;      // requests per IP per window
-const hits = new Map();
-
-function limited(ip) {
-  const now = Date.now();
-  const arr = (hits.get(ip) || []).filter((t) => now - t < WINDOW_MS);
-  if (arr.length >= MAX_PER_WINDOW) { hits.set(ip, arr); return true; }
-  arr.push(now); hits.set(ip, arr);
-  if (hits.size > 5000) hits.clear();
-  return false;
-}
 
 function clean(text) {
   return String(text || '')
@@ -34,8 +24,8 @@ async function handler(req, res) {
   const key = process.env.ELEVENLABS_API_KEY;
   if (!key) return res.status(503).json({ error: 'not_configured' });
 
-  const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (limited(ip)) return res.status(429).json({ error: 'rate_limited' });
+  const ip = clientIp(req);
+  if (await limit('tts:' + ip, MAX_PER_WINDOW, WINDOW_MS)) return res.status(429).json({ error: 'rate_limited' });
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }

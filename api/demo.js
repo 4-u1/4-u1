@@ -7,18 +7,9 @@
 // Response: {"text":"..."}            (json:false demos)
 //           {"data":{...},"text":"..."} (json:true demos; data is parsed JSON or null)
 
-const { reject } = require('./_guard');
+const { reject, clientIp, limit } = require('./_guard');
 
 const DEMOS = ['whatsapp', 'voice', 'rag', 'automation', 'mvp', 'system', 'security', 'identity', 'reviews', 'store', 'pwa', 'posters'];
-
-const hits = new Map();
-function limited(key, max) {
-  const now = Date.now(), win = 10 * 60 * 1000;
-  const arr = (hits.get(key) || []).filter((t) => now - t < win);
-  arr.push(now); hits.set(key, arr);
-  if (hits.size > 8000) hits.clear();
-  return arr.length > max;
-}
 
 function load(slug) {
   if (!DEMOS.includes(slug)) return null;
@@ -122,8 +113,9 @@ module.exports = async (req, res) => {
   const slug = String((body && body.demo) || '');
   const cfg = load(slug);
   if (!cfg) { res.statusCode = 404; return res.json({ error: 'unknown_demo' }); }
-  const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'anon';
-  if (limited(ip, 40) || limited(ip + '|' + slug, 15)) { res.statusCode = 429; return res.json({ error: 'rate_limited' }); }
+  const ip = clientIp(req);
+  const win = 10 * 60 * 1000;
+  if (await limit('demo:' + ip, 40, win) || await limit('demo:' + ip + '|' + slug, 15, win)) { res.statusCode = 429; return res.json({ error: 'rate_limited' }); }
   const msgs = clean(body && body.messages, cfg.maxInput);
   if (!msgs) { res.statusCode = 400; return res.json({ error: 'bad_request' }); }
   const useGemini = !!process.env.GEMINI_API_KEY, useClaude = !!process.env.ANTHROPIC_API_KEY;

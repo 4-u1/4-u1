@@ -6,7 +6,7 @@
 //                    Until then Resend only allows "onboarding@resend.dev" -> the Resend account owner's own address.
 // The visitor's address goes in reply_to, so replying from Gmail answers the visitor directly.
 
-const { reject } = require('./_guard');
+const { reject, clientIp, limit } = require('./_guard');
 
 const MAX_FILES = 3;
 const MAX_TOTAL_BYTES = 3 * 1024 * 1024; // 3 MB decoded ≈ 4 MB base64, safely under Vercel's 4.5 MB request limit
@@ -14,13 +14,6 @@ const ALLOWED = /^(image\/(png|jpe?g|webp|gif|heic|heif)|application\/pdf|applic
 const EXT_OK = /\.(png|jpe?g|webp|gif|heic|heif|pdf|docx?|pptx?|xlsx?|txt)$/i;
 const EMAIL = /^[^@\s<>"]+@[^@\s<>"]+\.[^@\s<>"]{2,}$/;
 
-const hits = new Map();
-function limited(ip) {
-  const now = Date.now(), win = 10 * 60 * 1000;
-  const arr = (hits.get(ip) || []).filter((t) => now - t < win);
-  arr.push(now); hits.set(ip, arr);
-  return arr.length > 5;
-}
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clean = (s, n) => String(s || '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').trim().slice(0, n);
 const safeName = (s) => clean(s, 120).replace(/[\\/:*?"<>|\r\n]+/g, '_') || 'attachment';
@@ -69,8 +62,8 @@ module.exports = async function handler(req, res) {
   if (reject(req, res)) return;
   const key = process.env.RESEND_API_KEY;
   if (!key) { res.statusCode = 503; return res.json({ error: 'not_configured' }); }
-  const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'anon';
-  if (limited(ip)) { res.statusCode = 429; return res.json({ error: 'rate_limited' }); }
+  const ip = clientIp(req);
+  if (await limit('contact:' + ip, 5, 10 * 60 * 1000)) { res.statusCode = 429; return res.json({ error: 'rate_limited' }); }
 
   let b = req.body;
   if (typeof b === 'string') { try { b = JSON.parse(b); } catch (e) { b = null; } }
