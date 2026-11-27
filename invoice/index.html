@@ -106,7 +106,7 @@ ul.t{margin:0;padding-inline-start:18px;color:#C9CED6}ul.t li{margin:2px 0}
 <aside class="panel">
 <h1>YH · الفواتير</h1>
 <p class="sub">تصدر الفاتورة برقم متسلسل ما يتكرر، وتنحفظ، وتنرسل للعميل على إيميله.</p>
-<div id="login"><label for="akey">مفتاح الدخول</label><input id="akey" type="password" class="ltr" autocomplete="current-password"><button class="btn go" id="alogin" type="button">دخول</button><div class="msg" id="lmsg"></div></div>
+<div id="login"><label for="auser">اسم المستخدم</label><input id="auser" type="text" class="ltr" autocomplete="username" style="margin-bottom:10px"><label for="akey">كلمة المرور</label><input id="akey" type="password" class="ltr" autocomplete="current-password"><button class="btn go" id="alogin" type="button">دخول</button><div class="msg" id="lmsg"></div></div>
 <div class="needkey">
 <details id="cfgBox"><summary>بياناتي والحساب البنكي</summary>
 <label for="bankName">اسم البنك</label><input id="bankName" data-c value="مصرف الراجحي">
@@ -219,6 +219,7 @@ const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e)
 // admin key lives only in sessionStorage: cleared when the tab closes, and not
 // readable by a persistent-XSS payload the way localStorage would be.
 const skey={get(){try{return sessionStorage.getItem('yhi-key')||''}catch(e){return ''}},set(v){try{sessionStorage.setItem('yhi-key',v)}catch(e){}}};
+const suser={get(){try{return sessionStorage.getItem('yhi-user')||''}catch(e){return ''}},set(v){try{sessionStorage.setItem('yhi-user',v)}catch(e){}}};
 const fmt=(n)=>(Math.round(n*100)/100).toLocaleString('en-US',{maximumFractionDigits:2});
 const esc=(t)=>String(t).replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dAr=(s)=>{if(!s)return '';const d=new Date(s+'T12:00:00');return d.toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{year:'numeric',month:'long',day:'numeric'})};
@@ -226,7 +227,7 @@ const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Riyadh'}).format
 const set=(id,t,ph)=>{const e=$(id);e.textContent=t||ph||'';e.classList.toggle('empty',!t&&!!ph)};
 const cfgIds=[...document.querySelectorAll('[data-c]')].map(e=>e.id),qIds=[...document.querySelectorAll('[data-q]')].map(e=>e.id);
 const val=(id)=>{const e=$(id);return e.type==='checkbox'?e.checked:e.value};
-let items=[{d:'',q:1,p:''}],KEY=skey.get();
+let items=[{d:'',q:1,p:''}],KEY=skey.get(),USER=suser.get();
 const TERMS=['يُرجى السداد قبل تاريخ الاستحقاق بالتحويل إلى الحساب المذكور.','اكتب رقم الفاتورة في وصف التحويل.','تنطبق الشروط والأحكام الواردة في عرض السعر المرتبط بهذه الفاتورة.'];
 
 function paint(inv){
@@ -258,9 +259,9 @@ function draft(){
 function drawItems(){$('items').innerHTML=items.map((it,i)=>`<div class="item"><input aria-label="البند ${i+1}" data-i="${i}" data-f="d" value="${esc(it.d)}" placeholder="وصف البند"><input aria-label="الكمية" data-i="${i}" data-f="q" type="number" min="0" step="any" class="ltr" value="${esc(it.q)}"><input aria-label="السعر بالريال" data-i="${i}" data-f="p" type="number" min="0" step="any" class="ltr" value="${esc(it.p)}" placeholder="ريال"><button class="x" type="button" data-del="${i}" aria-label="احذف البند">×</button></div>`).join('')}
 function save(){const c={};cfgIds.forEach(id=>c[id]=val(id));store.set('yhi-cfg',c);const q={items};qIds.forEach(id=>q[id]=val(id));store.set('yhi-draft',q)}
 function msg(id,t,ok){const e=$(id);e.textContent=t;e.className='msg '+(ok?'ok':'err')}
-async function api(body){const r=await fetch('/api/invoice',{method:'POST',headers:{'content-type':'application/json','x-admin-key':KEY},body:JSON.stringify(body)});let j={};try{j=await r.json()}catch(e){}return {ok:r.ok,status:r.status,j}}
-const ERR={client_name:'اكتب اسم العميل.',client_email:'إيميل العميل غير صحيح.',no_items:'أضف بند واحد على الأقل بسعر وكمية.',iban:'اكتب الآيبان صحيح (SA + 22 رقم) في «بياناتي والحساب البنكي».',unauthorized:'مفتاح الدخول غير صحيح.',too_many_attempts:'محاولات كثيرة متتالية. انتظر ١٠ دقائق ثم حاول مرة ثانية.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط.',forbidden_origin:'افتح الصفحة من invoice.yazeedalharthi.sa.'};
-async function loadList(){const r=await fetch('/api/invoice?list=1',{headers:{'x-admin-key':KEY}});if(!r.ok)return;const j=await r.json();
+async function api(body){const r=await fetch('/api/invoice',{method:'POST',headers:{'content-type':'application/json','x-admin-key':KEY,'x-admin-user':USER},body:JSON.stringify(body)});let j={};try{j=await r.json()}catch(e){}return {ok:r.ok,status:r.status,j}}
+const ERR={client_name:'اكتب اسم العميل.',client_email:'إيميل العميل غير صحيح.',no_items:'أضف بند واحد على الأقل بسعر وكمية.',iban:'اكتب الآيبان صحيح (SA + 22 رقم) في «بياناتي والحساب البنكي».',unauthorized:'اسم المستخدم أو كلمة المرور غير صحيحة.',too_many_attempts:'محاولات كثيرة متتالية. انتظر ١٠ دقائق ثم حاول مرة ثانية.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط.',forbidden_origin:'افتح الصفحة من invoice.yazeedalharthi.sa.'};
+async function loadList(){const r=await fetch('/api/invoice?list=1',{headers:{'x-admin-key':KEY,'x-admin-user':USER}});if(!r.ok)return;const j=await r.json();
  $('lst').innerHTML=(j.invoices||[]).map(i=>`<div><span><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.id)}</a> · ${esc(i.client)}<br><small>${esc(i.date)} · ${fmt(i.total)} ريال · ${i.status==='paid'?'مدفوعة ✓':'غير مدفوعة'}</small></span><span>${i.status==='paid'?'':`<button type="button" data-paid="${esc(i.id)}">تم الدفع</button>`}</span></div>`).join('')||'<small>ما فيه فواتير بعد.</small>'}
 
 async function admin(){
@@ -274,8 +275,8 @@ async function admin(){
   const pb=e.target.closest('[data-paid]');if(pb&&confirm('تأكيد إن العميل دفع الفاتورة '+pb.dataset.paid+'؟ بينرسل له إيصال.')){pb.disabled=true;const r=await api({action:'paid',id:pb.dataset.paid});if(r.ok)loadList();else{pb.disabled=false;alert(ERR[r.j.error]||'صار خطأ، جرّب مرة ثانية.')}}});
  $('addItem').onclick=()=>{items.push({d:'',q:1,p:''});drawItems();save()};
  const unlock=async()=>{const r=await api({action:'check'});if(r.ok){document.body.classList.remove('locked');loadList();return true}document.body.classList.add('locked');if(KEY)msg('lmsg',ERR[r.j.error]||'ما قدرت أتحقق من المفتاح.',false);return false};
- $('alogin').onclick=async()=>{KEY=$('akey').value.trim();if(await unlock())skey.set(KEY)};
- if(!KEY)document.body.classList.add('locked');else unlock();
+ $('alogin').onclick=async()=>{USER=$('auser').value.trim();KEY=$('akey').value.trim();if(await unlock()){suser.set(USER);skey.set(KEY)}};
+ if(!(USER&&KEY))document.body.classList.add('locked');else unlock();
  $('issue').onclick=async()=>{const dr=draft();const b=$('issue');
   if(!confirm(`تصدر فاتورة بمبلغ ${fmt(dr.totals.total)} ريال لـ ${dr.client.name||'—'}${$('sendIt').checked&&dr.client.email?' وترسلها على '+dr.client.email:''}؟ الرقم ما يتكرر ولا يُلغى.`))return;
   b.disabled=true;msg('imsg','جاري الإصدار…',true);

@@ -2,6 +2,7 @@
 // Files starting with "_" are not exposed as routes by Vercel.
 // Blocks calls that do not come from the site's own pages, so other sites
 // cannot spend the owner's API credits through a visitor's browser.
+const crypto = require('crypto');
 
 const ALLOWED_HOSTS = new Set([
   'yazeed-alharthi.vercel.app',
@@ -137,4 +138,24 @@ async function adminFail(req) {
   return blocked;
 }
 
-module.exports = { reject, allowedOrigin, isJson, clientIp, limit, adminFail };
+// --- admin authentication -----------------------------------------------------
+// A complex password (INVOICE_ADMIN_KEY) and, when configured, a username
+// (ADMIN_USER). Both are compared in constant time (sha256 + timingSafeEqual)
+// so neither length nor content leaks through timing. Backward compatible: if
+// ADMIN_USER is not set, only the password is required.
+const _sha = (s) => crypto.createHash('sha256').update(String(s)).digest();
+function _eq(a, b) { try { return crypto.timingSafeEqual(_sha(a), _sha(b)); } catch (e) { return false; } }
+function isAdmin(req) {
+  const key = process.env.INVOICE_ADMIN_KEY || '';
+  if (key.length < 12) return false;
+  const gotKey = String(req.headers['x-admin-key'] || '');
+  if (!gotKey || !_eq(gotKey, key)) return false;
+  const user = process.env.ADMIN_USER || '';
+  if (user) {
+    const gotUser = String(req.headers['x-admin-user'] || '');
+    if (!gotUser || !_eq(gotUser, user)) return false;
+  }
+  return true;
+}
+
+module.exports = { reject, allowedOrigin, isJson, clientIp, limit, adminFail, isAdmin };

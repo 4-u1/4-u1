@@ -9,17 +9,9 @@
 //
 // The public site loads the GET result and applies it on top of the built-in
 // content, so nothing here can break the site when it is empty or unreachable.
-const crypto = require('crypto');
-const { reject, adminFail } = require('./_guard');
+const { reject, adminFail, isAdmin } = require('./_guard');
 
 const KEY = 'content/overrides.json';
-const sha = (s) => crypto.createHash('sha256').update(String(s)).digest();
-function same(a, b) { try { return crypto.timingSafeEqual(sha(a), sha(b)); } catch (e) { return false; } }
-function isAdmin(req) {
-  const k = process.env.INVOICE_ADMIN_KEY || '';
-  const got = String(req.headers['x-admin-key'] || '');
-  return k.length >= 12 && got.length > 0 && same(got, k);
-}
 
 const blob = () => import('@vercel/blob');
 const clean = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim().slice(0, n);

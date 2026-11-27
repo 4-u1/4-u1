@@ -1,16 +1,7 @@
 // Read-only status for the owner's admin dashboard (/admin).
 // Gated by the same INVOICE_ADMIN_KEY. Returns ONLY booleans about which
 // integrations are configured — never any secret value.
-const crypto = require('crypto');
-const { adminFail } = require('./_guard');
-
-const sha = (s) => crypto.createHash('sha256').update(String(s)).digest();
-function same(a, b) { try { return crypto.timingSafeEqual(sha(a), sha(b)); } catch (e) { return false; } }
-function isAdmin(req) {
-  const k = process.env.INVOICE_ADMIN_KEY || '';
-  const got = String(req.headers['x-admin-key'] || '');
-  return k.length >= 12 && got.length > 0 && same(got, k);
-}
+const { adminFail, isAdmin } = require('./_guard');
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');

@@ -3,7 +3,7 @@
 // Admin actions need the INVOICE_ADMIN_KEY env var; clients read one invoice
 // with its id + random token.
 const crypto = require('crypto');
-const { reject, adminFail } = require('./_guard');
+const { reject, adminFail, isAdmin } = require('./_guard');
 
 const PREFIX = 'invoices/';
 const ID_RE = /^INV-\d{4}-\d{4}$/;
@@ -18,11 +18,6 @@ const EMAIL = /^[^\s@<>"']{1,64}@[^\s@<>"']{1,190}\.[a-z]{2,}$/i;
 const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = (n) => Number(n).toLocaleString('en-US', { maximumFractionDigits: 2 });
 
-function isAdmin(req) {
-  const k = process.env.INVOICE_ADMIN_KEY || '';
-  const got = String(req.headers['x-admin-key'] || '');
-  return k.length >= 12 && got.length > 0 && same(got, k);
-}
 
 async function readJson(pathname) {
   const { get } = await blob();

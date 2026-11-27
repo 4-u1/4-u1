@@ -116,9 +116,11 @@ textarea{min-height:92px;resize:vertical;line-height:1.9}
 <section id="login" class="login">
   <div class="card" style="padding:26px 24px">
     <div class="brandmark">Y<b>H</b> · لوحة التحكم</div>
-    <p class="muted" style="margin:8px 0 18px;font-size:13.5px">أدخل مفتاح الدخول للوصول إلى لوحتك.</p>
-    <label class="muted" style="font-size:13px;display:block;margin-bottom:6px" for="akey">مفتاح الدخول</label>
-    <input id="akey" type="password" class="ltr" autocomplete="current-password" placeholder="INVOICE_ADMIN_KEY">
+    <p class="muted" style="margin:8px 0 18px;font-size:13.5px">أدخل اسم المستخدم وكلمة المرور للوصول إلى لوحتك.</p>
+    <label class="muted" style="font-size:13px;display:block;margin-bottom:6px" for="auser">اسم المستخدم</label>
+    <input id="auser" type="text" class="ltr" autocomplete="username" placeholder="اسم المستخدم" style="margin-bottom:13px">
+    <label class="muted" style="font-size:13px;display:block;margin-bottom:6px" for="akey">كلمة المرور</label>
+    <input id="akey" type="password" class="ltr" autocomplete="current-password" placeholder="كلمة المرور">
     <button id="alogin" class="btn go" style="width:100%;margin-top:14px">دخول</button>
     <div id="lmsg" class="msg"></div>
     <p class="note">يُحفظ في هذه الجلسة فقط (sessionStorage) ويُمسح بإغلاق التبويب.</p>
@@ -233,12 +235,13 @@ const $=(id)=>document.getElementById(id);
 const esc=(t)=>String(t==null?'':t).replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmt=(n)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2});
 const skey={get(){try{return sessionStorage.getItem('yhi-key')||''}catch(e){return ''}},set(v){try{sessionStorage.setItem('yhi-key',v)}catch(e){}},clear(){try{sessionStorage.removeItem('yhi-key')}catch(e){}}};
-let KEY=skey.get();
-const ERR={unauthorized:'مفتاح الدخول غير صحيح.',too_many_attempts:'محاولات كثيرة متتالية. انتظر ١٠ دقائق ثم حاول مرة ثانية.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط (Vercel Blob).',forbidden_origin:'افتح الصفحة من yazeedalharthi.sa.',bad_image:'صيغة الصورة غير مدعومة.',too_large:'الصورة كبيرة (الحد 4MB).'};
+const suser={get(){try{return sessionStorage.getItem('yhi-user')||''}catch(e){return ''}},set(v){try{sessionStorage.setItem('yhi-user',v)}catch(e){}},clear(){try{sessionStorage.removeItem('yhi-user')}catch(e){}}};
+let KEY=skey.get(),USER=suser.get();
+const ERR={unauthorized:'اسم المستخدم أو كلمة المرور غير صحيحة.',too_many_attempts:'محاولات كثيرة متتالية. انتظر ١٠ دقائق ثم حاول مرة ثانية.',admin_key_not_configured:'ما فيه مفتاح دخول مضبوط في Vercel (INVOICE_ADMIN_KEY).',storage_not_configured:'التخزين غير مربوط (Vercel Blob).',forbidden_origin:'افتح الصفحة من yazeedalharthi.sa.',bad_image:'صيغة الصورة غير مدعومة.',too_large:'الصورة كبيرة (الحد 4MB).'};
 const LOCK_ERR={not_configured:1,storage_not_configured:1,admin_key_not_configured:1};
 
 /* ---------- networking ---------- */
-function adminHeaders(extra){return Object.assign({'x-admin-key':KEY},extra||{})}
+function adminHeaders(extra){return Object.assign({'x-admin-key':KEY,'x-admin-user':USER},extra||{})}
 async function timed(fn,ms){const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),ms||1500);const t0=performance.now();
  try{const r=await fn(ctrl.signal);return {ok:true,res:r,ms:Math.round(performance.now()-t0)}}
  catch(e){return {ok:false,ms:Math.round(performance.now()-t0),aborted:e.name==='AbortError'}}
@@ -421,17 +424,19 @@ $('nav').addEventListener('click',(e)=>{const b=e.target.closest('[data-v]');if(
 /* ---------- auth / boot ---------- */
 function msg(id,t,ok){const e=$(id);e.textContent=t||'';e.className='msg '+(ok?'ok':'err')}
 function unlock(){$('login').hidden=true;$('app').hidden=false;runHealth();loadInvoices();loadContent()}
-function lock(){$('app').hidden=true;$('login').hidden=false;KEY='';skey.clear()}
-async function tryLogin(k){
- KEY=k;let r;try{r=await fetch('/api/invoice',{method:'POST',headers:adminHeaders({'content-type':'application/json'}),body:JSON.stringify({action:'check'})})}catch(e){msg('lmsg','تعذّر الاتصال.',false);KEY='';return false}
- if(r.ok){skey.set(KEY);unlock();return true}
+function lock(){$('app').hidden=true;$('login').hidden=false;KEY='';USER='';skey.clear();suser.clear()}
+async function tryLogin(u,k){
+ USER=u;KEY=k;let r;try{r=await fetch('/api/invoice',{method:'POST',headers:adminHeaders({'content-type':'application/json'}),body:JSON.stringify({action:'check'})})}catch(e){msg('lmsg','تعذّر الاتصال.',false);USER='';KEY='';return false}
+ if(r.ok){suser.set(USER);skey.set(KEY);unlock();return true}
  let j={};try{j=await r.json()}catch(e){}
- msg('lmsg',ERR[j.error]||'ما قدرت أتحقق من المفتاح.',false);KEY='';return false;
+ msg('lmsg',ERR[j.error]||'اسم المستخدم أو كلمة المرور غير صحيحة.',false);USER='';KEY='';return false;
 }
-$('alogin').onclick=()=>tryLogin($('akey').value.trim());
-$('akey').addEventListener('keydown',(e)=>{if(e.key==='Enter')tryLogin($('akey').value.trim())});
+const doLogin=()=>tryLogin($('auser').value.trim(),$('akey').value.trim());
+$('alogin').onclick=doLogin;
+$('auser').addEventListener('keydown',(e)=>{if(e.key==='Enter')$('akey').focus()});
+$('akey').addEventListener('keydown',(e)=>{if(e.key==='Enter')doLogin()});
 $('logout').onclick=lock;
-if(KEY)tryLogin(KEY);else $('akey').focus();
+if(USER&&KEY)tryLogin(USER,KEY);else $('auser').focus();
 })();
 </script>
 </body>
