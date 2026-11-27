@@ -115,8 +115,11 @@ textarea{min-height:92px;resize:vertical;line-height:1.9}
 <!-- ============ LOGIN ============ -->
 <section id="login" class="login">
   <div class="card" style="padding:26px 24px">
-    <div class="brandmark">Y<b>H</b> · لوحة التحكم</div>
-    <p class="muted" style="margin:8px 0 18px;font-size:13.5px">أدخل اسم المستخدم وكلمة المرور للوصول إلى لوحتك.</p>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:54px;height:54px;margin:0 auto 13px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,rgba(79,184,232,.18),rgba(79,184,232,.04));border:1px solid rgba(79,184,232,.32);box-shadow:0 10px 26px -14px rgba(79,184,232,.6)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8FD6F5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+      <div class="brandmark" style="font-size:24px">Y<b>H</b> · لوحة التحكم</div>
+      <p class="muted" style="margin:7px 0 0;font-size:12.5px">منطقة محمية — بيانات الدخول مطلوبة</p>
+    </div>
     <label class="muted" style="font-size:13px;display:block;margin-bottom:6px" for="auser">اسم المستخدم</label>
     <input id="auser" type="text" class="ltr" autocomplete="username" placeholder="اسم المستخدم" style="margin-bottom:13px">
     <label class="muted" style="font-size:13px;display:block;margin-bottom:6px" for="akey">كلمة المرور</label>
@@ -132,7 +135,7 @@ textarea{min-height:92px;resize:vertical;line-height:1.9}
 <div class="shell">
   <aside class="side">
     <div class="bm"><span class="brandmark" style="font-size:22px">Y<b>H</b></span></div>
-    <div class="who">يزيد حمد الحارثي · إدارة الموقع</div>
+    <div class="who" id="whoLine">يزيد حمد الحارثي · إدارة الموقع</div>
     <nav class="nav" id="nav">
       <button data-v="overview" class="on"><span class="ic">◎</span> نظرة عامة</button>
       <button data-v="health"><span class="ic">◉</span> الفحوصات المباشرة</button>
@@ -423,7 +426,7 @@ $('nav').addEventListener('click',(e)=>{const b=e.target.closest('[data-v]');if(
 
 /* ---------- auth / boot ---------- */
 function msg(id,t,ok){const e=$(id);e.textContent=t||'';e.className='msg '+(ok?'ok':'err')}
-function unlock(){$('login').hidden=true;$('app').hidden=false;runHealth();loadInvoices();loadContent()}
+function unlock(){$('login').hidden=true;$('app').hidden=false;try{if(USER)$('whoLine').textContent='مُسجّل الدخول: '+USER}catch(e){}runHealth();loadInvoices();loadContent()}
 function lock(){$('app').hidden=true;$('login').hidden=false;KEY='';USER='';skey.clear();suser.clear()}
 async function tryLogin(u,k){
  USER=u;KEY=k;let r;try{r=await fetch('/api/invoice',{method:'POST',headers:adminHeaders({'content-type':'application/json'}),body:JSON.stringify({action:'check'})})}catch(e){msg('lmsg','تعذّر الاتصال.',false);USER='';KEY='';return false}
